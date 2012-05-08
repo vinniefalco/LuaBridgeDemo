@@ -88,18 +88,18 @@ public:
     : m_luaCore (luaCore)
     , m_lua (lua)
   {
-    luabridge::scope m (lua);
 #if 0
+    luabridge::scope m (lua);
     m.class_ <Object> ("obj")
       .method ("send", &Object::send)
       ;
-#endif
     m.function ("test", &test);
 
     luabridge::tdstack <luabridge::shared_ptr <Object> >::push (
       lua, luabridge::shared_ptr <Object> (this));
     
     lua_setglobal(lua, "obj");
+#endif
   }
 
   ~Object ()
