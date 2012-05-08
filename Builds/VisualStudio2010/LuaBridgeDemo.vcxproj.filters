@@ -258,22 +258,19 @@
     <ClInclude Include="..\..\Lua_5_2\lzio.h">
       <Filter>LuaBridgeDemo\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\impl\class.hpp">
+    <ClInclude Include="..\..\LuaBridge\include\luabridge.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\luabridge.hpp">
+    <ClInclude Include="..\..\LuaBridge\include\impl\scope.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\impl\scope.hpp">
+    <ClInclude Include="..\..\LuaBridge\include\shared_ptr.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\shared_ptr.hpp">
+    <ClInclude Include="..\..\LuaBridge\include\impl\stack.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\impl\stack.hpp">
-      <Filter>LuaBridgeDemo\LuaBridge</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\impl\typelist.hpp">
+    <ClInclude Include="..\..\LuaBridge\include\impl\typelist.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CConsole.h">

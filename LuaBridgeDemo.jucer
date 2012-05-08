@@ -93,14 +93,13 @@
       <FILE id="sROLi4" name="lzio.h" compile="0" resource="0" file="Lua_5_2/lzio.h"/>
     </GROUP>
     <GROUP id="{57691745-83BC-D2F2-FC34-5F751803C298}" name="LuaBridge">
-      <FILE id="awzjgE" name="class.hpp" compile="0" resource="0" file="LuaBridge/include/impl/class.hpp"/>
-      <FILE id="e4XtP3" name="luabridge.cpp" compile="0" resource="0" file="LuaBridge/src/luabridge.cpp"/>
-      <FILE id="CQo8zr" name="luabridge.hpp" compile="0" resource="0" file="LuaBridge/include/luabridge.hpp"/>
-      <FILE id="zRMzFC" name="scope.hpp" compile="0" resource="0" file="LuaBridge/include/impl/scope.hpp"/>
-      <FILE id="GOOWhJ" name="shared_ptr.cpp" compile="0" resource="0" file="LuaBridge/src/shared_ptr.cpp"/>
-      <FILE id="v9NZUt" name="shared_ptr.hpp" compile="0" resource="0" file="LuaBridge/include/shared_ptr.hpp"/>
-      <FILE id="WWjqbU" name="stack.hpp" compile="0" resource="0" file="LuaBridge/include/impl/stack.hpp"/>
-      <FILE id="Q1LZzB" name="typelist.hpp" compile="0" resource="0" file="LuaBridge/include/impl/typelist.hpp"/>
+      <FILE id="jlxBai" name="luabridge.cpp" compile="0" resource="0" file="LuaBridge/src/luabridge.cpp"/>
+      <FILE id="HXy1bo" name="luabridge.h" compile="0" resource="0" file="LuaBridge/include/luabridge.h"/>
+      <FILE id="WtV2Ul" name="scope.h" compile="0" resource="0" file="LuaBridge/include/impl/scope.h"/>
+      <FILE id="flBKij" name="shared_ptr.cpp" compile="0" resource="0" file="LuaBridge/src/shared_ptr.cpp"/>
+      <FILE id="lP5rBY" name="shared_ptr.h" compile="0" resource="0" file="LuaBridge/include/shared_ptr.h"/>
+      <FILE id="FChUxB" name="stack.h" compile="0" resource="0" file="LuaBridge/include/impl/stack.h"/>
+      <FILE id="DVlRFR" name="typelist.h" compile="0" resource="0" file="LuaBridge/include/impl/typelist.h"/>
     </GROUP>
     <GROUP id="{6456FC22-301F-295A-6231-03972769E7C1}" name="JUCEAmalgam">
       <FILE id="ASPtWE" name="juce_core_amalgam.cpp" compile="1" resource="0"

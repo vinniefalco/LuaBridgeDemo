@@ -285,12 +285,11 @@
     <ClInclude Include="..\..\Lua_5_2\lundump.h"/>
     <ClInclude Include="..\..\Lua_5_2\lvm.h"/>
     <ClInclude Include="..\..\Lua_5_2\lzio.h"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\class.hpp"/>
-    <ClInclude Include="..\..\LuaBridge\include\luabridge.hpp"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\scope.hpp"/>
-    <ClInclude Include="..\..\LuaBridge\include\shared_ptr.hpp"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\stack.hpp"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\typelist.hpp"/>
+    <ClInclude Include="..\..\LuaBridge\include\luabridge.h"/>
+    <ClInclude Include="..\..\LuaBridge\include\impl\scope.h"/>
+    <ClInclude Include="..\..\LuaBridge\include\shared_ptr.h"/>
+    <ClInclude Include="..\..\LuaBridge\include\impl\stack.h"/>
+    <ClInclude Include="..\..\LuaBridge\include\impl\typelist.h"/>
     <ClInclude Include="..\..\Source\CConsole.h"/>
     <ClInclude Include="..\..\Source\CConsoleEdit.h"/>
     <ClInclude Include="..\..\Source\CConsoleText.h"/>
