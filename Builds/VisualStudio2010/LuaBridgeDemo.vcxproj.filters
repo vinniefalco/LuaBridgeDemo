@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="LuaBridgeDemo">
+      <UniqueIdentifier>{7F8DCBD1-928B-A2E2-7028-60069398EAC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeDemo\Lua">
+      <UniqueIdentifier>{FA61A657-A79F-BBF9-87D6-98659F160CFD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeDemo\LuaBridge">
+      <UniqueIdentifier>{F8E77F02-AB72-D4D9-BD84-50BE42BDA9A8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeDemo\JUCEAmalgam">
+      <UniqueIdentifier>{624173F2-A8D8-6494-001C-6B692A254F84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeDemo\Source">
+      <UniqueIdentifier>{C229198E-1100-DAD5-E48D-684A1778856B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Juce Library Code">
+      <UniqueIdentifier>{8B4D1BAA-6DB4-CAEC-A0FA-271F354D5C61}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Lua_5_2\lapi.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lauxlib.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lbaselib.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lbitlib.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lcode.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lcorolib.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lctype.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\ldblib.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\ldebug.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\ldo.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\ldump.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lfunc.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lgc.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\linit.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\liolib.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\llex.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lmathlib.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lmem.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\loadlib.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lobject.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lopcodes.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\loslib.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lparser.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lstate.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lstring.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lstrlib.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\ltable.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\ltablib.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\ltm.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lua.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lundump.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lvm.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Lua_5_2\lzio.c">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LuaBridge\src\luabridge.cpp">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\LuaBridge\src\shared_ptr.cpp">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_data_structures_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_data_structures_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CConsole.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CConsoleEdit.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CConsoleText.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CConsoleWindow.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaCore.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaLibrary.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Main.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\App.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Lua_5_2\lapi.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lauxlib.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lcode.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lctype.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\ldebug.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\ldo.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lfunc.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lgc.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\llex.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\llimits.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lmem.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lobject.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lopcodes.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lparser.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lstate.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lstring.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\ltable.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\ltm.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lua.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lua.hpp">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\luaconf.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lualib.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lundump.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lvm.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Lua_5_2\lzio.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LuaBridge\include\impl\class.hpp">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LuaBridge\include\luabridge.hpp">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LuaBridge\include\impl\scope.hpp">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LuaBridge\include\shared_ptr.hpp">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LuaBridge\include\impl\stack.hpp">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\LuaBridge\include\impl\typelist.hpp">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CConsole.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CConsoleEdit.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CConsoleText.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CConsoleWindow.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaCore.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h">
+      <Filter>Juce Library Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
+      <Filter>Juce Library Code</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include=".\resources.rc">
+      <Filter>Juce Library Code</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

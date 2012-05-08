@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="Z8yiuR" name="LuaBridgeDemo" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="com.yourcompany.LuaBridgeDemo" jucerVersion="3.0.0">
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="xU85kB" juceFolder="">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="LuaBridgeDemo"
+                       osxSDK="default" osxCompatibility="default" osxArchitecture="default"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="LuaBridgeDemo"
+                       osxSDK="default" osxCompatibility="default" osxArchitecture="default"/>
+      </CONFIGURATIONS>
+    </XCODE_MAC>
+    <VS2010 targetFolder="Builds/VisualStudio2010" libraryType="1" juceFolder=""
+            extraCompilerFlags="/EHs">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="LuaBridgeDemo" headerPath="..\..\"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="LuaBridgeDemo" headerPath="..\..\"/>
+      </CONFIGURATIONS>
+    </VS2010>
+    <LINUX_MAKE targetFolder="Builds/Linux" juceFolder="">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
+                       targetName="LuaBridgeDemo"/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
+                       targetName="LuaBridgeDemo"/>
+      </CONFIGURATIONS>
+    </LINUX_MAKE>
+  </EXPORTFORMATS>
+  <MAINGROUP id="NmR0e6" name="LuaBridgeDemo">
+    <GROUP id="{B555AAA3-A424-A30F-E675-033803A46A86}" name="Lua">
+      <FILE id="S10jnV" name="lapi.c" compile="0" resource="0" file="Lua_5_2/lapi.c"/>
+      <FILE id="s3xAdW" name="lapi.h" compile="0" resource="0" file="Lua_5_2/lapi.h"/>
+      <FILE id="LAAGmn" name="lauxlib.c" compile="0" resource="0" file="Lua_5_2/lauxlib.c"/>
+      <FILE id="OTt6hq" name="lauxlib.h" compile="0" resource="0" file="Lua_5_2/lauxlib.h"/>
+      <FILE id="TheP2i" name="lbaselib.c" compile="0" resource="0" file="Lua_5_2/lbaselib.c"/>
+      <FILE id="zTQU5B" name="lbitlib.c" compile="0" resource="0" file="Lua_5_2/lbitlib.c"/>
+      <FILE id="ZSfeWJ" name="lcode.c" compile="0" resource="0" file="Lua_5_2/lcode.c"/>
+      <FILE id="VLVRq0" name="lcode.h" compile="0" resource="0" file="Lua_5_2/lcode.h"/>
+      <FILE id="ZdmaLK" name="lcorolib.c" compile="0" resource="0" file="Lua_5_2/lcorolib.c"/>
+      <FILE id="U1t2aF" name="lctype.c" compile="0" resource="0" file="Lua_5_2/lctype.c"/>
+      <FILE id="X0HKMG" name="lctype.h" compile="0" resource="0" file="Lua_5_2/lctype.h"/>
+      <FILE id="nJSWAx" name="ldblib.c" compile="0" resource="0" file="Lua_5_2/ldblib.c"/>
+      <FILE id="ZYXzxx" name="ldebug.c" compile="0" resource="0" file="Lua_5_2/ldebug.c"/>
+      <FILE id="ODapl0" name="ldebug.h" compile="0" resource="0" file="Lua_5_2/ldebug.h"/>
+      <FILE id="cEHFwq" name="ldo.c" compile="0" resource="0" file="Lua_5_2/ldo.c"/>
+      <FILE id="HJRhDy" name="ldo.h" compile="0" resource="0" file="Lua_5_2/ldo.h"/>
+      <FILE id="PyTysV" name="ldump.c" compile="0" resource="0" file="Lua_5_2/ldump.c"/>
+      <FILE id="SVyEe1" name="lfunc.c" compile="0" resource="0" file="Lua_5_2/lfunc.c"/>
+      <FILE id="ypjTW3" name="lfunc.h" compile="0" resource="0" file="Lua_5_2/lfunc.h"/>
+      <FILE id="PMYPcp" name="lgc.c" compile="0" resource="0" file="Lua_5_2/lgc.c"/>
+      <FILE id="mRUmcz" name="lgc.h" compile="0" resource="0" file="Lua_5_2/lgc.h"/>
+      <FILE id="HCW2Pl" name="linit.c" compile="0" resource="0" file="Lua_5_2/linit.c"/>
+      <FILE id="grjNgb" name="liolib.c" compile="0" resource="0" file="Lua_5_2/liolib.c"/>
+      <FILE id="o5e7I0" name="llex.c" compile="0" resource="0" file="Lua_5_2/llex.c"/>
+      <FILE id="XakRWg" name="llex.h" compile="0" resource="0" file="Lua_5_2/llex.h"/>
+      <FILE id="o8Mawh" name="llimits.h" compile="0" resource="0" file="Lua_5_2/llimits.h"/>
+      <FILE id="Tyd9hx" name="lmathlib.c" compile="0" resource="0" file="Lua_5_2/lmathlib.c"/>
+      <FILE id="nv4qw8" name="lmem.c" compile="0" resource="0" file="Lua_5_2/lmem.c"/>
+      <FILE id="sxxo9m" name="lmem.h" compile="0" resource="0" file="Lua_5_2/lmem.h"/>
+      <FILE id="ftY1xu" name="loadlib.c" compile="0" resource="0" file="Lua_5_2/loadlib.c"/>
+      <FILE id="toop78" name="lobject.c" compile="0" resource="0" file="Lua_5_2/lobject.c"/>
+      <FILE id="DhG9Bq" name="lobject.h" compile="0" resource="0" file="Lua_5_2/lobject.h"/>
+      <FILE id="f0gWsv" name="lopcodes.c" compile="0" resource="0" file="Lua_5_2/lopcodes.c"/>
+      <FILE id="kGrWeX" name="lopcodes.h" compile="0" resource="0" file="Lua_5_2/lopcodes.h"/>
+      <FILE id="vONbG3" name="loslib.c" compile="0" resource="0" file="Lua_5_2/loslib.c"/>
+      <FILE id="yTshuG" name="lparser.c" compile="0" resource="0" file="Lua_5_2/lparser.c"/>
+      <FILE id="HNphNg" name="lparser.h" compile="0" resource="0" file="Lua_5_2/lparser.h"/>
+      <FILE id="GDY2OP" name="lstate.c" compile="0" resource="0" file="Lua_5_2/lstate.c"/>
+      <FILE id="aCOGIk" name="lstate.h" compile="0" resource="0" file="Lua_5_2/lstate.h"/>
+      <FILE id="DhVvxM" name="lstring.c" compile="0" resource="0" file="Lua_5_2/lstring.c"/>
+      <FILE id="Ejrvks" name="lstring.h" compile="0" resource="0" file="Lua_5_2/lstring.h"/>
+      <FILE id="esolmb" name="lstrlib.c" compile="0" resource="0" file="Lua_5_2/lstrlib.c"/>
+      <FILE id="cKyaMr" name="ltable.c" compile="0" resource="0" file="Lua_5_2/ltable.c"/>
+      <FILE id="a2nUSD" name="ltable.h" compile="0" resource="0" file="Lua_5_2/ltable.h"/>
+      <FILE id="OGSnSa" name="ltablib.c" compile="0" resource="0" file="Lua_5_2/ltablib.c"/>
+      <FILE id="E2maGX" name="ltm.c" compile="0" resource="0" file="Lua_5_2/ltm.c"/>
+      <FILE id="tAz39l" name="ltm.h" compile="0" resource="0" file="Lua_5_2/ltm.h"/>
+      <FILE id="Ww6teA" name="lua.c" compile="0" resource="0" file="Lua_5_2/lua.c"/>
+      <FILE id="H6dlmo" name="lua.h" compile="0" resource="0" file="Lua_5_2/lua.h"/>
+      <FILE id="eZF8rJ" name="lua.hpp" compile="0" resource="0" file="Lua_5_2/lua.hpp"/>
+      <FILE id="gga09h" name="luaconf.h" compile="0" resource="0" file="Lua_5_2/luaconf.h"/>
+      <FILE id="Wt4pQG" name="lualib.h" compile="0" resource="0" file="Lua_5_2/lualib.h"/>
+      <FILE id="H3V7Wj" name="lundump.c" compile="0" resource="0" file="Lua_5_2/lundump.c"/>
+      <FILE id="M9KkLn" name="lundump.h" compile="0" resource="0" file="Lua_5_2/lundump.h"/>
+      <FILE id="v4aTGT" name="lvm.c" compile="0" resource="0" file="Lua_5_2/lvm.c"/>
+      <FILE id="CmzshX" name="lvm.h" compile="0" resource="0" file="Lua_5_2/lvm.h"/>
+      <FILE id="mfcLuM" name="lzio.c" compile="0" resource="0" file="Lua_5_2/lzio.c"/>
+      <FILE id="sROLi4" name="lzio.h" compile="0" resource="0" file="Lua_5_2/lzio.h"/>
+    </GROUP>
+    <GROUP id="{57691745-83BC-D2F2-FC34-5F751803C298}" name="LuaBridge">
+      <FILE id="awzjgE" name="class.hpp" compile="0" resource="0" file="LuaBridge/include/impl/class.hpp"/>
+      <FILE id="e4XtP3" name="luabridge.cpp" compile="0" resource="0" file="LuaBridge/src/luabridge.cpp"/>
+      <FILE id="CQo8zr" name="luabridge.hpp" compile="0" resource="0" file="LuaBridge/include/luabridge.hpp"/>
+      <FILE id="zRMzFC" name="scope.hpp" compile="0" resource="0" file="LuaBridge/include/impl/scope.hpp"/>
+      <FILE id="GOOWhJ" name="shared_ptr.cpp" compile="0" resource="0" file="LuaBridge/src/shared_ptr.cpp"/>
+      <FILE id="v9NZUt" name="shared_ptr.hpp" compile="0" resource="0" file="LuaBridge/include/shared_ptr.hpp"/>
+      <FILE id="WWjqbU" name="stack.hpp" compile="0" resource="0" file="LuaBridge/include/impl/stack.hpp"/>
+      <FILE id="Q1LZzB" name="typelist.hpp" compile="0" resource="0" file="LuaBridge/include/impl/typelist.hpp"/>
+    </GROUP>
+    <GROUP id="{6456FC22-301F-295A-6231-03972769E7C1}" name="JUCEAmalgam">
+      <FILE id="ASPtWE" name="juce_core_amalgam.cpp" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_core_amalgam.cpp"/>
+      <FILE id="nCBBtu" name="juce_core_amalgam.mm" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_core_amalgam.mm"/>
+      <FILE id="EqCXSy" name="juce_data_structures_amalgam.cpp" compile="1"
+            resource="0" file="JUCEAmalgam/include/juce_data_structures_amalgam.cpp"/>
+      <FILE id="bhTBY0" name="juce_data_structures_amalgam.mm" compile="1"
+            resource="0" file="JUCEAmalgam/include/juce_data_structures_amalgam.mm"/>
+      <FILE id="MCAvWS" name="juce_events_amalgam.cpp" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_events_amalgam.cpp"/>
+      <FILE id="X56283" name="juce_events_amalgam.mm" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_events_amalgam.mm"/>
+      <FILE id="haBiXi" name="juce_graphics_amalgam.cpp" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_graphics_amalgam.cpp"/>
+      <FILE id="U4NVqz" name="juce_graphics_amalgam.mm" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_graphics_amalgam.mm"/>
+      <FILE id="asToi9" name="juce_gui_basics_amalgam.cpp" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_gui_basics_amalgam.cpp"/>
+      <FILE id="VnjiMq" name="juce_gui_basics_amalgam.mm" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_gui_basics_amalgam.mm"/>
+    </GROUP>
+    <GROUP id="{1FEE5481-FE4D-3591-BEC4-5213CEAAB221}" name="Source">
+      <FILE id="VPBPmf" name="CConsole.cpp" compile="0" resource="0" file="Source/CConsole.cpp"/>
+      <FILE id="GUUOAa" name="CConsole.h" compile="0" resource="0" file="Source/CConsole.h"/>
+      <FILE id="ajfyad" name="CConsoleEdit.cpp" compile="0" resource="0"
+            file="Source/CConsoleEdit.cpp"/>
+      <FILE id="CZqzoS" name="CConsoleEdit.h" compile="0" resource="0" file="Source/CConsoleEdit.h"/>
+      <FILE id="HCxNTq" name="CConsoleText.cpp" compile="0" resource="0"
+            file="Source/CConsoleText.cpp"/>
+      <FILE id="WTlzkR" name="CConsoleText.h" compile="0" resource="0" file="Source/CConsoleText.h"/>
+      <FILE id="LaI8kl" name="CConsoleWindow.cpp" compile="0" resource="0"
+            file="Source/CConsoleWindow.cpp"/>
+      <FILE id="o78Buz" name="CConsoleWindow.h" compile="0" resource="0"
+            file="Source/CConsoleWindow.h"/>
+      <FILE id="mWUwMt" name="LuaCore.cpp" compile="0" resource="0" file="Source/LuaCore.cpp"/>
+      <FILE id="HA3Su9" name="LuaCore.h" compile="0" resource="0" file="Source/LuaCore.h"/>
+      <FILE id="uTnbb1" name="LuaLibrary.cpp" compile="1" resource="0" file="Source/LuaLibrary.cpp"/>
+      <FILE id="zdep57" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="coAbb7" name="App.cpp" compile="0" resource="0" file="Source/App.cpp"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_gui_audio" showAllCode="1" useLocalCopy="1"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>
