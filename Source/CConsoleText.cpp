@@ -65,6 +65,6 @@ void CConsoleText::onLuaCoreOutput (String text)
   if (text != String::empty)
   {
     m_text->insertTextAtCaret (text);
-    m_text->insertTextAtCaret ("\n");
+    //m_text->insertTextAtCaret ("\n");
   }
 }

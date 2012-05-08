@@ -26,28 +26,95 @@
   ==============================================================================
 */
 
-static int print (lua_State* lua)
+// from luaB_print()
+//
+static int print (lua_State *L)
 {
-  int nRetVal = 0;
-  int nArg = lua_gettop (lua);
+  LuaCore* const luaCore = static_cast <LuaCore*> (
+    lua_touserdata (L, lua_upvalueindex (1)));
 
   String text;
+  int n = lua_gettop(L);  /* number of arguments */
+  int i;
+  lua_getglobal(L, "tostring");
+  for (i=1; i<=n; i++) {
+    const char *s;
+    size_t l;
+    lua_pushvalue(L, -1);  /* function to be called */
+    lua_pushvalue(L, i);   /* value to print */
+    lua_call(L, 1, 1);
+    s = lua_tolstring(L, -1, &l);  /* get result */
+    if (s == NULL)
+      return luaL_error(L,
+         LUA_QL("tostring") " must return a string to " LUA_QL("print"));
+    if (i>1) text << " ";
+    text << String (s, l);
+    lua_pop(L, 1);  /* pop result */
+  }
+  text << "\n";
+  luaCore->write (text);
+  return 0;
+}
 
-  LuaCore* const luaCore = static_cast <LuaCore*> (
-    lua_touserdata (lua, lua_upvalueindex (1)));
+//==============================================================================
 
-  for (int i = nArg; i>= 1; --i)
+class Object
+{
+private:
+  Object (Object const&);
+  Object& operator= (Object const&);
+
+  LuaCore& m_luaCore;
+  lua_State* m_lua;
+
+public:
+  Object (LuaCore& luaCore, lua_State* lua)
+    : m_luaCore (luaCore)
+    , m_lua (lua)
   {
-    lua_pushvalue (lua, -i); // copy
-    const char* s = lua_tostring (lua, -1);
-    text << s;
-    lua_pop (lua, 1);
+    luabridge::scope m (lua);
+
+    m.class_ <Object> ("obj")
+      .method ("send", &Object::send)
+      ;
+
+    luabridge::tdstack <luabridge::shared_ptr <Object> >::push (
+      lua, luabridge::shared_ptr <Object> (this));
+    
+    lua_setglobal(lua, "obj");
   }
 
-  luaCore->write (text);
+  ~Object ()
+  {
+  }
 
-  return nRetVal;
-}
+  int send (lua_State* lua)
+  {
+    int nArg = lua_gettop (lua);
+
+    String text;
+
+    LuaCore* const luaCore = static_cast <LuaCore*> (
+      lua_touserdata (lua, lua_upvalueindex (1)));
+
+    for (int i = nArg; i>= 1; --i)
+    {
+      lua_pushvalue (lua, -i); // copy
+      size_t len;
+      const char* s = luaL_tolstring (lua, -1, &len);
+      text << s;
+      if (i > 1)
+        text << ", ";
+      lua_pop (lua, 1);
+    }
+
+    luaCore->write (text);
+
+    return 0;
+  }
+};
+
+//==============================================================================
 
 class LuaCoreImp : public LuaCore
 {
@@ -70,6 +137,8 @@ public:
     lua_pushlightuserdata (m_lua, this);
     lua_pushcclosure (m_lua, print, 1);
     lua_setglobal (m_lua, "print");
+
+    new Object (*this, m_lua);
   }
 
   ~LuaCoreImp ()
@@ -104,6 +173,8 @@ public:
 
       write (errorMessage);
     }
+
+    write ("\n");
   }
 };
 
