@@ -40,8 +40,11 @@ public:
 
   static LuaCore* New ();
   virtual ~LuaCore () = 0;
+  
   virtual void addListener (Listener* listener) = 0;
   virtual void removeListener (Listener* listener) = 0;
+
+  virtual void write (String text) = 0;
 
   virtual void doString (String chunk) = 0;
 };

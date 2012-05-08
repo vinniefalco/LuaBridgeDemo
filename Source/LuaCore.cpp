@@ -29,6 +29,12 @@
 class LuaCoreImp : public LuaCore
 {
 private:
+  struct State
+  {
+    StringArray lines;
+  };
+
+  State m_state;
   ListenerList <Listener> m_listeners;
 
 public:
@@ -50,8 +56,16 @@ public:
     m_listeners.remove (listener);
   }
 
+  void write (String text)
+  {
+    m_state.lines.add (text);
+
+    m_listeners.call (&Listener::onLuaCoreOutput, text);
+  }
+
   void doString (String text)
   {
+    write (text);
   }
 };
 
