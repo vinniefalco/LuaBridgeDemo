@@ -26,6 +26,22 @@
   ==============================================================================
 */
 
+// for k,v in pairs(_G) do print(k,v) end
+
+static void print (lua_State* L, String text)
+{
+  lua_getglobal (L, "print");
+  lua_pushvalue (L, -1);
+  lua_pushstring (L, text.toUTF8 ());
+  lua_call (L, 1, 0);
+}
+
+static int test (lua_State* L, int)
+{
+  print (L, "test succeeded!");
+  return 0;
+}
+
 // from luaB_print()
 //
 static int print (lua_State *L)
@@ -73,10 +89,12 @@ public:
     , m_lua (lua)
   {
     luabridge::scope m (lua);
-
+#if 0
     m.class_ <Object> ("obj")
       .method ("send", &Object::send)
       ;
+#endif
+    m.function ("test", &test);
 
     luabridge::tdstack <luabridge::shared_ptr <Object> >::push (
       lua, luabridge::shared_ptr <Object> (this));

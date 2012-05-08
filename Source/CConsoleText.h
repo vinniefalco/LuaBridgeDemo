@@ -41,7 +41,7 @@ public:
 
   void resized ();
 
-  void onLuaCoreOutput (String line);
+  void onLuaCoreOutput (String text);
 
 private:
   LuaCore& m_luaCore;
