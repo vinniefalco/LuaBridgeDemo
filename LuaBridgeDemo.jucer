@@ -3,7 +3,8 @@
 <JUCERPROJECT id="Z8yiuR" name="LuaBridgeDemo" projectType="guiapp" version="1.0.0"
               bundleIdentifier="com.yourcompany.LuaBridgeDemo" jucerVersion="3.0.0">
   <EXPORTFORMATS>
-    <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="xU85kB" juceFolder="">
+    <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="xU85kB" juceFolder=""
+               extraFrameworks="AudioToolbox,Carbon,Cocoa,CoreAudio,CoreMIDI,DiscRecording,IOKit,QuartzCore,WebKit">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="LuaBridgeDemo"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"
