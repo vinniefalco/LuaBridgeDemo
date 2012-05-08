@@ -28,7 +28,7 @@
 
 #include "Lua_5_2/lua.hpp"
 
-#include "LuaBridge/include/luabridge.hpp"
+#include "LuaBridge/include/luabridge.h"
 
 #include "JUCEAmalgam/include/juce_core_amalgam.h"
 #include "JUCEAmalgam/include/juce_data_structures_amalgam.h"

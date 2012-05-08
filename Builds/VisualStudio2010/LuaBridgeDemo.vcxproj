@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -14,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{340ACBA7-0099-FD85-2AB7-7948DD2F983D}</ProjectGuid>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
@@ -26,13 +25,12 @@
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
-  <ImportGroup Label="ExtensionSettings"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')"
-            Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</OutDir>
@@ -50,7 +48,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <HeaderFileName/>
+      <HeaderFileName />
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -59,7 +57,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader/>
+      <PrecompiledHeader />
       <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
       <ObjectFileName>.\Debug\</ObjectFileName>
       <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
@@ -91,7 +89,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <HeaderFileName/>
+      <HeaderFileName />
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
@@ -99,7 +97,7 @@
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader/>
+      <PrecompiledHeader />
       <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
       <ObjectFileName>.\Release\</ObjectFileName>
       <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
@@ -233,11 +231,11 @@
     <ClCompile Include="..\..\LuaBridge\src\shared_ptr.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.cpp"/>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_data_structures_amalgam.cpp"/>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.cpp"/>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.cpp"/>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.cpp"/>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.cpp" />
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_data_structures_amalgam.cpp" />
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.cpp" />
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.cpp" />
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.cpp" />
     <ClCompile Include="..\..\Source\CConsole.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -253,55 +251,55 @@
     <ClCompile Include="..\..\Source\LuaCore.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\Source\LuaLibrary.cpp"/>
-    <ClCompile Include="..\..\Source\Main.cpp"/>
+    <ClCompile Include="..\..\Source\LuaLibrary.cpp" />
+    <ClCompile Include="..\..\Source\Main.cpp" />
     <ClCompile Include="..\..\Source\App.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Lua_5_2\lapi.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lauxlib.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lcode.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lctype.h"/>
-    <ClInclude Include="..\..\Lua_5_2\ldebug.h"/>
-    <ClInclude Include="..\..\Lua_5_2\ldo.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lfunc.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lgc.h"/>
-    <ClInclude Include="..\..\Lua_5_2\llex.h"/>
-    <ClInclude Include="..\..\Lua_5_2\llimits.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lmem.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lobject.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lopcodes.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lparser.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lstate.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lstring.h"/>
-    <ClInclude Include="..\..\Lua_5_2\ltable.h"/>
-    <ClInclude Include="..\..\Lua_5_2\ltm.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lua.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lua.hpp"/>
-    <ClInclude Include="..\..\Lua_5_2\luaconf.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lualib.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lundump.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lvm.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lzio.h"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\class.hpp"/>
-    <ClInclude Include="..\..\LuaBridge\include\luabridge.hpp"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\scope.hpp"/>
-    <ClInclude Include="..\..\LuaBridge\include\shared_ptr.hpp"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\stack.hpp"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\typelist.hpp"/>
-    <ClInclude Include="..\..\Source\CConsole.h"/>
-    <ClInclude Include="..\..\Source\CConsoleEdit.h"/>
-    <ClInclude Include="..\..\Source\CConsoleText.h"/>
-    <ClInclude Include="..\..\Source\CConsoleWindow.h"/>
-    <ClInclude Include="..\..\Source\LuaCore.h"/>
-    <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h"/>
-    <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
+    <ClInclude Include="..\..\Lua_5_2\lapi.h" />
+    <ClInclude Include="..\..\Lua_5_2\lauxlib.h" />
+    <ClInclude Include="..\..\Lua_5_2\lcode.h" />
+    <ClInclude Include="..\..\Lua_5_2\lctype.h" />
+    <ClInclude Include="..\..\Lua_5_2\ldebug.h" />
+    <ClInclude Include="..\..\Lua_5_2\ldo.h" />
+    <ClInclude Include="..\..\Lua_5_2\lfunc.h" />
+    <ClInclude Include="..\..\Lua_5_2\lgc.h" />
+    <ClInclude Include="..\..\Lua_5_2\llex.h" />
+    <ClInclude Include="..\..\Lua_5_2\llimits.h" />
+    <ClInclude Include="..\..\Lua_5_2\lmem.h" />
+    <ClInclude Include="..\..\Lua_5_2\lobject.h" />
+    <ClInclude Include="..\..\Lua_5_2\lopcodes.h" />
+    <ClInclude Include="..\..\Lua_5_2\lparser.h" />
+    <ClInclude Include="..\..\Lua_5_2\lstate.h" />
+    <ClInclude Include="..\..\Lua_5_2\lstring.h" />
+    <ClInclude Include="..\..\Lua_5_2\ltable.h" />
+    <ClInclude Include="..\..\Lua_5_2\ltm.h" />
+    <ClInclude Include="..\..\Lua_5_2\lua.h" />
+    <ClInclude Include="..\..\Lua_5_2\lua.hpp" />
+    <ClInclude Include="..\..\Lua_5_2\luaconf.h" />
+    <ClInclude Include="..\..\Lua_5_2\lualib.h" />
+    <ClInclude Include="..\..\Lua_5_2\lundump.h" />
+    <ClInclude Include="..\..\Lua_5_2\lvm.h" />
+    <ClInclude Include="..\..\Lua_5_2\lzio.h" />
+    <ClInclude Include="..\..\LuaBridge\include\impl\class.h" />
+    <ClInclude Include="..\..\LuaBridge\include\luabridge.h" />
+    <ClInclude Include="..\..\LuaBridge\include\impl\scope.h" />
+    <ClInclude Include="..\..\LuaBridge\include\shared_ptr.h" />
+    <ClInclude Include="..\..\LuaBridge\include\impl\stack.h" />
+    <ClInclude Include="..\..\LuaBridge\include\impl\typelist.h" />
+    <ClInclude Include="..\..\Source\CConsole.h" />
+    <ClInclude Include="..\..\Source\CConsoleEdit.h" />
+    <ClInclude Include="..\..\Source\CConsoleText.h" />
+    <ClInclude Include="..\..\Source\CConsoleWindow.h" />
+    <ClInclude Include="..\..\Source\LuaCore.h" />
+    <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h" />
+    <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include=".\resources.rc"/>
+    <ResourceCompile Include=".\resources.rc" />
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-  <ImportGroup Label="ExtensionTargets"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
 </Project>
