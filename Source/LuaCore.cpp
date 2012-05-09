@@ -87,51 +87,28 @@ public:
     : m_luaCore (luaCore)
     , m_lua (lua)
   {
-    {
-      luabridge::scope m (lua, "x.y.z");
-    }
-
-    luabridge::scope m (lua);
-
-    m.function ("test", &test);
-
-#if 0
-    m.class_ <Object> ("obj")
-      .method ("send", &Object::send)
+    luabridge::scope m (m_lua);
+    m.class_ <Object> ("Object")
+      .method ("f1", &Object::f1)
+      //.static_method ("t1", &Object::t1)
       ;
     luabridge::tdstack <luabridge::shared_ptr <Object> >::push (
       lua, luabridge::shared_ptr <Object> (this));
     lua_setglobal(lua, "obj");
-#endif
   }
 
   ~Object ()
   {
   }
 
-  int send (lua_State* lua)
+  void f1 ()
   {
-    int nArg = lua_gettop (lua);
+    m_luaCore.write ("f1\n");
+  }
 
-    String text;
-
-    LuaCore* const luaCore = static_cast <LuaCore*> (
-      lua_touserdata (lua, lua_upvalueindex (1)));
-
-    for (int i = nArg; i>= 1; --i)
-    {
-      lua_pushvalue (lua, -i); // copy
-      size_t len;
-      const char* s = luaL_tolstring (lua, -1, &len);
-      text << s;
-      if (i > 1)
-        text << ", ";
-      lua_pop (lua, 1);
-    }
-
-    luaCore->write (text);
-
-    return 0;
+  static void s1 ()
+  {
+    //print ("t1\n");
   }
 };
 
