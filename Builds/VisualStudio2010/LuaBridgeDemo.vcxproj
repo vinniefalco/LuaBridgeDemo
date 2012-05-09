@@ -227,10 +227,10 @@
     <ClCompile Include="..\..\Lua_5_2\lzio.c">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\LuaBridge\src\luabridge.cpp">
+    <ClCompile Include="..\..\LuaBridge\LuaBridge\shared_ptr.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\LuaBridge\src\shared_ptr.cpp">
+    <ClCompile Include="..\..\LuaBridge\LuaBridge\luabridge.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.cpp"/>
@@ -285,12 +285,12 @@
     <ClInclude Include="..\..\Lua_5_2\lundump.h"/>
     <ClInclude Include="..\..\Lua_5_2\lvm.h"/>
     <ClInclude Include="..\..\Lua_5_2\lzio.h"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\class.h"/>
-    <ClInclude Include="..\..\LuaBridge\include\luabridge.h"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\scope.h"/>
-    <ClInclude Include="..\..\LuaBridge\include\shared_ptr.h"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\stack.h"/>
-    <ClInclude Include="..\..\LuaBridge\include\impl\typelist.h"/>
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\shared_ptr.h"/>
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\stack.h"/>
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\typelist.h"/>
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\class.h"/>
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\luabridge.h"/>
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\scope.h"/>
     <ClInclude Include="..\..\Source\CConsole.h"/>
     <ClInclude Include="..\..\Source\CConsoleEdit.h"/>
     <ClInclude Include="..\..\Source\CConsoleText.h"/>

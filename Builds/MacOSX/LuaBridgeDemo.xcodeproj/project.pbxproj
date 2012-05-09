@@ -30,33 +30,31 @@
 		017722D082620ABFA1288D4E = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CConsoleEdit.cpp; path = ../../Source/CConsoleEdit.cpp; sourceTree = "SOURCE_ROOT"; };
 		03FDCEF610C4C2B3DDBED513 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lparser.c; path = "../../Lua_5_2/lparser.c"; sourceTree = "SOURCE_ROOT"; };
 		09804419763EB6B085D3F12E = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
-		0A987727E541576CAF10C4A6 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "shared_ptr.h"; path = "../../LuaBridge/include/shared_ptr.h"; sourceTree = "SOURCE_ROOT"; };
 		0B34FDD9C0885CB346225B09 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = luaconf.h; path = "../../Lua_5_2/luaconf.h"; sourceTree = "SOURCE_ROOT"; };
 		0DF7D522D7F2443C72269D5E = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
-		0ED3DD1B198FAA8D3BFDDB1B = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = scope.h; path = ../../LuaBridge/include/impl/scope.h; sourceTree = "SOURCE_ROOT"; };
-		10CD9B7A9248E4C5378BF661 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = luabridge.h; path = ../../LuaBridge/include/luabridge.h; sourceTree = "SOURCE_ROOT"; };
+		113F2A8E9DB7DE8927CFA018 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = luabridge.h; path = ../../LuaBridge/LuaBridge/luabridge.h; sourceTree = "SOURCE_ROOT"; };
 		11A0B339B5B6A4FBAE9BDDAE = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_gui_basics_amalgam.cpp"; path = "../../JUCEAmalgam/include/juce_gui_basics_amalgam.cpp"; sourceTree = "SOURCE_ROOT"; };
 		1437400D393C7B23525461EA = { isa = PBXFileReference; lastKnownFileType = file.c; name = lmathlib.c; path = "../../Lua_5_2/lmathlib.c"; sourceTree = "SOURCE_ROOT"; };
-		17438E8B688E26A3B5B9E0DB = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = luabridge.cpp; path = ../../LuaBridge/src/luabridge.cpp; sourceTree = "SOURCE_ROOT"; };
+		175B0298921E20A9C0363A60 = { isa = PBXFileReference; lastKnownFileType = text.TXT; name = CHANGES.TXT; path = ../../LuaBridge/CHANGES.TXT; sourceTree = "SOURCE_ROOT"; };
 		189E9DC578901D98F31ACDD1 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_core_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_core_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
 		1AF807E355AEEA5D7AA8C3FE = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_data_structures_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_data_structures_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
 		1BD354595FD72D2898408F0F = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CConsoleText.cpp; path = ../../Source/CConsoleText.cpp; sourceTree = "SOURCE_ROOT"; };
 		1D2BF0E2055B832B7B847298 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_gui_basics_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_gui_basics_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
+		1D73D39B06C9BDDCC448420C = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = scope.h; path = ../../LuaBridge/LuaBridge/scope.h; sourceTree = "SOURCE_ROOT"; };
 		1E7A292A306019EF882BB435 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = App.cpp; path = ../../Source/App.cpp; sourceTree = "SOURCE_ROOT"; };
 		2CE57163D45549EF70A93B07 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lapi.h; path = "../../Lua_5_2/lapi.h"; sourceTree = "SOURCE_ROOT"; };
 		2CEB0474C1CC24E5AEABF979 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_graphics_amalgam.cpp"; path = "../../JUCEAmalgam/include/juce_graphics_amalgam.cpp"; sourceTree = "SOURCE_ROOT"; };
 		30CFE421131B3B36D4FD41CB = { isa = PBXFileReference; lastKnownFileType = file.c; name = llex.c; path = "../../Lua_5_2/llex.c"; sourceTree = "SOURCE_ROOT"; };
 		3310822CA877BDF270E56B87 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = ../../JuceLibraryCode/AppConfig.h; sourceTree = "SOURCE_ROOT"; };
-		34E1E5ED57DA1C4677517563 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stack.h; path = ../../LuaBridge/include/impl/stack.h; sourceTree = "SOURCE_ROOT"; };
 		36F550B6532752A308B6A1B8 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CConsole.h; path = ../../Source/CConsole.h; sourceTree = "SOURCE_ROOT"; };
 		36FBA801D6E8A8BEA80D2033 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lauxlib.h; path = "../../Lua_5_2/lauxlib.h"; sourceTree = "SOURCE_ROOT"; };
-		38399C577F64CAD158A858A4 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "shared_ptr.cpp"; path = "../../LuaBridge/src/shared_ptr.cpp"; sourceTree = "SOURCE_ROOT"; };
 		3B288248D663E478C778A0F3 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lundump.h; path = "../../Lua_5_2/lundump.h"; sourceTree = "SOURCE_ROOT"; };
+		3C8AF6B7A16D5EFB740187BE = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "shared_ptr.cpp"; path = "../../LuaBridge/LuaBridge/shared_ptr.cpp"; sourceTree = "SOURCE_ROOT"; };
 		432B24F79C060E08AB2BD8D3 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
 		434C86E9BE1DA704C4EA6FAC = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lctype.h; path = "../../Lua_5_2/lctype.h"; sourceTree = "SOURCE_ROOT"; };
+		4527401A3BCD6ACDE82633EB = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = stack.h; path = ../../LuaBridge/LuaBridge/stack.h; sourceTree = "SOURCE_ROOT"; };
 		4B13C44CB13E7BE9965FE3C3 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CConsoleEdit.h; path = ../../Source/CConsoleEdit.h; sourceTree = "SOURCE_ROOT"; };
 		4B32A9141C24C121CD679430 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lctype.c; path = "../../Lua_5_2/lctype.c"; sourceTree = "SOURCE_ROOT"; };
-		5000F9B2857CC8A3BAB43D43 = { isa = PBXFileReference; lastKnownFileType = file; name = CHANGES; path = ../../LuaBridge/CHANGES; sourceTree = "SOURCE_ROOT"; };
 		5179818D443435368C006F6E = { isa = PBXFileReference; lastKnownFileType = file.c; name = lzio.c; path = "../../Lua_5_2/lzio.c"; sourceTree = "SOURCE_ROOT"; };
 		55FEB9D6B84A9C66342D48D0 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lundump.c; path = "../../Lua_5_2/lundump.c"; sourceTree = "SOURCE_ROOT"; };
 		5AEEC3E3E69543E5D60D2E6F = { isa = PBXFileReference; lastKnownFileType = file.c; name = lfunc.c; path = "../../Lua_5_2/lfunc.c"; sourceTree = "SOURCE_ROOT"; };
@@ -71,6 +69,7 @@
 		6A58B24404F6249F9FC3E436 = { isa = PBXFileReference; lastKnownFileType = file.c; name = loslib.c; path = "../../Lua_5_2/loslib.c"; sourceTree = "SOURCE_ROOT"; };
 		6AD713EB48BE6A89FD29D432 = { isa = PBXFileReference; lastKnownFileType = file.c; name = ltm.c; path = "../../Lua_5_2/ltm.c"; sourceTree = "SOURCE_ROOT"; };
 		712260626B141F090011CDFB = { isa = PBXFileReference; lastKnownFileType = file.c; name = ldo.c; path = "../../Lua_5_2/ldo.c"; sourceTree = "SOURCE_ROOT"; };
+		718EC45B6B93D706EF9354FA = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = luabridge.cpp; path = ../../LuaBridge/LuaBridge/luabridge.cpp; sourceTree = "SOURCE_ROOT"; };
 		7353DD7267C8991D88CF831C = { isa = PBXFileReference; lastKnownFileType = file.c; name = lstate.c; path = "../../Lua_5_2/lstate.c"; sourceTree = "SOURCE_ROOT"; };
 		752735F56A2F1C825415A34D = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CConsoleWindow.h; path = ../../Source/CConsoleWindow.h; sourceTree = "SOURCE_ROOT"; };
 		75F2F85DDB0C665A8A414279 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CConsoleWindow.cpp; path = ../../Source/CConsoleWindow.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -80,12 +79,11 @@
 		7E7014B4F989B1F2DFB5B762 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CConsoleText.h; path = ../../Source/CConsoleText.h; sourceTree = "SOURCE_ROOT"; };
 		7FEB258169B9C05F578B4B5C = { isa = PBXFileReference; lastKnownFileType = file.c; name = lcorolib.c; path = "../../Lua_5_2/lcorolib.c"; sourceTree = "SOURCE_ROOT"; };
 		81C06C476387809FBA9CACA9 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		8260EE3B0D30913FBEBD7FC4 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = typelist.h; path = ../../LuaBridge/LuaBridge/typelist.h; sourceTree = "SOURCE_ROOT"; };
 		846EBECB95A6EC9968B4F0D5 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lgc.h; path = "../../Lua_5_2/lgc.h"; sourceTree = "SOURCE_ROOT"; };
 		88632CE6741C1E055856C29B = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		88B1981EB4C01564C3FE5FAA = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = typelist.h; path = ../../LuaBridge/include/impl/typelist.h; sourceTree = "SOURCE_ROOT"; };
 		8C1A2058C8062A86C682CE79 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lcode.h; path = "../../Lua_5_2/lcode.h"; sourceTree = "SOURCE_ROOT"; };
 		8CE1EF352F51FF445CE1B215 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lauxlib.c; path = "../../Lua_5_2/lauxlib.c"; sourceTree = "SOURCE_ROOT"; };
-		8D9CB9CA932BC5616F70844F = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = class.h; path = ../../LuaBridge/include/impl/class.h; sourceTree = "SOURCE_ROOT"; };
 		8DDB43A50CF2459A5DB95A4D = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LuaCore.cpp; path = ../../Source/LuaCore.cpp; sourceTree = "SOURCE_ROOT"; };
 		8E103AF170B3F8B29238A677 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lobject.c; path = "../../Lua_5_2/lobject.c"; sourceTree = "SOURCE_ROOT"; };
 		8EA79BCA47D18026E65CCC4C = { isa = PBXFileReference; lastKnownFileType = file.c; name = linit.c; path = "../../Lua_5_2/linit.c"; sourceTree = "SOURCE_ROOT"; };
@@ -101,6 +99,7 @@
 		A6B479A02821F6BDA0CE5663 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lua.h; path = "../../Lua_5_2/lua.h"; sourceTree = "SOURCE_ROOT"; };
 		AAB551947738F69D0C1C18B7 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		B251152F379A21C455B33331 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lbitlib.c; path = "../../Lua_5_2/lbitlib.c"; sourceTree = "SOURCE_ROOT"; };
+		B5EADACE6D5D7304DAFB82D1 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "shared_ptr.h"; path = "../../LuaBridge/LuaBridge/shared_ptr.h"; sourceTree = "SOURCE_ROOT"; };
 		B972D582B9A6D82F66484653 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lmem.h; path = "../../Lua_5_2/lmem.h"; sourceTree = "SOURCE_ROOT"; };
 		BEE3E5690EF5BFD0B99EC8D1 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LuaCore.h; path = ../../Source/LuaCore.h; sourceTree = "SOURCE_ROOT"; };
 		BEF9FFC8DE00228BE574AB85 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lvm.h; path = "../../Lua_5_2/lvm.h"; sourceTree = "SOURCE_ROOT"; };
@@ -118,6 +117,7 @@
 		E1D094E5113A941FCF492205 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_events_amalgam.cpp"; path = "../../JUCEAmalgam/include/juce_events_amalgam.cpp"; sourceTree = "SOURCE_ROOT"; };
 		E1FD5BA576F00F38FC28C8C7 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = llimits.h; path = "../../Lua_5_2/llimits.h"; sourceTree = "SOURCE_ROOT"; };
 		E27329E83DA77CFA209B6573 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lbaselib.c; path = "../../Lua_5_2/lbaselib.c"; sourceTree = "SOURCE_ROOT"; };
+		E3301D86C4E68740CB9AAFB3 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = class.h; path = ../../LuaBridge/LuaBridge/class.h; sourceTree = "SOURCE_ROOT"; };
 		E934F61E83CBAC2A39F7DB19 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lmem.c; path = "../../Lua_5_2/lmem.c"; sourceTree = "SOURCE_ROOT"; };
 		EC1BFAE9E02A0777D87731C4 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lstrlib.c; path = "../../Lua_5_2/lstrlib.c"; sourceTree = "SOURCE_ROOT"; };
 		ED8121508FB5761DE61EE1DD = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lfunc.h; path = "../../Lua_5_2/lfunc.h"; sourceTree = "SOURCE_ROOT"; };
@@ -190,15 +190,15 @@
 				5179818D443435368C006F6E,
 				DF0F21E8FED679FD47215D90 ); name = Lua; sourceTree = "<group>"; };
 		80EDA40E308415BDBA9B2647 = { isa = PBXGroup; children = (
-				8D9CB9CA932BC5616F70844F,
-				5000F9B2857CC8A3BAB43D43,
-				17438E8B688E26A3B5B9E0DB,
-				10CD9B7A9248E4C5378BF661,
-				0ED3DD1B198FAA8D3BFDDB1B,
-				38399C577F64CAD158A858A4,
-				0A987727E541576CAF10C4A6,
-				34E1E5ED57DA1C4677517563,
-				88B1981EB4C01564C3FE5FAA ); name = LuaBridge; sourceTree = "<group>"; };
+				3C8AF6B7A16D5EFB740187BE,
+				B5EADACE6D5D7304DAFB82D1,
+				4527401A3BCD6ACDE82633EB,
+				8260EE3B0D30913FBEBD7FC4,
+				E3301D86C4E68740CB9AAFB3,
+				718EC45B6B93D706EF9354FA,
+				113F2A8E9DB7DE8927CFA018,
+				1D73D39B06C9BDDCC448420C,
+				175B0298921E20A9C0363A60 ); name = LuaBridge; sourceTree = "<group>"; };
 		E240EEDFC26F332741DD81D3 = { isa = PBXGroup; children = (
 				F4263F6FD4BA340FD5AF3D5B,
 				189E9DC578901D98F31ACDD1,

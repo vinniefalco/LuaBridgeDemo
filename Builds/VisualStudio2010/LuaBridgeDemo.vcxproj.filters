@@ -121,13 +121,13 @@
     <ClCompile Include="..\..\Lua_5_2\lzio.c">
       <Filter>LuaBridgeDemo\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\LuaBridge\CHANGES">
+    <ClCompile Include="..\..\LuaBridge\LuaBridge\shared_ptr.cpp">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\LuaBridge\src\luabridge.cpp">
+    <ClCompile Include="..\..\LuaBridge\LuaBridge\luabridge.cpp">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\LuaBridge\src\shared_ptr.cpp">
+    <ClCompile Include="..\..\LuaBridge\CHANGES.TXT">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.cpp">
@@ -261,22 +261,22 @@
     <ClInclude Include="..\..\Lua_5_2\lzio.h">
       <Filter>LuaBridgeDemo\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\impl\class.h">
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\shared_ptr.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\luabridge.h">
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\stack.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\impl\scope.h">
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\typelist.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\shared_ptr.h">
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\class.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\impl\stack.h">
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\luabridge.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\include\impl\typelist.h">
+    <ClInclude Include="..\..\LuaBridge\LuaBridge\scope.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CConsole.h">
