@@ -94,6 +94,7 @@
       <FILE id="sROLi4" name="lzio.h" compile="0" resource="0" file="Lua_5_2/lzio.h"/>
     </GROUP>
     <GROUP id="{57691745-83BC-D2F2-FC34-5F751803C298}" name="LuaBridge">
+      <FILE id="uIWpQa" name="class.h" compile="0" resource="0" file="LuaBridge/include/impl/class.h"/>
       <FILE id="R7AsIo" name="CHANGES" compile="0" resource="0" file="LuaBridge/CHANGES"/>
       <FILE id="jlxBai" name="luabridge.cpp" compile="0" resource="0" file="LuaBridge/src/luabridge.cpp"/>
       <FILE id="HXy1bo" name="luabridge.h" compile="0" resource="0" file="LuaBridge/include/luabridge.h"/>
