@@ -36,10 +36,9 @@ static void print (lua_State* L, String text)
   lua_call (L, 1, 0);
 }
 
-static int test (lua_State* L, int)
+static int test ()
 {
-  print (L, "test succeeded!");
-  return 0;
+  return 42;
 }
 
 // from luaB_print()
@@ -88,16 +87,16 @@ public:
     : m_luaCore (luaCore)
     , m_lua (lua)
   {
-#if 0
     luabridge::scope m (lua);
+
+    m.function ("test", &test);
+
+#if 0
     m.class_ <Object> ("obj")
       .method ("send", &Object::send)
       ;
-    m.function ("test", &test);
-
     luabridge::tdstack <luabridge::shared_ptr <Object> >::push (
       lua, luabridge::shared_ptr <Object> (this));
-    
     lua_setglobal(lua, "obj");
 #endif
   }
