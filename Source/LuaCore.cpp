@@ -87,6 +87,10 @@ public:
     : m_luaCore (luaCore)
     , m_lua (lua)
   {
+    {
+      luabridge::scope m (lua, "x.y.z");
+    }
+
     luabridge::scope m (lua);
 
     m.function ("test", &test);
