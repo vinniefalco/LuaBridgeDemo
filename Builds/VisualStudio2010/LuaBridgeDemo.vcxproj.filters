@@ -157,6 +157,9 @@
     <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.mm">
       <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\LuaBridgeTests.lua">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\App.cpp">
       <Filter>LuaBridgeDemo\Source</Filter>
     </ClCompile>
@@ -183,6 +186,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\LuaBridgeTests.cpp">
       <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
+      <Filter>Juce Library Code</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -289,6 +295,9 @@
       <Filter>LuaBridgeDemo\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h">
+      <Filter>Juce Library Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h">
       <Filter>Juce Library Code</Filter>
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">

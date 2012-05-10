@@ -40,6 +40,12 @@
 
 #include "LuaBridge/LuaBridge/luabridge.h"
 
+#include "JUCEAmalgam/include/juce_core_amalgam.h"
+#include "JUCEAmalgam/include/juce_gui_basics_amalgam.h"
+
+#include "BinaryData.h"
+
+
 using namespace std;
 
 // traceback function, adapted from lua.c
@@ -291,7 +297,7 @@ void register_lua_funcs (lua_State *L)
 {
   luabridge::scope s(L);
 
-  s	.function("testSucceeded", &testSucceeded)
+  s .function("testSucceeded", &testSucceeded)
     .function("testAFnCalled", &testAFnCalled)
     .function("testBFnCalled", &testBFnCalled)
     .function("testRetInt", &testRetInt)
@@ -323,7 +329,7 @@ void register_lua_funcs (lua_State *L)
     .constructor<void (*) (const string &)>()
     .static_method("testStatic2", &B::testStatic2);
 
-  s	.function("testParamAPtr", &testParamAPtr)
+  s  .function("testParamAPtr", &testParamAPtr)
     .function("testParamAPtrConst", &testParamAPtrConst)
     .function("testParamConstAPtr", &testParamConstAPtr)
     .function("testParamSharedPtrA", &testParamSharedPtrA)
@@ -337,17 +343,6 @@ std::string runLuaBridgeTests (lua_State* L)
 {
   std::string errorString;
 
-  /*
-  // Create the Lua state
-  lua_State *L = luaL_newstate();
-  // Provide the base libraries
-  luaopen_base(L);
-  luaopen_table(L);
-  luaopen_string(L);
-  luaopen_math(L);
-  luaopen_debug(L);
-  */
-
   // Provide user libraries
   register_lua_funcs(L);
 
@@ -356,9 +351,9 @@ std::string runLuaBridgeTests (lua_State* L)
   int errfunc_index = lua_gettop(L);
 
   // Execute lua files in order
-  int errorCode;
+  int errorCode = 0;
 
-  errorCode = luaL_loadfile(L, "d:\\test.lua");
+  errorCode = luaL_loadstring (L, BinaryData::LuaBridgeTests_lua);
 
   if (errorCode != 0)
   {
@@ -376,8 +371,6 @@ std::string runLuaBridgeTests (lua_State* L)
       errorString = lua_tostring(L, -1);
     }
   }
-
-  int newStackSize = lua_gettop(L);
 
   lua_pop (L, 1); // get rid of our traceback function
 

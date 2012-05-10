@@ -256,6 +256,7 @@
     <ClCompile Include="..\..\Source\LuaLibrary.cpp"/>
     <ClCompile Include="..\..\Source\Main.cpp"/>
     <ClCompile Include="..\..\Source\LuaBridgeTests.cpp"/>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp"/>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Lua_5_2\lapi.h"/>
@@ -293,6 +294,7 @@
     <ClInclude Include="..\..\Source\CConsoleWindow.h"/>
     <ClInclude Include="..\..\Source\LuaCore.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h"/>
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
   </ItemGroup>
   <ItemGroup>

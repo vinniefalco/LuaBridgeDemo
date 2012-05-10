@@ -124,6 +124,8 @@
             file="JUCEAmalgam/include/juce_gui_basics_amalgam.mm"/>
     </GROUP>
     <GROUP id="{1FEE5481-FE4D-3591-BEC4-5213CEAAB221}" name="Source">
+      <FILE id="iIvCpF" name="LuaBridgeTests.lua" compile="0" resource="1"
+            file="Source/LuaBridgeTests.lua"/>
       <FILE id="coAbb7" name="App.cpp" compile="0" resource="0" file="Source/App.cpp"/>
       <FILE id="VPBPmf" name="CConsole.cpp" compile="0" resource="0" file="Source/CConsole.cpp"/>
       <FILE id="GUUOAa" name="CConsole.h" compile="0" resource="0" file="Source/CConsole.h"/>

@@ -51,6 +51,7 @@ OBJECTS := \
   $(OBJDIR)/LuaLibrary_2b643dac.o \
   $(OBJDIR)/Main_90ebc5c2.o \
   $(OBJDIR)/LuaBridgeTests_15236c89.o \
+  $(OBJDIR)/BinaryData_ce4232d4.o \
 
 .PHONY: clean
 
@@ -105,6 +106,11 @@ $(OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
 $(OBJDIR)/LuaBridgeTests_15236c89.o: ../../Source/LuaBridgeTests.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling LuaBridgeTests.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling BinaryData.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)

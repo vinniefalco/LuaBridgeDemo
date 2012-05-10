@@ -29,6 +29,7 @@
 		C2DD4184E9B09EED62C7C18A = { isa = PBXBuildFile; fileRef = 769EEC288B099E8C2EEF07B2; };
 		2D9A13BFB9D4D429DF7EF848 = { isa = PBXBuildFile; fileRef = 6957AB52EE86CC8D937F1B1A; };
 		732093034A6800E1006BFD57 = { isa = PBXBuildFile; fileRef = CC2CE8BF5FFAC53729F01BBC; };
+		F40F45247F78FC01C330B03E = { isa = PBXBuildFile; fileRef = 1A764CF389D341619186D790; };
 		017722D082620ABFA1288D4E = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CConsoleEdit.cpp; path = ../../Source/CConsoleEdit.cpp; sourceTree = "SOURCE_ROOT"; };
 		03FDCEF610C4C2B3DDBED513 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lparser.c; path = "../../Lua_5_2/lparser.c"; sourceTree = "SOURCE_ROOT"; };
 		09804419763EB6B085D3F12E = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -39,6 +40,7 @@
 		1437400D393C7B23525461EA = { isa = PBXFileReference; lastKnownFileType = file.c; name = lmathlib.c; path = "../../Lua_5_2/lmathlib.c"; sourceTree = "SOURCE_ROOT"; };
 		175B0298921E20A9C0363A60 = { isa = PBXFileReference; lastKnownFileType = text.TXT; name = CHANGES.TXT; path = ../../LuaBridge/CHANGES.TXT; sourceTree = "SOURCE_ROOT"; };
 		189E9DC578901D98F31ACDD1 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_core_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_core_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
+		1A764CF389D341619186D790 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryData.cpp; path = ../../JuceLibraryCode/BinaryData.cpp; sourceTree = "SOURCE_ROOT"; };
 		1AF807E355AEEA5D7AA8C3FE = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_data_structures_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_data_structures_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
 		1BD354595FD72D2898408F0F = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CConsoleText.cpp; path = ../../Source/CConsoleText.cpp; sourceTree = "SOURCE_ROOT"; };
 		1D2BF0E2055B832B7B847298 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_gui_basics_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_gui_basics_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
@@ -65,6 +67,7 @@
 		62C36307D9C3D25B1EC53476 = { isa = PBXFileReference; lastKnownFileType = file.c; name = ltable.c; path = "../../Lua_5_2/ltable.c"; sourceTree = "SOURCE_ROOT"; };
 		6388B907296CAA91701E0E1F = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_graphics_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_graphics_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
 		647A7C59EC5142FEED593037 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lua.c; path = "../../Lua_5_2/lua.c"; sourceTree = "SOURCE_ROOT"; };
+		64E4B412330202DD88D44AFE = { isa = PBXFileReference; lastKnownFileType = file.lua; name = LuaBridgeTests.lua; path = ../../Source/LuaBridgeTests.lua; sourceTree = "SOURCE_ROOT"; };
 		67B2EA159C90422E6C36C260 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lua.hpp; path = "../../Lua_5_2/lua.hpp"; sourceTree = "SOURCE_ROOT"; };
 		6957AB52EE86CC8D937F1B1A = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Source/Main.cpp; sourceTree = "SOURCE_ROOT"; };
 		6A58B24404F6249F9FC3E436 = { isa = PBXFileReference; lastKnownFileType = file.c; name = loslib.c; path = "../../Lua_5_2/loslib.c"; sourceTree = "SOURCE_ROOT"; };
@@ -82,6 +85,7 @@
 		8260EE3B0D30913FBEBD7FC4 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = typelist.h; path = ../../LuaBridge/LuaBridge/typelist.h; sourceTree = "SOURCE_ROOT"; };
 		846EBECB95A6EC9968B4F0D5 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lgc.h; path = "../../Lua_5_2/lgc.h"; sourceTree = "SOURCE_ROOT"; };
 		88632CE6741C1E055856C29B = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		8B3CB1647A28C52EC11ED38C = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BinaryData.h; path = ../../JuceLibraryCode/BinaryData.h; sourceTree = "SOURCE_ROOT"; };
 		8C1A2058C8062A86C682CE79 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lcode.h; path = "../../Lua_5_2/lcode.h"; sourceTree = "SOURCE_ROOT"; };
 		8CE1EF352F51FF445CE1B215 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lauxlib.c; path = "../../Lua_5_2/lauxlib.c"; sourceTree = "SOURCE_ROOT"; };
 		8DDB43A50CF2459A5DB95A4D = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LuaCore.cpp; path = ../../Source/LuaCore.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -208,6 +212,7 @@
 				11A0B339B5B6A4FBAE9BDDAE,
 				1D2BF0E2055B832B7B847298 ); name = JUCEAmalgam; sourceTree = "<group>"; };
 		DEB0D163D1C94F9534249BFE = { isa = PBXGroup; children = (
+				64E4B412330202DD88D44AFE,
 				1E7A292A306019EF882BB435,
 				F9393CE2ECA3B0F46449E596,
 				36F550B6532752A308B6A1B8,
@@ -229,6 +234,8 @@
 				DEB0D163D1C94F9534249BFE ); name = LuaBridgeDemo; sourceTree = "<group>"; };
 		2011959A46829E2367C051F5 = { isa = PBXGroup; children = (
 				3310822CA877BDF270E56B87,
+				1A764CF389D341619186D790,
+				8B3CB1647A28C52EC11ED38C,
 				5B05CB52BA3D9D28A3865709 ); name = "Juce Library Code"; sourceTree = "<group>"; };
 		F83AB0D0659BAE558362B10B = { isa = PBXGroup; children = (
 				F9C6AE93352683295BE72C06 ); name = Resources; sourceTree = "<group>"; };
@@ -336,7 +343,8 @@
 				09F7AF8B94C388B1B08BCA2A,
 				C2DD4184E9B09EED62C7C18A,
 				2D9A13BFB9D4D429DF7EF848,
-				732093034A6800E1006BFD57 ); runOnlyForDeploymentPostprocessing = 0; };
+				732093034A6800E1006BFD57,
+				F40F45247F78FC01C330B03E ); runOnlyForDeploymentPostprocessing = 0; };
 		C36D501292D7034A7B974AA9 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (
 				AAA7D4273C15EC8377F51BD7,
 				2D0C73CE75C553196FC0EBAF,
