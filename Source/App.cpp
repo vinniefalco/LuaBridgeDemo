@@ -29,7 +29,7 @@
 #include "LuaCore.h"
 #include "CConsoleWindow.h"
 
-extern void runTests ();
+extern std::string runTests ();
 
 class App  : public JUCEApplication
 {
@@ -49,13 +49,15 @@ public:
 
   void initialise (const String&)
   {
-    runTests ();
-
     // Do your application's initialisation code here..
 
     m_window = new CConsoleWindow (*m_luaCore);
 
     m_window->setVisible (true);
+
+    std::string errorString = runTests ();
+
+    m_luaCore->write (errorString.c_str ());
   }
 
   void shutdown()
