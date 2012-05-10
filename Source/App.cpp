@@ -29,6 +29,8 @@
 #include "LuaCore.h"
 #include "CConsoleWindow.h"
 
+extern void runTests ();
+
 class App  : public JUCEApplication
 {
 private:
@@ -47,6 +49,8 @@ public:
 
   void initialise (const String&)
   {
+    runTests ();
+
     // Do your application's initialisation code here..
 
     m_window = new CConsoleWindow (*m_luaCore);

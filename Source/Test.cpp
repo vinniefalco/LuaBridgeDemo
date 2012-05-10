@@ -43,11 +43,8 @@ using namespace std;
 int traceback (lua_State *L);
 void register_lua_funcs (lua_State *L);
 
-int main (int argc, char **argv)
+void runTests ()
 {
-  (void)argc;
-  (void)argv;
-
   // Create the Lua state
   lua_State *L = luaL_newstate();
 
@@ -66,23 +63,18 @@ int main (int argc, char **argv)
   int errfunc_index = lua_gettop(L);
 
   // Execute lua files in order
-  if (luaL_loadfile(L, "src/test.lua") != 0)
+  if (luaL_loadfile(L, "d:\\test.lua") != 0)
   {
     // compile-time error
     cerr << lua_tostring(L, -1) << endl;
-    lua_close(L);
-    return 1;
   }
   else if (lua_pcall(L, 0, 0, errfunc_index) != 0)
   {
     // runtime error
     cerr << lua_tostring(L, -1) << endl;
-    lua_close(L);
-    return 1;
   }
 
   lua_close(L);
-  return 0;
 }
 
 // traceback function, adapted from lua.c
