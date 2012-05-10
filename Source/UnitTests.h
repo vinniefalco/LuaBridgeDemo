@@ -28,8 +28,8 @@
 */
 //==============================================================================
 
-#ifndef LUABRIDGEDEMO_LUABRIDGETESTS_HEADER
-#define LUABRIDGEDEMO_LUABRIDGETESTS_HEADER
+#ifndef LUABRIDGEDEMO_UNITTESTS_HEADER
+#define LUABRIDGEDEMO_UNITTESTS_HEADER
 
 #include "TestHost.h"
 

@@ -147,6 +147,8 @@
       <FILE id="TaGHWu" name="UnitTests.cpp" compile="1" resource="0" file="Source/UnitTests.cpp"/>
       <FILE id="bEkfYH" name="UnitTests.h" compile="0" resource="0" file="Source/UnitTests.h"/>
       <FILE id="iIvCpF" name="UnitTests.lua" compile="0" resource="1" file="Source/UnitTests.lua"/>
+      <FILE id="Iseeup" name="UnitTests2.cpp" compile="1" resource="0" file="Source/UnitTests2.cpp"/>
+      <FILE id="UhxtSt" name="UnitTests2.h" compile="0" resource="0" file="Source/UnitTests2.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

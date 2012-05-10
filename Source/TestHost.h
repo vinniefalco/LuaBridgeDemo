@@ -51,6 +51,11 @@ public:
     Called to destroy the environment when it is no longer needed.
   */
   virtual void destroyTestEnvironment (lua_State* L) = 0;
+
+  /**
+    Prints output
+  */
+  virtual void print (std::string text) = 0;
 };
 
 #endif

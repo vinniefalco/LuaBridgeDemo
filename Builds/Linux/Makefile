@@ -51,6 +51,7 @@ OBJECTS := \
   $(OBJDIR)/LuaLibrary_2b643dac.o \
   $(OBJDIR)/Main_90ebc5c2.o \
   $(OBJDIR)/UnitTests_cf65a5de.o \
+  $(OBJDIR)/UnitTests2_1d6f2bde.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
 
 .PHONY: clean
@@ -106,6 +107,11 @@ $(OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
 $(OBJDIR)/UnitTests_cf65a5de.o: ../../Source/UnitTests.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling UnitTests.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/UnitTests2_1d6f2bde.o: ../../Source/UnitTests2.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling UnitTests2.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp

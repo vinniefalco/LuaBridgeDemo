@@ -4,6 +4,7 @@
   https://github.com/vinniefalco/LuaBridgeDemo
   
   Copyright (C) 2012, Vinnie Falco <vinnie.falco@gmail.com>
+  Copyright (C) 2007, Nathan Reed
 
   License: The MIT License (http://www.opensource.org/licenses/mit-license.php)
 
@@ -27,74 +28,11 @@
 */
 //==============================================================================
 
-#include "LuaState.h"
-#include "CConsoleWindow.h"
-#include "UnitTests.h"
-#include "UnitTests2.h"
+#ifndef LUABRIDGEDEMO_UNITTESTS2_HEADER
+#define LUABRIDGEDEMO_UNITTESTS2_HEADER
 
-class App : public JUCEApplication
-{
-private:
-  ScopedPointer <LuaState> m_luaState;
-  ScopedPointer <CConsoleWindow> m_window;
+#include "TestHost.h"
 
-public:
-  App()
-    : m_luaState (LuaState::New ())
-  {
-  }
+extern void runUnitTests2 (TestHost& host);
 
-  ~App()
-  {
-  }
-
-  void initialise (const String&)
-  {
-    // Do your application's initialisation code here..
-
-    m_window = new CConsoleWindow (*m_luaState);
-
-    m_window->setVisible (true);
-
-    std::string errorString = runUnitTests (*m_luaState);
-
-    if (errorString.size () > 0)
-      m_luaState->print (errorString.c_str ());
-
-    runUnitTests2 (*m_luaState);
-  }
-
-  void shutdown()
-  {
-    // Do your application's shutdown code here..
-
-    m_window = nullptr;
-  }
-
-  void systemRequestedQuit()
-  {
-    quit();
-  }
-
-  const String getApplicationName()
-  {
-    return "LuaBridge Demo";
-  }
-
-  const String getApplicationVersion()
-  {
-    return "1.0";
-  }
-
-  bool moreThanOneInstanceAllowed()
-  {
-    return true;
-  }
-
-  void anotherInstanceStarted (const String&)
-  {
-
-  }
-};
-
-START_JUCE_APPLICATION (App)
+#endif

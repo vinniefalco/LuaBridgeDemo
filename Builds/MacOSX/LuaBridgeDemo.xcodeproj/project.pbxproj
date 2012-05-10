@@ -29,9 +29,11 @@
 		C2DD4184E9B09EED62C7C18A = { isa = PBXBuildFile; fileRef = 769EEC288B099E8C2EEF07B2; };
 		2D9A13BFB9D4D429DF7EF848 = { isa = PBXBuildFile; fileRef = 6957AB52EE86CC8D937F1B1A; };
 		82FA3F6BB481DD5FE1C83A31 = { isa = PBXBuildFile; fileRef = BFEA5603DDE25BE915165A66; };
+		E94BEA6DAC8CBBE2684DA400 = { isa = PBXBuildFile; fileRef = 5DC21126794ABC96F605AB07; };
 		F40F45247F78FC01C330B03E = { isa = PBXBuildFile; fileRef = 1A764CF389D341619186D790; };
 		0110F715854624935FD9A8DC = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TestHost.h; path = ../../Source/TestHost.h; sourceTree = "SOURCE_ROOT"; };
 		017722D082620ABFA1288D4E = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CConsoleEdit.cpp; path = ../../Source/CConsoleEdit.cpp; sourceTree = "SOURCE_ROOT"; };
+		03782DA0C97C7B887F2551EE = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = UnitTests2.h; path = ../../Source/UnitTests2.h; sourceTree = "SOURCE_ROOT"; };
 		03FDCEF610C4C2B3DDBED513 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lparser.c; path = "../../Lua_5_2/lparser.c"; sourceTree = "SOURCE_ROOT"; };
 		09804419763EB6B085D3F12E = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		0B34FDD9C0885CB346225B09 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = luaconf.h; path = "../../Lua_5_2/luaconf.h"; sourceTree = "SOURCE_ROOT"; };
@@ -65,6 +67,7 @@
 		5AEEC3E3E69543E5D60D2E6F = { isa = PBXFileReference; lastKnownFileType = file.c; name = lfunc.c; path = "../../Lua_5_2/lfunc.c"; sourceTree = "SOURCE_ROOT"; };
 		5B05CB52BA3D9D28A3865709 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = "SOURCE_ROOT"; };
 		5CEF8059E08C981BC9AFD71C = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lstring.h; path = "../../Lua_5_2/lstring.h"; sourceTree = "SOURCE_ROOT"; };
+		5DC21126794ABC96F605AB07 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = UnitTests2.cpp; path = ../../Source/UnitTests2.cpp; sourceTree = "SOURCE_ROOT"; };
 		5F93E405F911E14D63436DB9 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lobject.h; path = "../../Lua_5_2/lobject.h"; sourceTree = "SOURCE_ROOT"; };
 		62C36307D9C3D25B1EC53476 = { isa = PBXFileReference; lastKnownFileType = file.c; name = ltable.c; path = "../../Lua_5_2/ltable.c"; sourceTree = "SOURCE_ROOT"; };
 		6388B907296CAA91701E0E1F = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_graphics_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_graphics_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
@@ -231,7 +234,9 @@
 		9FEE52F5B78E0D5802A7CE32 = { isa = PBXGroup; children = (
 				BFEA5603DDE25BE915165A66,
 				4CB340A161EB3F1F7186AD0F,
-				6D571987B8A79CB7CBAE0EBF ); name = "Unit Tests"; sourceTree = "<group>"; };
+				6D571987B8A79CB7CBAE0EBF,
+				5DC21126794ABC96F605AB07,
+				03782DA0C97C7B887F2551EE ); name = "Unit Tests"; sourceTree = "<group>"; };
 		35B0215222A399CB6AB25D94 = { isa = PBXGroup; children = (
 				E240EEDFC26F332741DD81D3,
 				5C026953D15AFC4D93600FD8,
@@ -350,6 +355,7 @@
 				C2DD4184E9B09EED62C7C18A,
 				2D9A13BFB9D4D429DF7EF848,
 				82FA3F6BB481DD5FE1C83A31,
+				E94BEA6DAC8CBBE2684DA400,
 				F40F45247F78FC01C330B03E ); runOnlyForDeploymentPostprocessing = 0; };
 		C36D501292D7034A7B974AA9 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (
 				AAA7D4273C15EC8377F51BD7,

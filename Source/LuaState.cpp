@@ -138,7 +138,7 @@ public:
       lua_pop(L, 1);  /* pop result */
     }
     text << "\n";
-    luaState->print (text);
+    luaState->print (std::string (text.toUTF8 ()));
     return 0;
   }
 
@@ -149,6 +149,7 @@ public:
     luaL_openlibs (L);
 
     // Hook the print function.
+    // Must happen after opening the io lib.
     lua_pushlightuserdata (L, this);
     lua_pushcclosure (L, &LuaStateImp::print, 1);
     lua_setglobal (L, "print");
@@ -172,11 +173,13 @@ public:
     m_listeners.remove (listener);
   }
 
-  void print (String text)
+  void print (std::string text)
   {
-    m_state.lines.add (text);
+    String s (text.c_str ());
 
-    m_listeners.call (&Listener::onLuaStatePrint, text);
+    m_state.lines.add (s);
+
+    m_listeners.call (&Listener::onLuaStatePrint, s);
   }
 
   void doString (String text)
