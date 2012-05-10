@@ -39,14 +39,12 @@ CConsoleText::CConsoleText (LuaCore& luaCore)
     c->setReadOnly (true);
     c->setMultiLine (true, true);
     c->setFont (16);
-    c->setColour (TextEditor::backgroundColourId, Colours::transparentBlack);
-    c->setColour (TextEditor::textColourId,       Colours::white);
-    c->setColour (TextEditor::highlightColourId,  Colours::cyan);
-    c->setColour (TextEditor::highlightColourId,  Colours::cyan);
-
-    c->setColour (TextEditor::outlineColourId,    Colours::transparentBlack);
-    c->setColour (TextEditor::shadowColourId,     Colour::fromRGBA (255, 255, 255, 32));
-    c->setColour (TextEditor::highlightColourId,  Colours::cyan);
+    c->setColour (TextEditor::backgroundColourId,       Colours::transparentBlack);
+    c->setColour (TextEditor::textColourId,             Colours::white);
+    c->setColour (TextEditor::highlightColourId,        Colour::fromRGBA (0, 255, 255, 96));
+    c->setColour (TextEditor::highlightedTextColourId,  Colours::white);
+    c->setColour (TextEditor::outlineColourId,          Colours::transparentBlack);
+    c->setColour (TextEditor::shadowColourId,           Colour::fromRGBA (255, 255, 255, 32));
     
     c->setBounds (0, 0, 400, 100);
     addAndMakeVisible (c);
