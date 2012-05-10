@@ -1,9 +1,12 @@
+//==============================================================================
 /*
-  ==============================================================================
+  https://github.com/vinniefalco/LuaBridge
+  https://github.com/vinniefalco/LuaBridgeDemo
+  
+  Copyright (C) 2012, Vinnie Falco <vinnie.falco@gmail.com>
+  Copyright (C) 2007, Nathan Reed
 
-  Copyright (c) 2012, Vinnie Falco <vinnie.falco@gmail.com>
-
-  This file is provided under the terms of the MIT License:
+  License: The MIT License (http://www.opensource.org/licenses/mit-license.php)
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +25,8 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
-
-  ==============================================================================
 */
+//==============================================================================
 
 // A set of tests of different types' communication with Lua
 
@@ -39,57 +41,6 @@
 #include "LuaBridge/LuaBridge/luabridge.h"
 
 using namespace std;
-
-int traceback (lua_State *L);
-void register_lua_funcs (lua_State *L);
-
-std::string runTests ()
-{
-  std::string errorString;
-
-  // Create the Lua state
-  lua_State *L = luaL_newstate();
-
-  // Provide the base libraries
-  luaopen_base(L);
-  luaopen_table(L);
-  luaopen_string(L);
-  luaopen_math(L);
-  luaopen_debug(L);
-
-  // Provide user libraries
-  register_lua_funcs(L);
-
-  // Put the traceback function on the stack
-  lua_pushcfunction(L, &traceback);
-  int errfunc_index = lua_gettop(L);
-
-  // Execute lua files in order
-  int errorCode;
-
-  errorCode = luaL_loadfile(L, "d:\\test.lua");
-
-  if (errorCode != 0)
-  {
-    // compile-time error
-    errorString = lua_tostring(L, -1);
-  }
-  
-  if (!errorCode)
-  {
-    errorCode = lua_pcall(L, 0, 0, errfunc_index);
-
-    if (errorCode != 0)
-    {
-      // runtime error
-      errorString = lua_tostring(L, -1);
-    }
-  }
-
-  lua_close(L);
-
-  return errorString;
-}
 
 // traceback function, adapted from lua.c
 // when a runtime error occurs, this will append the call stack to the error message
@@ -380,3 +331,55 @@ void register_lua_funcs (lua_State *L)
     .function("testRetSharedPtrConstA", &testRetSharedPtrConstA);
 }
 
+//==============================================================================
+
+std::string runLuaBridgeTests (lua_State* L)
+{
+  std::string errorString;
+
+  /*
+  // Create the Lua state
+  lua_State *L = luaL_newstate();
+  // Provide the base libraries
+  luaopen_base(L);
+  luaopen_table(L);
+  luaopen_string(L);
+  luaopen_math(L);
+  luaopen_debug(L);
+  */
+
+  // Provide user libraries
+  register_lua_funcs(L);
+
+  // Put the traceback function on the stack
+  lua_pushcfunction(L, &traceback);
+  int errfunc_index = lua_gettop(L);
+
+  // Execute lua files in order
+  int errorCode;
+
+  errorCode = luaL_loadfile(L, "d:\\test.lua");
+
+  if (errorCode != 0)
+  {
+    // compile-time error
+    errorString = lua_tostring(L, -1);
+  }
+  
+  if (!errorCode)
+  {
+    errorCode = lua_pcall(L, 0, 0, errfunc_index);
+
+    if (errorCode != 0)
+    {
+      // runtime error
+      errorString = lua_tostring(L, -1);
+    }
+  }
+
+  int newStackSize = lua_gettop(L);
+
+  lua_pop (L, 1); // get rid of our traceback function
+
+  return errorString;
+}

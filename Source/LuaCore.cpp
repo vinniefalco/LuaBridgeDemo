@@ -1,9 +1,11 @@
+//==============================================================================
 /*
-  ==============================================================================
+  https://github.com/vinniefalco/LuaBridge
+  https://github.com/vinniefalco/LuaBridgeDemo
+  
+  Copyright (C) 2012, Vinnie Falco <vinnie.falco@gmail.com>
 
-  Copyright (c) 2012, Vinnie Falco <vinnie.falco@gmail.com>
-
-  This file is provided under the terms of the MIT License:
+  License: The MIT License (http://www.opensource.org/licenses/mit-license.php)
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +24,8 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
-
-  ==============================================================================
 */
+//==============================================================================
 
 // for k,v in pairs(_G) do print(k,v) end
 
@@ -152,6 +153,11 @@ public:
   void removeListener (Listener* listener)
   {
     m_listeners.remove (listener);
+  }
+
+  lua_State* getLuaState ()
+  {
+    return m_lua;
   }
 
   void write (String text)

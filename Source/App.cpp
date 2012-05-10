@@ -1,9 +1,11 @@
+//==============================================================================
 /*
-  ==============================================================================
+  https://github.com/vinniefalco/LuaBridge
+  https://github.com/vinniefalco/LuaBridgeDemo
+  
+  Copyright (C) 2012, Vinnie Falco <vinnie.falco@gmail.com>
 
-  Copyright (c) 2012 by Vinnie Falco
-
-  This file is provided under the terms of the MIT License:
+  License: The MIT License (http://www.opensource.org/licenses/mit-license.php)
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +24,13 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
-
-  ==============================================================================
 */
+//==============================================================================
 
 #include "LuaCore.h"
 #include "CConsoleWindow.h"
 
-extern std::string runTests ();
+extern std::string runLuaBridgeTests (lua_State* L);
 
 class App  : public JUCEApplication
 {
@@ -55,7 +56,7 @@ public:
 
     m_window->setVisible (true);
 
-    std::string errorString = runTests ();
+    std::string errorString = runLuaBridgeTests (m_luaCore->getLuaState ());
 
     m_luaCore->write (errorString.c_str ());
   }

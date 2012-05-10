@@ -50,7 +50,7 @@ OBJECTS := \
   $(OBJDIR)/juce_gui_basics_amalgam_dc5a1886.o \
   $(OBJDIR)/LuaLibrary_2b643dac.o \
   $(OBJDIR)/Main_90ebc5c2.o \
-  $(OBJDIR)/Test_4d11f01b.o \
+  $(OBJDIR)/LuaBridgeTests_15236c89.o \
 
 .PHONY: clean
 
@@ -102,9 +102,9 @@ $(OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
 	@echo "Compiling Main.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/Test_4d11f01b.o: ../../Source/Test.cpp
+$(OBJDIR)/LuaBridgeTests_15236c89.o: ../../Source/LuaBridgeTests.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling Test.cpp"
+	@echo "Compiling LuaBridgeTests.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)

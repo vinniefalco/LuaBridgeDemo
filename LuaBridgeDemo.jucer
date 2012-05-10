@@ -98,7 +98,6 @@
       <FILE id="UeMApm" name="shared_ptr.h" compile="0" resource="0" file="LuaBridge/LuaBridge/shared_ptr.h"/>
       <FILE id="XU9JBv" name="stack.h" compile="0" resource="0" file="LuaBridge/LuaBridge/stack.h"/>
       <FILE id="kHy6C7" name="typelist.h" compile="0" resource="0" file="LuaBridge/LuaBridge/typelist.h"/>
-      <FILE id="qlfpWS" name="class.h" compile="0" resource="0" file="LuaBridge/LuaBridge/class.h"/>
       <FILE id="XPW20k" name="luabridge.h" compile="0" resource="0" file="LuaBridge/LuaBridge/luabridge.h"/>
       <FILE id="R7AsIo" name="CHANGES.TXT" compile="1" resource="0" file="LuaBridge/CHANGES.TXT"/>
     </GROUP>
@@ -142,7 +141,8 @@
       <FILE id="HA3Su9" name="LuaCore.h" compile="0" resource="0" file="Source/LuaCore.h"/>
       <FILE id="uTnbb1" name="LuaLibrary.cpp" compile="1" resource="0" file="Source/LuaLibrary.cpp"/>
       <FILE id="zdep57" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="TaGHWu" name="Test.cpp" compile="1" resource="0" file="Source/Test.cpp"/>
+      <FILE id="TaGHWu" name="LuaBridgeTests.cpp" compile="1" resource="0"
+            file="Source/LuaBridgeTests.cpp"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
