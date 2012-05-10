@@ -27,16 +27,16 @@
 */
 //==============================================================================
 
-CConsole::CConsole (LuaCore& luaCore)
+CConsole::CConsole (LuaState& luaState)
 {
   {
-    Component* c = new CConsoleText (luaCore);
+    Component* c = new CConsoleText (luaState);
     addAndMakeVisible (c);
     m_text = c;
   }
 
   {
-    Component* c = new CConsoleEdit (luaCore);
+    Component* c = new CConsoleEdit (luaState);
     addAndMakeVisible (c);
     m_edit = c;
   }

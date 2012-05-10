@@ -27,13 +27,13 @@
 */
 //==============================================================================
 
-#ifndef CCONSOLEWINDOW_HEADER
-#define CCONSOLEWINDOW_HEADER
+#ifndef LUABRIDGEDEMO_CCONSOLEWINDOW_HEADER
+#define LUABRIDGEDEMO_CCONSOLEWINDOW_HEADER
 
 class CConsoleWindow : public DocumentWindow
 {
 public:
-  explicit CConsoleWindow (LuaCore& luaCore);
+  explicit CConsoleWindow (LuaState& luaState);
   ~CConsoleWindow ();
 
   void closeButtonPressed ();

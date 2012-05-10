@@ -27,20 +27,19 @@
 */
 //==============================================================================
 
-#include "LuaCore.h"
+#include "LuaState.h"
 #include "CConsoleWindow.h"
+#include "UnitTests.h"
 
-extern std::string runLuaBridgeTests (lua_State* L);
-
-class App  : public JUCEApplication
+class App : public JUCEApplication
 {
 private:
-  ScopedPointer <LuaCore> m_luaCore;
+  ScopedPointer <LuaState> m_luaState;
   ScopedPointer <CConsoleWindow> m_window;
 
 public:
   App()
-    : m_luaCore (LuaCore::New ())
+    : m_luaState (LuaState::New ())
   {
   }
 
@@ -52,13 +51,13 @@ public:
   {
     // Do your application's initialisation code here..
 
-    m_window = new CConsoleWindow (*m_luaCore);
+    m_window = new CConsoleWindow (*m_luaState);
 
     m_window->setVisible (true);
 
-    std::string errorString = runLuaBridgeTests (m_luaCore->getLuaState ());
+    std::string errorString = runUnitTests (*m_luaState);
 
-    m_luaCore->write (errorString.c_str ());
+    m_luaState->print (errorString.c_str ());
   }
 
   void shutdown()

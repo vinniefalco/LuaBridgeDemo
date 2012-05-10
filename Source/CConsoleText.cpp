@@ -28,8 +28,8 @@
 //==============================================================================
 
 
-CConsoleText::CConsoleText (LuaCore& luaCore)
-  : m_luaCore (luaCore)
+CConsoleText::CConsoleText (LuaState& luaState)
+  : m_luaState (luaState)
   , m_text (new TextEditor)
 {
   setSize (400, 100);
@@ -50,12 +50,12 @@ CConsoleText::CConsoleText (LuaCore& luaCore)
     addAndMakeVisible (c);
   }
 
-  m_luaCore.addListener (this);
+  m_luaState.addListener (this);
 }
 
 CConsoleText::~CConsoleText ()
 {
-  m_luaCore.removeListener (this);
+  m_luaState.removeListener (this);
 }
 
 void CConsoleText::resized ()
@@ -63,7 +63,7 @@ void CConsoleText::resized ()
   m_text->setBounds (0, 0, getWidth (), getHeight ());
 }
 
-void CConsoleText::onLuaCoreOutput (String text)
+void CConsoleText::onLuaStatePrint (String text)
 {
   m_text->moveCaretToEnd ();
 

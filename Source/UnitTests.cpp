@@ -44,7 +44,7 @@
 #include "JUCEAmalgam/include/juce_gui_basics_amalgam.h"
 
 #include "BinaryData.h"
-
+#include "UnitTests.h"
 
 using namespace std;
 
@@ -339,12 +339,14 @@ void register_lua_funcs (lua_State *L)
 
 //==============================================================================
 
-std::string runLuaBridgeTests (lua_State* L)
+std::string runUnitTests (TestHost& host)
 {
   std::string errorString;
 
+  lua_State* L = host.createTestEnvironment ();
+
   // Provide user libraries
-  register_lua_funcs(L);
+  register_lua_funcs (L);
 
   // Put the traceback function on the stack
   lua_pushcfunction(L, &traceback);
@@ -353,7 +355,7 @@ std::string runLuaBridgeTests (lua_State* L)
   // Execute lua files in order
   int errorCode = 0;
 
-  errorCode = luaL_loadstring (L, BinaryData::LuaBridgeTests_lua);
+  errorCode = luaL_loadstring (L, BinaryData::UnitTests_lua);
 
   if (errorCode != 0)
   {
@@ -373,6 +375,8 @@ std::string runLuaBridgeTests (lua_State* L)
   }
 
   lua_pop (L, 1); // get rid of our traceback function
+
+  host.destroyTestEnvironment (L);
 
   return errorString;
 }

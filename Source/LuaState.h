@@ -27,27 +27,32 @@
 */
 //==============================================================================
 
-#ifndef LUACORE_HEADER
-#define LUACORE_HEADER
+#ifndef LUABRIDGEDEMO_LUASTATE_HEADER
+#define LUABRIDGEDEMO_LUASTATE_HEADER
 
-class LuaCore
+#include "TestHost.h"
+
+/**
+  lua_State wrapper.
+
+  Output from print() is captured and provided to all Listener observers.
+*/
+class LuaState : public TestHost
 {
 public:
   class Listener
   {
   public:
-    virtual void onLuaCoreOutput (String text) = 0;
+    virtual void onLuaStatePrint (String text) = 0;
   };
 
-  static LuaCore* New ();
-  virtual ~LuaCore () = 0;
+  static LuaState* New ();
+  virtual ~LuaState () = 0;
   
   virtual void addListener (Listener* listener) = 0;
   virtual void removeListener (Listener* listener) = 0;
 
-  virtual lua_State* getLuaState () = 0;
-
-  virtual void write (String text) = 0;
+  virtual void print (String text) = 0;
 
   virtual void doString (String chunk) = 0;
 };

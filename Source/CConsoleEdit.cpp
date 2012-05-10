@@ -27,8 +27,8 @@
 */
 //==============================================================================
 
-CConsoleEdit::CConsoleEdit (LuaCore& luaCore)
-  : m_luaCore (luaCore)
+CConsoleEdit::CConsoleEdit (LuaState& luaState)
+  : m_luaState (luaState)
 {
   {
     TextEditor* c = new TextEditor;
@@ -56,6 +56,6 @@ void CConsoleEdit::textEditorReturnKeyPressed (TextEditor& editor)
 
   editor.clear ();
 
-  m_luaCore.doString (text);
+  m_luaState.doString (text);
 }
 

@@ -4,6 +4,7 @@
   https://github.com/vinniefalco/LuaBridgeDemo
   
   Copyright (C) 2012, Vinnie Falco <vinnie.falco@gmail.com>
+  Copyright (C) 2007, Nathan Reed
 
   License: The MIT License (http://www.opensource.org/licenses/mit-license.php)
 
@@ -27,26 +28,15 @@
 */
 //==============================================================================
 
-#ifndef CCONSOLETEXT_HEADER
-#define CCONSOLETEXT_HEADER
+#ifndef LUABRIDGEDEMO_LUABRIDGETESTS_HEADER
+#define LUABRIDGEDEMO_LUABRIDGETESTS_HEADER
 
-#include "LuaState.h"
+#include "TestHost.h"
 
-class CConsoleText
-  : public Component
-  , private LuaState::Listener
-{
-public:
-  explicit CConsoleText (LuaState& luaState);
-  ~CConsoleText ();
+#include <string>
 
-  void resized ();
+struct lua_State;
 
-  void onLuaStatePrint (String text);
-
-private:
-  LuaState& m_luaState;
-  ScopedPointer <TextEditor> m_text;
-};
+extern std::string runUnitTests (TestHost& host);
 
 #endif

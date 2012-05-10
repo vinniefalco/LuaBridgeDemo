@@ -27,15 +27,15 @@
 */
 //==============================================================================
 
-#ifndef CCONSOLE_HEADER
-#define CCONSOLE_HEADER
+#ifndef LUABRIDGEDEMO_CCONSOLE_HEADER
+#define LUABRIDGEDEMO_CCONSOLE_HEADER
 
 #include "CConsoleEdit.h"
 
 class CConsole : public Component
 {
 public:
-  explicit CConsole (LuaCore& luaCore);
+  explicit CConsole (LuaState& luaState);
   ~CConsole ();
 
   void resized ();

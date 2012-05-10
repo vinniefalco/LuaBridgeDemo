@@ -27,7 +27,7 @@
 */
 //==============================================================================
 
-CConsoleWindow::CConsoleWindow (LuaCore& luaCore)
+CConsoleWindow::CConsoleWindow (LuaState& luaState)
   : DocumentWindow (
       TRANS("Lua Console"),
       Colours::black,
@@ -46,7 +46,7 @@ CConsoleWindow::CConsoleWindow (LuaCore& luaCore)
   Component::addToDesktop (getDesktopWindowStyleFlags());
 
   // must happen after addToDesktop()
-  Component* c = new CConsole (luaCore);
+  Component* c = new CConsole (luaState);
   c->setBounds (0, 0, 640, 480);
   setContentOwned (c, true);
 

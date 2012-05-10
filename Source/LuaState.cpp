@@ -29,6 +29,7 @@
 
 // for k,v in pairs(_G) do print(k,v) end
 
+#if 0
 static void print (lua_State* L, String text)
 {
   lua_getglobal (L, "print");
@@ -41,51 +42,23 @@ static int test ()
 {
   return 42;
 }
-
-// from luaB_print()
-//
-static int print (lua_State *L)
-{
-  LuaCore* const luaCore = static_cast <LuaCore*> (
-    lua_touserdata (L, lua_upvalueindex (1)));
-
-  String text;
-  int n = lua_gettop(L);  /* number of arguments */
-  int i;
-  lua_getglobal(L, "tostring");
-  for (i=1; i<=n; i++) {
-    const char *s;
-    size_t l;
-    lua_pushvalue(L, -1);  /* function to be called */
-    lua_pushvalue(L, i);   /* value to print */
-    lua_call(L, 1, 1);
-    s = lua_tolstring(L, -1, &l);  /* get result */
-    if (s == NULL)
-      return luaL_error(L,
-         LUA_QL("tostring") " must return a string to " LUA_QL("print"));
-    if (i>1) text << " ";
-    text << String (s, l);
-    lua_pop(L, 1);  /* pop result */
-  }
-  text << "\n";
-  luaCore->write (text);
-  return 0;
-}
+#endif
 
 //==============================================================================
 
+#if 0
 class Object
 {
 private:
   Object (Object const&);
   Object& operator= (Object const&);
 
-  LuaCore& m_luaCore;
+  LuaState& m_luaState;
   lua_State* m_lua;
 
 public:
-  Object (LuaCore& luaCore, lua_State* lua)
-    : m_luaCore (luaCore)
+  Object (LuaState& luaState, lua_State* lua)
+    : m_luaState (luaState)
     , m_lua (lua)
   {
     luabridge::scope m (m_lua);
@@ -104,7 +77,7 @@ public:
 
   void f1 ()
   {
-    m_luaCore.write ("f1\n");
+    m_luaState.write ("f1\n");
   }
 
   static void s1 ()
@@ -112,10 +85,11 @@ public:
     //print ("t1\n");
   }
 };
+#endif
 
 //==============================================================================
 
-class LuaCoreImp : public LuaCore
+class LuaStateImp : public LuaState
 {
 private:
   struct State
@@ -128,22 +102,65 @@ private:
   lua_State* m_lua;
 
 public:
-  LuaCoreImp ()
-    : m_lua (luaL_newstate ())
+  LuaStateImp () : m_lua (createEnvironment ())
   {
-    luaL_openlibs (m_lua);
-
-    lua_pushlightuserdata (m_lua, this);
-    lua_pushcclosure (m_lua, print, 1);
-    lua_setglobal (m_lua, "print");
-
-    new Object (*this, m_lua);
+    //new Object (*this, m_lua);
   }
 
-  ~LuaCoreImp ()
+  ~LuaStateImp ()
   {
     lua_close (m_lua);
   }
+
+  // from luaB_print()
+  //
+  static int print (lua_State *L)
+  {
+    LuaState* const luaState = static_cast <LuaState*> (
+      lua_touserdata (L, lua_upvalueindex (1)));
+
+    String text;
+    int n = lua_gettop(L);  /* number of arguments */
+    int i;
+    lua_getglobal(L, "tostring");
+    for (i=1; i<=n; i++) {
+      const char *s;
+      size_t l;
+      lua_pushvalue(L, -1);  /* function to be called */
+      lua_pushvalue(L, i);   /* value to print */
+      lua_call(L, 1, 1);
+      s = lua_tolstring(L, -1, &l);  /* get result */
+      if (s == NULL)
+        return luaL_error(L,
+           LUA_QL("tostring") " must return a string to " LUA_QL("print"));
+      if (i>1) text << " ";
+      text << String (s, l);
+      lua_pop(L, 1);  /* pop result */
+    }
+    text << "\n";
+    luaState->print (text);
+    return 0;
+  }
+
+  lua_State* createEnvironment ()
+  {
+    lua_State* L (luaL_newstate ());
+
+    luaL_openlibs (L);
+
+    // Hook the print function.
+    lua_pushlightuserdata (L, this);
+    lua_pushcclosure (L, &LuaStateImp::print, 1);
+    lua_setglobal (L, "print");
+
+    return L;
+  }
+  
+  //----------------------------------------------------------------------------
+  //
+  // LuaState
+  //
+  //----------------------------------------------------------------------------
 
   void addListener (Listener* listener)
   {
@@ -155,16 +172,11 @@ public:
     m_listeners.remove (listener);
   }
 
-  lua_State* getLuaState ()
-  {
-    return m_lua;
-  }
-
-  void write (String text)
+  void print (String text)
   {
     m_state.lines.add (text);
 
-    m_listeners.call (&Listener::onLuaCoreOutput, text);
+    m_listeners.call (&Listener::onLuaStatePrint, text);
   }
 
   void doString (String text)
@@ -173,20 +185,34 @@ public:
 
     if (result != 0)
     {
-      String errorMessage = lua_tostring (m_lua, -1);
-
-      write (errorMessage);
+      print (lua_tostring (m_lua, -1));
     }
 
-    write ("\n");
+    print ("\n");
+  }
+
+  //----------------------------------------------------------------------------
+  //
+  // TestHost
+  //
+  //----------------------------------------------------------------------------
+
+  lua_State* createTestEnvironment ()
+  {
+    return createEnvironment ();
+  }
+
+  void destroyTestEnvironment (lua_State* L)
+  {
+    lua_close (L);
   }
 };
 
-LuaCore::~LuaCore ()
+LuaState::~LuaState ()
 {
 }
 
-LuaCore* LuaCore::New ()
+LuaState* LuaState::New ()
 {
-  return new LuaCoreImp;
+  return new LuaStateImp;
 }

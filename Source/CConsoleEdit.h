@@ -27,17 +27,17 @@
 */
 //==============================================================================
 
-#ifndef CCONSOLEEDIT_HEADER
-#define CCONSOLEEDIT_HEADER
+#ifndef LUABRIDGEDEMO_CCONSOLEEDIT_HEADER
+#define LUABRIDGEDEMO_CCONSOLEEDIT_HEADER
 
-#include "LuaCore.h"
+#include "LuaState.h"
 
 class CConsoleEdit
   : public Component
   , private TextEditor::Listener
 {
 public:
-  explicit CConsoleEdit (LuaCore& luaCore);
+  explicit CConsoleEdit (LuaState& luaState);
   ~CConsoleEdit ();
 
   void resized ();
@@ -46,7 +46,7 @@ private:
   void textEditorReturnKeyPressed (TextEditor& editor);
 
 private:
-  LuaCore& m_luaCore;
+  LuaState& m_luaState;
   ScopedPointer <Component> m_edit;
 };
 

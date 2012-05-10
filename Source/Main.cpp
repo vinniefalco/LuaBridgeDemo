@@ -43,7 +43,7 @@ using namespace juce;
 #include "CConsoleEdit.h"
 #include "CConsoleText.h"
 #include "CConsoleWindow.h"
-#include "LuaCore.h"
+#include "LuaState.h"
 
 #include "LuaBridge/LuaBridge/shared_ptr.cpp"
 
@@ -51,6 +51,6 @@ using namespace juce;
 #include "CConsoleEdit.cpp"
 #include "CConsoleText.cpp"
 #include "CConsoleWindow.cpp"
-#include "LuaCore.cpp"
+#include "LuaState.cpp"
 
 #include "App.cpp"

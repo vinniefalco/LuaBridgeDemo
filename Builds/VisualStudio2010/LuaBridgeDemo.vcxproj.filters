@@ -5,23 +5,56 @@
     <Filter Include="LuaBridgeDemo">
       <UniqueIdentifier>{7F8DCBD1-928B-A2E2-7028-60069398EAC1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LuaBridgeDemo\JUCEAmalgam">
+      <UniqueIdentifier>{624173F2-A8D8-6494-001C-6B692A254F84}</UniqueIdentifier>
+    </Filter>
     <Filter Include="LuaBridgeDemo\Lua">
       <UniqueIdentifier>{FA61A657-A79F-BBF9-87D6-98659F160CFD}</UniqueIdentifier>
     </Filter>
     <Filter Include="LuaBridgeDemo\LuaBridge">
       <UniqueIdentifier>{F8E77F02-AB72-D4D9-BD84-50BE42BDA9A8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="LuaBridgeDemo\JUCEAmalgam">
-      <UniqueIdentifier>{624173F2-A8D8-6494-001C-6B692A254F84}</UniqueIdentifier>
-    </Filter>
     <Filter Include="LuaBridgeDemo\Source">
       <UniqueIdentifier>{C229198E-1100-DAD5-E48D-684A1778856B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeDemo\Unit Tests">
+      <UniqueIdentifier>{5F7F26DF-5D5F-C8C9-5051-8FD71B316915}</UniqueIdentifier>
     </Filter>
     <Filter Include="Juce Library Code">
       <UniqueIdentifier>{8B4D1BAA-6DB4-CAEC-A0FA-271F354D5C61}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_data_structures_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_data_structures_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Lua_5_2\lapi.c">
       <Filter>LuaBridgeDemo\Lua</Filter>
     </ClCompile>
@@ -124,42 +157,6 @@
     <ClCompile Include="..\..\LuaBridge\LuaBridge\shared_ptr.cpp">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\LuaBridge\CHANGES.TXT">
-      <Filter>LuaBridgeDemo\LuaBridge</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.cpp">
-      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.mm">
-      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_data_structures_amalgam.cpp">
-      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_data_structures_amalgam.mm">
-      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.cpp">
-      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.mm">
-      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.cpp">
-      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.mm">
-      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.cpp">
-      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.mm">
-      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\LuaBridgeTests.lua">
-      <Filter>LuaBridgeDemo\Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\App.cpp">
       <Filter>LuaBridgeDemo\Source</Filter>
     </ClCompile>
@@ -175,7 +172,7 @@
     <ClCompile Include="..\..\Source\CConsoleWindow.cpp">
       <Filter>LuaBridgeDemo\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\LuaCore.cpp">
+    <ClCompile Include="..\..\Source\LuaState.cpp">
       <Filter>LuaBridgeDemo\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\LuaLibrary.cpp">
@@ -184,8 +181,8 @@
     <ClCompile Include="..\..\Source\Main.cpp">
       <Filter>LuaBridgeDemo\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\LuaBridgeTests.cpp">
-      <Filter>LuaBridgeDemo\Source</Filter>
+    <ClCompile Include="..\..\Source\UnitTests.cpp">
+      <Filter>LuaBridgeDemo\Unit Tests</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
       <Filter>Juce Library Code</Filter>
@@ -291,8 +288,14 @@
     <ClInclude Include="..\..\Source\CConsoleWindow.h">
       <Filter>LuaBridgeDemo\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\LuaCore.h">
+    <ClInclude Include="..\..\Source\LuaState.h">
       <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TestHost.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\UnitTests.h">
+      <Filter>LuaBridgeDemo\Unit Tests</Filter>
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h">
       <Filter>Juce Library Code</Filter>
@@ -303,6 +306,14 @@
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
       <Filter>Juce Library Code</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\LuaBridge\CHANGES.TXT">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </None>
+    <None Include="..\..\Source\UnitTests.lua">
+      <Filter>LuaBridgeDemo\Unit Tests</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include=".\resources.rc">

@@ -27,26 +27,30 @@
 */
 //==============================================================================
 
-#ifndef CCONSOLETEXT_HEADER
-#define CCONSOLETEXT_HEADER
+#ifndef LUABRIDGEDEMO_TESTHOST_HEADER
+#define LUABRIDGEDEMO_TESTHOST_HEADER
 
-#include "LuaState.h"
+struct lua_State;
 
-class CConsoleText
-  : public Component
-  , private LuaState::Listener
+/**
+  Host interface.
+
+  The tests call into a host-provided instance of this interface.
+*/
+class TestHost
 {
 public:
-  explicit CConsoleText (LuaState& luaState);
-  ~CConsoleText ();
+  /**
+    Called to create a fresh environment for performing a test.
 
-  void resized ();
+    The standard libraries are automatically opened.
+  */
+  virtual lua_State* createTestEnvironment () = 0;
 
-  void onLuaStatePrint (String text);
-
-private:
-  LuaState& m_luaState;
-  ScopedPointer <TextEditor> m_text;
+  /**
+    Called to destroy the environment when it is no longer needed.
+  */
+  virtual void destroyTestEnvironment (lua_State* L) = 0;
 };
 
 #endif
