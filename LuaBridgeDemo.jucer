@@ -99,9 +99,7 @@
       <FILE id="XU9JBv" name="stack.h" compile="0" resource="0" file="LuaBridge/LuaBridge/stack.h"/>
       <FILE id="kHy6C7" name="typelist.h" compile="0" resource="0" file="LuaBridge/LuaBridge/typelist.h"/>
       <FILE id="qlfpWS" name="class.h" compile="0" resource="0" file="LuaBridge/LuaBridge/class.h"/>
-      <FILE id="EPucfg" name="luabridge.cpp" compile="0" resource="0" file="LuaBridge/LuaBridge/luabridge.cpp"/>
       <FILE id="XPW20k" name="luabridge.h" compile="0" resource="0" file="LuaBridge/LuaBridge/luabridge.h"/>
-      <FILE id="qSFbYI" name="scope.h" compile="0" resource="0" file="LuaBridge/LuaBridge/scope.h"/>
       <FILE id="R7AsIo" name="CHANGES.TXT" compile="1" resource="0" file="LuaBridge/CHANGES.TXT"/>
     </GROUP>
     <GROUP id="{6456FC22-301F-295A-6231-03972769E7C1}" name="JUCEAmalgam">
@@ -127,6 +125,7 @@
             file="JUCEAmalgam/include/juce_gui_basics_amalgam.mm"/>
     </GROUP>
     <GROUP id="{1FEE5481-FE4D-3591-BEC4-5213CEAAB221}" name="Source">
+      <FILE id="coAbb7" name="App.cpp" compile="0" resource="0" file="Source/App.cpp"/>
       <FILE id="VPBPmf" name="CConsole.cpp" compile="0" resource="0" file="Source/CConsole.cpp"/>
       <FILE id="GUUOAa" name="CConsole.h" compile="0" resource="0" file="Source/CConsole.h"/>
       <FILE id="ajfyad" name="CConsoleEdit.cpp" compile="0" resource="0"
@@ -143,7 +142,7 @@
       <FILE id="HA3Su9" name="LuaCore.h" compile="0" resource="0" file="Source/LuaCore.h"/>
       <FILE id="uTnbb1" name="LuaLibrary.cpp" compile="1" resource="0" file="Source/LuaLibrary.cpp"/>
       <FILE id="zdep57" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="coAbb7" name="App.cpp" compile="0" resource="0" file="Source/App.cpp"/>
+      <FILE id="TaGHWu" name="Test.cpp" compile="1" resource="0" file="Source/Test.cpp"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

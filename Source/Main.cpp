@@ -44,7 +44,6 @@ using namespace juce;
 #include "CConsoleWindow.h"
 #include "LuaCore.h"
 
-#include "LuaBridge/LuaBridge/luabridge.cpp"
 #include "LuaBridge/LuaBridge/shared_ptr.cpp"
 
 #include "CConsole.cpp"

@@ -28,6 +28,7 @@
 		09F7AF8B94C388B1B08BCA2A = { isa = PBXBuildFile; fileRef = 1D2BF0E2055B832B7B847298; };
 		C2DD4184E9B09EED62C7C18A = { isa = PBXBuildFile; fileRef = 769EEC288B099E8C2EEF07B2; };
 		2D9A13BFB9D4D429DF7EF848 = { isa = PBXBuildFile; fileRef = 6957AB52EE86CC8D937F1B1A; };
+		54D4E7F7F33C541D5FEF123C = { isa = PBXBuildFile; fileRef = A00C501A8B1B9878093AE639; };
 		017722D082620ABFA1288D4E = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CConsoleEdit.cpp; path = ../../Source/CConsoleEdit.cpp; sourceTree = "SOURCE_ROOT"; };
 		03FDCEF610C4C2B3DDBED513 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lparser.c; path = "../../Lua_5_2/lparser.c"; sourceTree = "SOURCE_ROOT"; };
 		09804419763EB6B085D3F12E = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
@@ -41,7 +42,6 @@
 		1AF807E355AEEA5D7AA8C3FE = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_data_structures_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_data_structures_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
 		1BD354595FD72D2898408F0F = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CConsoleText.cpp; path = ../../Source/CConsoleText.cpp; sourceTree = "SOURCE_ROOT"; };
 		1D2BF0E2055B832B7B847298 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_gui_basics_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_gui_basics_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
-		1D73D39B06C9BDDCC448420C = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = scope.h; path = ../../LuaBridge/LuaBridge/scope.h; sourceTree = "SOURCE_ROOT"; };
 		1E7A292A306019EF882BB435 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = App.cpp; path = ../../Source/App.cpp; sourceTree = "SOURCE_ROOT"; };
 		2CE57163D45549EF70A93B07 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lapi.h; path = "../../Lua_5_2/lapi.h"; sourceTree = "SOURCE_ROOT"; };
 		2CEB0474C1CC24E5AEABF979 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_graphics_amalgam.cpp"; path = "../../JUCEAmalgam/include/juce_graphics_amalgam.cpp"; sourceTree = "SOURCE_ROOT"; };
@@ -70,7 +70,6 @@
 		6A58B24404F6249F9FC3E436 = { isa = PBXFileReference; lastKnownFileType = file.c; name = loslib.c; path = "../../Lua_5_2/loslib.c"; sourceTree = "SOURCE_ROOT"; };
 		6AD713EB48BE6A89FD29D432 = { isa = PBXFileReference; lastKnownFileType = file.c; name = ltm.c; path = "../../Lua_5_2/ltm.c"; sourceTree = "SOURCE_ROOT"; };
 		712260626B141F090011CDFB = { isa = PBXFileReference; lastKnownFileType = file.c; name = ldo.c; path = "../../Lua_5_2/ldo.c"; sourceTree = "SOURCE_ROOT"; };
-		718EC45B6B93D706EF9354FA = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = luabridge.cpp; path = ../../LuaBridge/LuaBridge/luabridge.cpp; sourceTree = "SOURCE_ROOT"; };
 		7353DD7267C8991D88CF831C = { isa = PBXFileReference; lastKnownFileType = file.c; name = lstate.c; path = "../../Lua_5_2/lstate.c"; sourceTree = "SOURCE_ROOT"; };
 		752735F56A2F1C825415A34D = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CConsoleWindow.h; path = ../../Source/CConsoleWindow.h; sourceTree = "SOURCE_ROOT"; };
 		75F2F85DDB0C665A8A414279 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CConsoleWindow.cpp; path = ../../Source/CConsoleWindow.cpp; sourceTree = "SOURCE_ROOT"; };
@@ -95,6 +94,7 @@
 		997DC26E587CE2AACDC199F8 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiscRecording.framework; path = System/Library/Frameworks/DiscRecording.framework; sourceTree = SDKROOT; };
 		9F8681D6B8FAE731A93EDA77 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lgc.c; path = "../../Lua_5_2/lgc.c"; sourceTree = "SOURCE_ROOT"; };
 		9FE0A5CF358437864D6D15E7 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		A00C501A8B1B9878093AE639 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Test.cpp; path = ../../Source/Test.cpp; sourceTree = "SOURCE_ROOT"; };
 		A1D9C69B75DA2D2BA71CF0FE = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ltm.h; path = "../../Lua_5_2/ltm.h"; sourceTree = "SOURCE_ROOT"; };
 		A366C39B63A5B6323256D715 = { isa = PBXFileReference; lastKnownFileType = file.c; name = lapi.c; path = "../../Lua_5_2/lapi.c"; sourceTree = "SOURCE_ROOT"; };
 		A6B479A02821F6BDA0CE5663 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = lua.h; path = "../../Lua_5_2/lua.h"; sourceTree = "SOURCE_ROOT"; };
@@ -196,9 +196,7 @@
 				4527401A3BCD6ACDE82633EB,
 				8260EE3B0D30913FBEBD7FC4,
 				E3301D86C4E68740CB9AAFB3,
-				718EC45B6B93D706EF9354FA,
 				113F2A8E9DB7DE8927CFA018,
-				1D73D39B06C9BDDCC448420C,
 				175B0298921E20A9C0363A60 ); name = LuaBridge; sourceTree = "<group>"; };
 		E240EEDFC26F332741DD81D3 = { isa = PBXGroup; children = (
 				F4263F6FD4BA340FD5AF3D5B,
@@ -212,6 +210,7 @@
 				11A0B339B5B6A4FBAE9BDDAE,
 				1D2BF0E2055B832B7B847298 ); name = JUCEAmalgam; sourceTree = "<group>"; };
 		DEB0D163D1C94F9534249BFE = { isa = PBXGroup; children = (
+				1E7A292A306019EF882BB435,
 				F9393CE2ECA3B0F46449E596,
 				36F550B6532752A308B6A1B8,
 				017722D082620ABFA1288D4E,
@@ -224,7 +223,7 @@
 				BEE3E5690EF5BFD0B99EC8D1,
 				769EEC288B099E8C2EEF07B2,
 				6957AB52EE86CC8D937F1B1A,
-				1E7A292A306019EF882BB435 ); name = Source; sourceTree = "<group>"; };
+				A00C501A8B1B9878093AE639 ); name = Source; sourceTree = "<group>"; };
 		35B0215222A399CB6AB25D94 = { isa = PBXGroup; children = (
 				5C026953D15AFC4D93600FD8,
 				80EDA40E308415BDBA9B2647,
@@ -338,7 +337,8 @@
 				A781414BE6FC0D702C4D51C6,
 				09F7AF8B94C388B1B08BCA2A,
 				C2DD4184E9B09EED62C7C18A,
-				2D9A13BFB9D4D429DF7EF848 ); runOnlyForDeploymentPostprocessing = 0; };
+				2D9A13BFB9D4D429DF7EF848,
+				54D4E7F7F33C541D5FEF123C ); runOnlyForDeploymentPostprocessing = 0; };
 		C36D501292D7034A7B974AA9 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (
 				AAA7D4273C15EC8377F51BD7,
 				2D0C73CE75C553196FC0EBAF,
