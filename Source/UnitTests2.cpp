@@ -34,6 +34,8 @@
 
 #include "UnitTests2.h"
 
+#include "JUCEAmalgam/include/juce_core_amalgam.h"
+
 using namespace luabridge;
 
 //==============================================================================
@@ -224,18 +226,34 @@ void push (lua_State*, char)
 {
 }
 
+struct test3;
+
+namespace luabridge
+{
+template <class T>
 struct PolicyType
 {
-  virtual void push () = 0;
-  virtual void addref () = 0;
-  virtual void release () = 0;
+  static void test ()
+  {
+  }
 };
+template <>
+class PolicyType <juce::ReferenceCountedObject*>
+{
+  //typedef class luabridge::OurSharedPtrPolicy <test3> type;
+  static void test ()
+  {
+  }
+};
+}
 
-struct test3
+struct test3 : public juce::ReferenceCountedObject
 {
   static void run (TestHost& host)
   {
     ScopedLuaTestState L (host);
+
+    luabridge::PolicyType <test3>::test ();
 
     test3* t = new test3;
 
