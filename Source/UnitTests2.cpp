@@ -35,7 +35,7 @@
 #include "UnitTests2.h"
 
 #include "JUCEAmalgam/include/juce_core_amalgam.h"
-
+ 
 using namespace luabridge;
 
 //==============================================================================
@@ -168,7 +168,7 @@ struct test2
 
     scope s (L);
 
-    s.class_ <test2> ("test2")
+    s.class_ <test2, luabridge::shared_ptr> ("test2")
       .constructor <void (*) (void)> ()
       .method ("f", &test2::f);
 
@@ -186,90 +186,20 @@ struct test2
 };
 
 //==============================================================================
-/*
 
-What are attributes of the policy for a class:
-
-- Whether or not the Lua code can create new objects
-- How is the lifetime managed
-- How is the object destroyed
-- How a pointer to the class is extracted from the userdata
-
-
-template <class T>
-struct Policy
-{
-  
-};
-
-Implementation notes:
-
-- Classes are always represented as a userdata with metatable
-
-*/
-
-template <typename T>
-void push (lua_State* L, T t)
-{
-  // should never get here
-  assert (0);
-}
-
-template <typename T>
-void push (lua_State*, T*)
-{
-  assert (classname <T>::isRegistered ());
-}
-
-template <>
-void push (lua_State*, char)
-{
-}
-
-struct test3;
-
-namespace luabridge
-{
-template <class T>
-struct PolicyType
-{
-  static void test ()
-  {
-  }
-};
-template <>
-class PolicyType <juce::ReferenceCountedObject*>
-{
-  //typedef class luabridge::OurSharedPtrPolicy <test3> type;
-  static void test ()
-  {
-  }
-};
-}
-
-struct test3 : public juce::ReferenceCountedObject
+struct test3
 {
   static void run (TestHost& host)
   {
     ScopedLuaTestState L (host);
 
-    luabridge::PolicyType <test3>::test ();
-
-    test3* t = new test3;
-
     scope s (L);
 
-    s.class_ <test3> ("test3")
+    s.class_ <test3, std::shared_ptr> ("test3")
+      .constructor <void (*) (void)> ()
       .method ("f", &test3::f);
 
-    push (L, t);
-    push (L, 'a');
-
-    tdstack <shared_ptr <test3> >::push (L, shared_ptr <test3> ());
-    
-    lua_setglobal (L, "test3");
-
-    L.dostring ("test3:f();");
+    L.dostring ("test3 (): f();");
   }
 
   test3 ()
@@ -278,6 +208,7 @@ struct test3 : public juce::ReferenceCountedObject
 
   void f ()
   {
+
   }
 };
 
