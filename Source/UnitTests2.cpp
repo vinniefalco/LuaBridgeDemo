@@ -168,7 +168,7 @@ struct test2
 
     scope s (L);
 
-    s.class_ <test2, luabridge::shared_ptr> ("test2")
+    s.class_ <test2> ("test2")
       .constructor <void (*) (void)> ()
       .method ("f", &test2::f);
 
@@ -187,6 +187,7 @@ struct test2
 
 //==============================================================================
 
+#if 0
 struct test3
 {
   static void run (TestHost& host)
@@ -211,6 +212,7 @@ struct test3
 
   }
 };
+#endif
 
 //==============================================================================
 
@@ -218,5 +220,5 @@ void runUnitTests2 (TestHost& host)
 {
   test1::run (host);
   test2::run (host);
-  test3::run (host);
+//  test3::run (host);
 }
