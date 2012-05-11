@@ -48,6 +48,6 @@ CConsole::~CConsole ()
 
 void CConsole::resized ()
 {
-  m_text->setBounds (0, 0, getWidth (), getHeight() - 30);
-  m_edit->setBounds (0, getHeight () - 30, getWidth (), 30);
+  m_text->setBounds (0, 0, getWidth (), getHeight() - 32);
+  m_edit->setBounds (0, getHeight () - 32, getWidth (), 32);
 }

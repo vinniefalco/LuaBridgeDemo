@@ -33,8 +33,8 @@ CConsoleEdit::CConsoleEdit (LuaState& luaState)
   {
     TextEditor* c = new TextEditor;
     c->setMultiLine (false);
-    c->setFont (16);
-    c->setBounds (0, 0, 100, 32);
+    c->setFont (18);
+    c->setBounds (0, 0, 100, 34);
     addAndMakeVisible (c);
     c->addListener (this);
     m_edit = c;

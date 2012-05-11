@@ -38,7 +38,7 @@ CConsoleText::CConsoleText (LuaState& luaState)
     TextEditor* c = m_text;
     c->setReadOnly (true);
     c->setMultiLine (true, true);
-    c->setFont (16);
+    c->setFont (18);
     c->setColour (TextEditor::backgroundColourId,       Colours::transparentBlack);
     c->setColour (TextEditor::textColourId,             Colours::white);
     c->setColour (TextEditor::highlightColourId,        Colour::fromRGBA (0, 255, 255, 96));

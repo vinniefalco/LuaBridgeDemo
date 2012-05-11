@@ -216,7 +216,7 @@ void push (lua_State* L, T t)
 template <typename T>
 void push (lua_State* L, T* pt)
 {
-  assert (classname <T>::name() != classname_unknown ());
+  assert (classname <T>::isRegistered ());
 }
 
 template <>
