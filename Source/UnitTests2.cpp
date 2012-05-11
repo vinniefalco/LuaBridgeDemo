@@ -214,13 +214,13 @@ void push (lua_State* L, T t)
 }
 
 template <typename T>
-void push (lua_State* L, T* pt)
+void push (lua_State*, T*)
 {
   assert (classname <T>::isRegistered ());
 }
 
 template <>
-void push (lua_State* L, char c)
+void push (lua_State*, char)
 {
 }
 
