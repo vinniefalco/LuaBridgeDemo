@@ -34,29 +34,17 @@
 
 #include "UnitTests2.h"
 
+using namespace luabridge;
+
 //==============================================================================
 /**
-  Scoped lifetime management for a lua_State test environment.
-
-  The test environment includes a traceback lua function as well as
-  some convenience member functions.
+  Wraps a lua_State to perform common tasks.
 */
-class ScopedLuaTestState
+class LuaStateWrapper
 {
 public:
-  explicit ScopedLuaTestState (TestHost& host)
-    : L (host.createTestEnvironment ())
-    , m_host (host)
+  LuaStateWrapper (lua_State* L_) : L (L_)
   {
-    lua_pushcfunction (L, &traceback); // push traceback
-    m_errfunc_index = lua_gettop(L);
-  }
-
-  ~ScopedLuaTestState ()
-  {
-    lua_pop (L, 1);  // pop traceback
-
-    m_host.destroyTestEnvironment (L);
   }
 
   inline operator lua_State* ()
@@ -87,6 +75,35 @@ public:
 
     if (error)
       print (lua_tostring (L, -1));
+  }
+
+protected:
+  lua_State* L;
+};
+
+//==============================================================================
+/**
+  Scoped lifetime management for a lua_State test environment.
+
+  The test environment includes a traceback lua function as well as
+  some convenience member functions.
+*/
+class ScopedLuaTestState : public LuaStateWrapper
+{
+public:
+  explicit ScopedLuaTestState (TestHost& host)
+    : LuaStateWrapper (host.createTestEnvironment ())
+    , m_host (host)
+  {
+    lua_pushcfunction (L, &traceback); // push traceback
+    m_errfunc_index = lua_gettop(L);
+  }
+
+  ~ScopedLuaTestState ()
+  {
+    lua_pop (L, 1);  // pop traceback
+
+    m_host.destroyTestEnvironment (L);
   }
 
 private:
@@ -121,7 +138,6 @@ private:
 private:
   ScopedLuaTestState& operator= (ScopedLuaTestState const&);
 
-  lua_State* L;
   TestHost& m_host;
   int m_errfunc_index;
 };
@@ -142,7 +158,116 @@ private:
 
 //==============================================================================
 
+struct test2
+{
+  static void run (TestHost& host)
+  {
+    ScopedLuaTestState L (host);
+
+    scope s (L);
+
+    s.class_ <test2> ("test2")
+      .constructor <void (*) (void)> ()
+      .method ("f", &test2::f);
+
+    L.dostring ("test2 (): f();");
+  }
+
+  test2 ()
+  {
+  }
+
+  void f ()
+  {
+
+  }
+};
+
+//==============================================================================
+/*
+
+What are attributes of the policy for a class:
+
+- Whether or not the Lua code can create new objects
+- How is the lifetime managed
+- How is the object destroyed
+- How a pointer to the class is extracted from the userdata
+
+
+template <class T>
+struct Policy
+{
+  
+};
+
+Implementation notes:
+
+- Classes are always represented as a userdata with metatable
+
+*/
+
+template <typename T>
+void push (lua_State* L, T t)
+{
+  // should never get here
+  assert (0);
+}
+
+template <typename T>
+void push (lua_State* L, T* pt)
+{
+  assert (classname <T>::name() != classname_unknown ());
+}
+
+template <>
+void push (lua_State* L, char c)
+{
+}
+
+struct PolicyType
+{
+  virtual void push () = 0;
+  virtual void addref () = 0;
+  virtual void release () = 0;
+};
+
+struct test3
+{
+  static void run (TestHost& host)
+  {
+    ScopedLuaTestState L (host);
+
+    test3* t = new test3;
+
+    scope s (L);
+
+    s.class_ <test3> ("test3")
+      .method ("f", &test3::f);
+
+    push (L, t);
+    push (L, 'a');
+
+    tdstack <shared_ptr <test3> >::push (L, shared_ptr <test3> ());
+    
+    lua_setglobal (L, "test3");
+
+    L.dostring ("test3:f();");
+  }
+
+  test3 ()
+  {
+  }
+
+  void f ()
+  {
+  }
+};
+
+//==============================================================================
+
 void runUnitTests2 (TestHost& host)
 {
   test1::run (host);
+  test2::run (host);
+  test3::run (host);
 }
