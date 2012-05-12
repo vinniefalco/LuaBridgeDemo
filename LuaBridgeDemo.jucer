@@ -116,7 +116,7 @@
       <FILE id="sROLi4" name="lzio.h" compile="0" resource="0" file="Lua_5_2/lzio.h"/>
     </GROUP>
     <GROUP id="{57691745-83BC-D2F2-FC34-5F751803C298}" name="LuaBridge">
-      <FILE id="XPW20k" name="luabridge.h" compile="0" resource="0" file="LuaBridge/LuaBridge/luabridge.h"/>
+      <FILE id="Y7Aabl" name="LuaBridge.h" compile="0" resource="0" file="LuaBridge/LuaBridge.h"/>
       <FILE id="R7AsIo" name="CHANGES.TXT" compile="1" resource="0" file="LuaBridge/CHANGES.TXT"/>
     </GROUP>
     <GROUP id="{1FEE5481-FE4D-3591-BEC4-5213CEAAB221}" name="Source">

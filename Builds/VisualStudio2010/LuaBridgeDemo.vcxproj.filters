@@ -264,7 +264,7 @@
     <ClInclude Include="..\..\Lua_5_2\lzio.h">
       <Filter>LuaBridgeDemo\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\LuaBridge\luabridge.h">
+    <ClInclude Include="..\..\LuaBridge\LuaBridge.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CConsole.h">
