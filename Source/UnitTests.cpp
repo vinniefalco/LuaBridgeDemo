@@ -312,7 +312,7 @@ void register_lua_funcs (lua_State *L)
     .function("testParamStdStringRef", &testParamStdStringRef);
 
   s.class_<A>("A")
-    .constructor<void (*) (const string &)>()
+    .constructor<void (*) (const string &), luabridge::shared_ptr>()
     .method("testVirtual", &A::testVirtual)
     .method("getName", &A::getName)
     .method("testSucceeded", &A::testSucceeded)
@@ -326,7 +326,7 @@ void register_lua_funcs (lua_State *L)
 
 
   s.subclass<B, A>("B")
-    .constructor<void (*) (const string &)>()
+    .constructor<void (*) (const string &), luabridge::shared_ptr>()
     .static_method("testStatic2", &B::testStatic2);
 
   s  .function("testParamAPtr", &testParamAPtr)

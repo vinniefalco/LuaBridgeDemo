@@ -182,7 +182,7 @@ struct test2
     scope s (L);
 
     s.class_ <test2> ("test2")
-      .constructor <void (*) (void)> ()
+      .constructor <void (*) (void), luabridge::shared_ptr> ()
       .method ("f", &test2::f);
 
     L.load ("test2 (): f();");
@@ -238,7 +238,7 @@ struct stacktests
     scope s (L);
 
     s.class_ <A> ("A")
-      .constructor <void (*) (void)> ()
+      .constructor <void (*) (void), luabridge::shared_ptr> ()
       .method ("set", &A::set)
       .method ("take", &A::take)
       ;
