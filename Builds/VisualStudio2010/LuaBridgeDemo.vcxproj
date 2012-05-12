@@ -232,9 +232,6 @@
     <ClCompile Include="..\..\Lua_5_2\lzio.c">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\LuaBridge\LuaBridge\shared_ptr.cpp">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\Source\App.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -285,9 +282,6 @@
     <ClInclude Include="..\..\Lua_5_2\lundump.h"/>
     <ClInclude Include="..\..\Lua_5_2\lvm.h"/>
     <ClInclude Include="..\..\Lua_5_2\lzio.h"/>
-    <ClInclude Include="..\..\LuaBridge\LuaBridge\shared_ptr.h"/>
-    <ClInclude Include="..\..\LuaBridge\LuaBridge\stack.h"/>
-    <ClInclude Include="..\..\LuaBridge\LuaBridge\typelist.h"/>
     <ClInclude Include="..\..\LuaBridge\LuaBridge\luabridge.h"/>
     <ClInclude Include="..\..\Source\CConsole.h"/>
     <ClInclude Include="..\..\Source\CConsoleEdit.h"/>

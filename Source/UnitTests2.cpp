@@ -28,14 +28,17 @@
 */
 //==============================================================================
 
+// for k,v in pairs (_G) do print (k, v) end
+
 #include "Lua_5_2/lua.hpp"
 
-#include "LuaBridge/LuaBridge/luabridge.h"
+#include "LuaBridge/LuaBridge.h"
 
 #include "UnitTests2.h"
 
 #include "JUCEAmalgam/include/juce_core_amalgam.h"
  
+using namespace juce;
 using namespace luabridge;
 
 //==============================================================================
@@ -56,27 +59,12 @@ public:
 
   /** Print a message
   */
-  void print (char const* text)
+  void print (String text)
   {
     lua_getglobal (L, "print");
     lua_pushvalue (L, -1);
-    lua_pushstring (L, text);
+    lua_pushstring (L, text.toUTF8 ());
     lua_call (L, 1, 0);
-  }
-
-  /** Load and run a string
-  */
-  void dostring (char const* s)
-  {
-    int error;
-    
-    error = luaL_loadstring (L, s);
-    
-    if (!error)
-      error = lua_pcall (L, 0, LUA_MULTRET, 0);
-
-    if (error)
-      print (lua_tostring (L, -1));
   }
 
 protected:
@@ -106,6 +94,31 @@ public:
     lua_pop (L, 1);  // pop traceback
 
     m_host.destroyTestEnvironment (L);
+  }
+
+  /** Load and run a string
+  */
+  void load (char const* s)
+  {
+    int error;
+    
+    error = luaL_loadstring (L, s);
+    
+    if (!error)
+      error = lua_pcall (L, 0, LUA_MULTRET, m_errfunc_index);
+
+    if (error)
+      print (lua_tostring (L, -1));
+  }
+
+  /** Call a function with arguments.
+  */
+  void call (int nArgs = 0)
+  {
+    int error = lua_pcall (L, nArgs, LUA_MULTRET, m_errfunc_index);
+
+    if (error)
+      print (lua_tostring (L, -1));
   }
 
 private:
@@ -152,7 +165,7 @@ struct test1
   {
     ScopedLuaTestState L (host);
 
-    L.dostring ("print (\"test1\")");
+    L.load ("print (\"test1\")");
   }
 
 private:
@@ -172,7 +185,7 @@ struct test2
       .constructor <void (*) (void)> ()
       .method ("f", &test2::f);
 
-    L.dostring ("test2 (): f();");
+    L.load ("test2 (): f();");
   }
 
   test2 ()
@@ -182,6 +195,87 @@ struct test2
   void f ()
   {
 
+  }
+};
+
+//==============================================================================
+
+template <template <class> class Policy>
+struct stacktests
+{
+  struct A
+  {
+    A ()
+    {
+    }
+
+    void set (int value)
+    {
+      var () = value;
+    }
+
+    int get () const
+    {
+      return var ();
+    }
+
+    //void take (shared_ptr <A> p)
+    void take (A*)
+    {
+    }
+
+  private:
+    static int& var ()
+    {
+      static int value = 0;
+      return value;
+    }
+  };
+
+  static void run (TestHost& host)
+  {
+    ScopedLuaTestState L (host);
+
+    scope s (L);
+
+    s.class_ <A> ("A")
+      .constructor <void (*) (void)> ()
+      .method ("set", &A::set)
+      .method ("take", &A::take)
+      ;
+
+    L.load ("local function test () print (\"test1\"); end return test");
+    L.call ();
+
+    L.load ("local function test (t) print (t); end return test");
+    tdstack <int>::push (L, 16);
+    L.call (1);
+
+    {
+      A a;
+      L.load ("local function test (a) a:set(42); end return test");
+      tdstack <A>::push (L, a);
+      L.call (1);
+      String s;
+      s << "value = " << String (a.get ());
+      L.print (s);
+    }
+
+    {
+      A a;
+      A& ra (a);
+      L.load ("local function test (a) a:set(50); end return test");
+      tdstack <A>::push (L, ra);
+      L.call (1);
+      String s;
+      s << "value = " << String (a.get ());
+      L.print (s);
+    }
+
+    {
+      L.load ("local function test () a=A(); a:take (a); end return test");
+      L.call ();
+    }
   }
 };
 
@@ -218,7 +312,9 @@ struct test3
 
 void runUnitTests2 (TestHost& host)
 {
-  test1::run (host);
-  test2::run (host);
+//  test1::run (host);
+//  test2::run (host);
 //  test3::run (host);
+
+  stacktests <SharedPtrPolicy>::run (host);
 }

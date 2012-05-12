@@ -154,9 +154,6 @@
     <ClCompile Include="..\..\Lua_5_2\lzio.c">
       <Filter>LuaBridgeDemo\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\LuaBridge\LuaBridge\shared_ptr.cpp">
-      <Filter>LuaBridgeDemo\LuaBridge</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\App.cpp">
       <Filter>LuaBridgeDemo\Source</Filter>
     </ClCompile>
@@ -266,15 +263,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Lua_5_2\lzio.h">
       <Filter>LuaBridgeDemo\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\LuaBridge\shared_ptr.h">
-      <Filter>LuaBridgeDemo\LuaBridge</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\LuaBridge\stack.h">
-      <Filter>LuaBridgeDemo\LuaBridge</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\LuaBridge\LuaBridge\typelist.h">
-      <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\LuaBridge\LuaBridge\luabridge.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>

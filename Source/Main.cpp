@@ -29,7 +29,7 @@
 
 #include "Lua_5_2/lua.hpp"
 
-#include "LuaBridge/LuaBridge/luabridge.h"
+#include "LuaBridge/LuaBridge.h"
 
 #include "JUCEAmalgam/include/juce_core_amalgam.h"
 #include "JUCEAmalgam/include/juce_data_structures_amalgam.h"
@@ -44,8 +44,6 @@ using namespace juce;
 #include "CConsoleText.h"
 #include "CConsoleWindow.h"
 #include "LuaState.h"
-
-#include "LuaBridge/LuaBridge/shared_ptr.cpp"
 
 #include "CConsole.cpp"
 #include "CConsoleEdit.cpp"
