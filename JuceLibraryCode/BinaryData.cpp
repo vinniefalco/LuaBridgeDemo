@@ -95,7 +95,6 @@ static const unsigned char temp_7406a072[] =
 "\r\n"
 "result = testRetSharedPtrA();    assert(result:getName() == \"from C\");\r\n"
 "\r\n"
-#if 0
 "-- test constness\r\n"
 "\r\n"
 "constA = testRetSharedPtrConstA();    assert(constA:getName() == \"const A\");\r\n"
@@ -117,7 +116,6 @@ static const unsigned char temp_7406a072[] =
 "object1a = object1 + object1;      assert(testAFnCalled(FN_OPERATOR));\r\n"
 "assert(object1a:getName() == \"object1 + object1\");\r\n"
 "\r\n"
-#endif
 "print(\"All tests succeeded.\");\r\n";
 
 const char* UnitTests_lua = (const char*) temp_7406a072;
