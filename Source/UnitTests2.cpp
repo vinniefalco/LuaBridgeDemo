@@ -200,7 +200,6 @@ struct test2
 
 //==============================================================================
 
-template <template <class> class Policy>
 struct stacktests
 {
   struct A
@@ -316,5 +315,5 @@ void runUnitTests2 (TestHost& host)
 //  test2::run (host);
 //  test3::run (host);
 
-  stacktests <SharedPtrPolicy>::run (host);
+  stacktests::run (host);
 }
