@@ -39,6 +39,9 @@ struct lua_State;
 */
 class TestHost
 {
+protected:
+  virtual ~TestHost () { }
+
 public:
   /**
     Called to create a fresh environment for performing a test.
