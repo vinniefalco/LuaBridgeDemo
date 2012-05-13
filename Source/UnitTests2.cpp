@@ -33,6 +33,7 @@
 #include "Lua_5_2/lua.hpp"
 
 #include "LuaBridge/LuaBridge.h"
+#include "LuaBridge/shared_ptr.h"
 
 #include "UnitTests2.h"
 
