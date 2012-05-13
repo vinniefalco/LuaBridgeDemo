@@ -1,7 +1,12 @@
 //==============================================================================
 /*
+  https://github.com/vinniefalco/LuaBridge
+  https://github.com/vinniefalco/LuaBridgeDemo
+  
   Copyright (C) 2012, Vinnie Falco <vinnie.falco@gmail.com>
   Copyright (C) 2007, Nathan Reed
+
+  License: The MIT License (http://www.opensource.org/licenses/mit-license.php)
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -20,44 +25,65 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
+
+  This file incorporates work covered by the following copyright and
+  permission notice:  
+
+    The Loki Library
+    Copyright (c) 2001 by Andrei Alexandrescu
+    This code accompanies the book:
+    Alexandrescu, Andrei. "Modern C++ Design: Generic Programming and Design 
+        Patterns Applied". Copyright (c) 2001. Addison-Wesley.
+    Permission to use, copy, modify, distribute and sell this software for any 
+        purpose is hereby granted without fee, provided that the above copyright 
+        notice appear in all copies and that both that copyright notice and this 
+        permission notice appear in supporting documentation.
+    The author or Addison-Welsey Longman make no representations about the 
+        suitability of this software for any purpose. It is provided "as is" 
+        without express or implied warranty.
 */
 //==============================================================================
 
 #ifndef LUABRIDGE_SHARED_PTR_HEADER
 #define LUABRIDGE_SHARED_PTR_HEADER
 
-#include <stdint.h>
-
 #ifdef _MSC_VER
-#pragma warning (push)
-#pragma warning (disable: 4702) // unreachable code
-#include <hash_map>
-#pragma warning (pop)
+# include <hash_map>
 #else
-#include <ext/hash_map>
+# include <ext/hash_map>
 #endif
 
 namespace luabridge
 {
 
-// Declaration of container for the refcounts
-#ifdef _MSC_VER
-typedef stdext::hash_map <const void *, int> refcounts_t;
-#else
-struct ptr_hash
+//==============================================================================
+/**
+  Support for our shared_ptr.
+*/
+struct shared_ptr_base
 {
-  size_t operator () (const void * const v) const
+  // Declaration of container for the refcounts
+#ifdef _MSC_VER
+  typedef stdext::hash_map <const void *, int> refcounts_t;
+#else
+  struct ptr_hash
   {
-    static __gnu_cxx::hash<unsigned int> H;
-    return H(uintptr_t(v));
-  }
-};
-typedef __gnu_cxx::hash_map<const void *, int, ptr_hash> refcounts_t;
+    size_t operator () (const void * const v) const
+    {
+      static __gnu_cxx::hash<unsigned int> H;
+      return H(uintptr_t(v));
+    }
+  };
+  typedef __gnu_cxx::hash_map<const void *, int, ptr_hash> refcounts_t;
 #endif
 
-/** @todo Trick the definition into existing in the header only.
-*/
-extern refcounts_t refcounts_;
+protected:
+  inline refcounts_t& refcounts_ ()
+  {
+    static refcounts_t refcounts;
+    return refcounts ;
+  }
+};
 
 //==============================================================================
 /**
@@ -78,17 +104,23 @@ extern refcounts_t refcounts_;
 
   @todo Provide an intrusive version of shared_ptr.
 */
-template <typename T>
-class shared_ptr
+template <class T>
+class shared_ptr : private shared_ptr_base
 {
 public:
+  template <typename Other>
+  struct rebind
+  {
+    typedef shared_ptr <Other> other;
+  };
+
   /** Construct as nullptr or from existing pointer to T.
 
       @param p The optional, existing pointer to assign from.
   */
   shared_ptr (T* p = 0) : m_p (p)
   {
-    ++refcounts_ [m_p];
+    ++refcounts_ () [m_p];
   }
 
   /** Construct from another shared_ptr.
@@ -97,7 +129,7 @@ public:
   */
   shared_ptr (shared_ptr <T> const& rhs) : m_p (rhs.get())
   {
-    ++refcounts_ [m_p];
+    ++refcounts_ () [m_p];
   }
 
   /** Construct from a shared_ptr of a different type.
@@ -110,7 +142,7 @@ public:
   template <typename U>
   shared_ptr (shared_ptr <U> const& rhs) : m_p (static_cast <T*> (rhs.get()))
   {
-    ++refcounts_ [m_p];
+    ++refcounts_ () [m_p];
   }
 
   /** Release the object.
@@ -133,14 +165,14 @@ public:
     {
       reset ();
       m_p = rhs.m_p;
-      ++refcounts_ [m_p];
+      ++refcounts_ () [m_p];
     }
     return *this;
   }
 
   /** Assign from another shared_ptr of a different type.
 
-      @invariant A pointer to U must be convertible to a pointer to T.
+      @note A pointer to U must be convertible to a pointer to T.
 
       @tparam U   The other object type.
       @param  rhs The other shared_ptr to assign from.
@@ -151,7 +183,7 @@ public:
   {
     reset ();
     m_p = static_cast <T*> (rhs.get());
-    ++refcounts_ [m_p];
+    ++refcounts_ () [m_p];
     return *this;
   }
 
@@ -190,7 +222,7 @@ public:
   */
   long use_count () const
   {
-    return refcounts_ [m_p];
+    return refcounts_ () [m_p];
   }
 
   /** Release the pointer.
@@ -202,7 +234,7 @@ public:
   {
     if (m_p != 0)
     {
-      if (--refcounts_ [m_p] <= 0)
+      if (--refcounts_ () [m_p] <= 0)
         delete m_p;
 
       m_p = 0;
