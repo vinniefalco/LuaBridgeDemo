@@ -224,6 +224,10 @@ struct stacktests
     {
     }
 
+    void getState (lua_State*)
+    {
+    }
+
   private:
     static int& var ()
     {
@@ -242,6 +246,7 @@ struct stacktests
       .constructor <void (*) (void), luabridge::shared_ptr> ()
       .method ("set", &A::set)
       .method ("take", &A::take)
+      .method ("getState", &A::getState)
       ;
 
     L.load ("local function test () print (\"test1\"); end return test");
