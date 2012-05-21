@@ -90,6 +90,8 @@ struct A
   {
     staticProperty = v;
   }
+
+  T dataMember;
 };
 
 template <class T>
@@ -109,7 +111,8 @@ void addTemplateClass (char const* name)
         .addStaticData ("staticData", &T::staticData)
         .addStaticData ("staticDataReadOnly", &T::staticData, false)
         .addStaticProperty ("staticProperty", &T::getStaticProperty, &T::setStaticProperty)
-        //.addDataMember ("m_int", &T::m_int)
+        .addDataMember ("dataMember", &T::dataMember)
+        //.addPropertyMember ("propertyMember", &T::getPropertyMember, &T::setPropertyMember)
       .endClass ()
     .endNamespace ()
     ;
