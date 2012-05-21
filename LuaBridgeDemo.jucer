@@ -155,6 +155,8 @@
       <FILE id="iIvCpF" name="UnitTests.lua" compile="0" resource="1" file="Source/UnitTests.lua"/>
       <FILE id="Iseeup" name="UnitTests2.cpp" compile="1" resource="0" file="Source/UnitTests2.cpp"/>
       <FILE id="UhxtSt" name="UnitTests2.h" compile="0" resource="0" file="Source/UnitTests2.h"/>
+      <FILE id="MJmTj1" name="UnitTests3.cpp" compile="1" resource="0" file="Source/UnitTests3.cpp"/>
+      <FILE id="bwUG6R" name="UnitTests3.h" compile="0" resource="0" file="Source/UnitTests3.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

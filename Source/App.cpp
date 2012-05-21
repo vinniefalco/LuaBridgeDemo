@@ -31,6 +31,7 @@
 #include "CConsoleWindow.h"
 #include "UnitTests.h"
 #include "UnitTests2.h"
+#include "UnitTests3.h"
 
 class App : public JUCEApplication
 {
@@ -62,6 +63,8 @@ public:
       m_luaState->print (errorString.c_str ());
 
     runUnitTests2 (*m_luaState);
+
+    addUnitTests3 (*m_luaState);
   }
 
   void shutdown()

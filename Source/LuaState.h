@@ -52,6 +52,8 @@ public:
   virtual void addListener (Listener* listener) = 0;
   virtual void removeListener (Listener* listener) = 0;
 
+  virtual operator lua_State* () = 0;
+
   virtual void doString (String chunk) = 0;
 };
 

@@ -254,6 +254,7 @@
     <ClCompile Include="..\..\Source\Main.cpp"/>
     <ClCompile Include="..\..\Source\UnitTests.cpp"/>
     <ClCompile Include="..\..\Source\UnitTests2.cpp"/>
+    <ClCompile Include="..\..\Source\UnitTests3.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp"/>
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +292,7 @@
     <ClInclude Include="..\..\Source\TestHost.h"/>
     <ClInclude Include="..\..\Source\UnitTests.h"/>
     <ClInclude Include="..\..\Source\UnitTests2.h"/>
+    <ClInclude Include="..\..\Source\UnitTests3.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>

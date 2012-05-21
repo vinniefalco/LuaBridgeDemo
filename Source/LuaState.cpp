@@ -27,68 +27,6 @@
 */
 //==============================================================================
 
-// for k,v in pairs(_G) do print(k,v) end
-
-#if 0
-static void print (lua_State* L, String text)
-{
-  lua_getglobal (L, "print");
-  lua_pushvalue (L, -1);
-  lua_pushstring (L, text.toUTF8 ());
-  lua_call (L, 1, 0);
-}
-
-static int test ()
-{
-  return 42;
-}
-#endif
-
-//==============================================================================
-
-#if 0
-class Object
-{
-private:
-  Object (Object const&);
-  Object& operator= (Object const&);
-
-  LuaState& m_luaState;
-  lua_State* m_lua;
-
-public:
-  Object (LuaState& luaState, lua_State* lua)
-    : m_luaState (luaState)
-    , m_lua (lua)
-  {
-    luabridge::scope m (m_lua);
-    m.class_ <Object> ("Object")
-      .method ("f1", &Object::f1)
-      //.static_method ("t1", &Object::t1)
-      ;
-    luabridge::tdstack <luabridge::shared_ptr <Object> >::push (
-      lua, luabridge::shared_ptr <Object> (this));
-    lua_setglobal(lua, "obj");
-  }
-
-  ~Object ()
-  {
-  }
-
-  void f1 ()
-  {
-    m_luaState.write ("f1\n");
-  }
-
-  static void s1 ()
-  {
-    //print ("t1\n");
-  }
-};
-#endif
-
-//==============================================================================
-
 class LuaStateImp : public LuaState
 {
 private:
@@ -104,12 +42,16 @@ private:
 public:
   LuaStateImp () : m_lua (createEnvironment ())
   {
-    //new Object (*this, m_lua);
   }
 
   ~LuaStateImp ()
   {
     lua_close (m_lua);
+  }
+
+  operator lua_State* ()
+  {
+    return m_lua;
   }
 
   // from luaB_print()
@@ -188,10 +130,8 @@ public:
 
     if (result != 0)
     {
-      print (lua_tostring (m_lua, -1));
+      print (std::string (lua_tostring (m_lua, -1)) + "\n");
     }
-
-    print ("\n");
   }
 
   //----------------------------------------------------------------------------

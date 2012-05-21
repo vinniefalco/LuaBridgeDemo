@@ -32,7 +32,7 @@
 
 #include "Lua_5_2/lua.hpp"
 
-#include "LuaBridge/LuaBridge.h"
+#include "LuaBridge/LuaBridge2.h"
 #include "LuaBridge/shared_ptr.h"
 
 #include "UnitTests2.h"
@@ -74,26 +74,46 @@ void seti (int i)
   globalInteger = i;
 }
 
+template <class T>
 struct A
 {
-  static int s_int;
+  static T staticData;
 
-  static int getInt ()
+  static T staticProperty;
+
+  static T getStaticProperty ()
   {
-    return s_int;
+    return staticProperty;
   }
 
-  static void setInt (int v)
+  static void setStaticProperty (T v)
   {
-    s_int = v;
+    staticProperty = v;
   }
-
-  int m_int;
 };
 
-int A::s_int;
+template <class T>
+T A <T>::staticData = 0;
+
+template <class T>
+T A <T>::staticProperty = 0;
 
 };
+
+template <class T>
+void addTemplateClass (char const* name)
+{
+  getGlobalNamespace ()
+    .beginNamespace ("test")
+      .beginClass <T> (name)
+        .addStaticData ("staticData", &T::staticData)
+        .addStaticData ("staticDataReadOnly", &T::staticData, false)
+        .addStaticProperty ("staticProperty", &T::getStaticProperty, &T::setStaticProperty)
+        //.addDataMember ("m_int", &T::m_int)
+      .endClass ()
+    .endNamespace ()
+    ;
+}
 
 void addUnitTests3 (lua_State* L)
 {
@@ -103,17 +123,13 @@ void addUnitTests3 (lua_State* L)
       .addFunction ("foo2", test::foo2)
       .addFunction ("foo3", test::foo3)
       .addVariable ("var1", &test::var1)
-      .addVariableReadOnly ("var2", &test::var2)
+      .addVariable ("var2", &test::var2, false)
       .addProperty ("globi", &test::geti)
       .addProperty ("globirw", &test::geti, &test::seti)
-      .beginClass <test::A> ("A")
-        .addStaticData ("s_int", &test::A::s_int, true)
-        .addStaticProperty ("s_int2", &test::A::getInt, &test::A::setInt)
-        .addDataMember ("m_int", &test::A::m_int)
-      .endClass ()
     .endNamespace ()
-    .addToState (L)
     ;
 
-  
+  addTemplateClass <test::A <int> > ("A");
+
+  getGlobalNamespace ().addToState (L);
 }

@@ -52,6 +52,7 @@ OBJECTS := \
   $(OBJDIR)/Main_90ebc5c2.o \
   $(OBJDIR)/UnitTests_cf65a5de.o \
   $(OBJDIR)/UnitTests2_1d6f2bde.o \
+  $(OBJDIR)/UnitTests3_1d7d435f.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
 
 .PHONY: clean
@@ -112,6 +113,11 @@ $(OBJDIR)/UnitTests_cf65a5de.o: ../../Source/UnitTests.cpp
 $(OBJDIR)/UnitTests2_1d6f2bde.o: ../../Source/UnitTests2.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling UnitTests2.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/UnitTests3_1d7d435f.o: ../../Source/UnitTests3.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling UnitTests3.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp

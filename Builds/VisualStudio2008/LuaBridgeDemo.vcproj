@@ -587,6 +587,8 @@
         </File>
         <File RelativePath="..\..\Source\UnitTests2.cpp"/>
         <File RelativePath="..\..\Source\UnitTests2.h"/>
+        <File RelativePath="..\..\Source\UnitTests3.cpp"/>
+        <File RelativePath="..\..\Source\UnitTests3.h"/>
       </Filter>
     </Filter>
     <Filter Name="Juce Library Code">
