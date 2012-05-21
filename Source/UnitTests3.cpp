@@ -107,6 +107,15 @@ struct A
 
   T propertyMember;
 
+  A ()
+  {
+  }
+
+  ~A ()
+  {
+    staticData = 0;
+  }
+
   T getProperty () const
   {
     return propertyMember;
@@ -131,6 +140,122 @@ T A <T>::staticData = 0;
 
 template <class T>
 T A <T>::staticProperty = 0;
+
+struct B
+{
+  static int staticData;
+
+  static int staticProperty;
+
+  static int getStaticProperty ()
+  {
+    return staticProperty;
+  }
+
+  static void setStaticProperty (int v)
+  {
+    staticProperty = v;
+  }
+
+  static void staticMethod ()
+  {
+  }
+
+  int dataMember;
+
+  int propertyMember;
+
+  int getProperty () const
+  {
+    return propertyMember;
+  }
+
+  void setProperty (int t)
+  {
+    propertyMember = t;
+  }
+
+  void method ()
+  {
+  }
+
+  void constMethod (int) const
+  {
+  }
+};
+
+int B::staticData = 0;
+
+int B::staticProperty = 0;
+
+struct C
+{
+  static float staticData;
+
+  static float staticProperty;
+
+  static float getStaticProperty ()
+  {
+    return staticProperty;
+  }
+
+  static void setStaticProperty (float v)
+  {
+    staticProperty = v;
+  }
+
+  static void staticMethod ()
+  {
+  }
+
+  float dataMember;
+
+  float propertyMember;
+
+  float getProperty () const
+  {
+    return propertyMember;
+  }
+
+  void setProperty (float t)
+  {
+    propertyMember = t;
+  }
+
+  void method ()
+  {
+  }
+
+  void constMethod (float) const
+  {
+  }
+};
+
+float C::staticData = 0;
+
+float C::staticProperty = 0;
+
+class D
+{
+public:
+  int m_d;
+
+  virtual void foo ()
+  {
+    m_d = 1;
+  }
+};
+
+class E : public D
+{
+public:
+  int m_e;
+
+  void foo ()
+  {
+    m_d = 2;
+  }
+};
 
 }
 
@@ -168,20 +293,6 @@ void addTemplateClass (luabridge2::Namespace& n, char const* name)
 
 void addUnitTests3 (lua_State* L)
 {
-  /*
-  getGlobalNamespace ()
-    .beginNamespace ("test")
-      .addFunction ("foo", test::foo)
-      .addFunction ("foo2", test::foo2)
-      .addFunction ("foo3", test::foo3)
-      .addVariable ("var1", &test::var1)
-      .addVariable ("var2", &test::var2, false)
-      .addProperty ("globi", &test::geti)
-      .addProperty ("globirw", &test::geti, &test::seti)
-    .endNamespace ()
-    ;
-  */
-  
   addGlobals <test::G <int> > (
     getGlobalNamespace()
       .beginNamespace ("test"));
@@ -191,11 +302,39 @@ void addUnitTests3 (lua_State* L)
       .beginNamespace ("test"),
       "A");
 
+  addTemplateClass <test::B> (
+    getGlobalNamespace()
+      .beginNamespace ("test"),
+      "B");
+
+  addTemplateClass <test::C> (
+    getGlobalNamespace()
+      .beginNamespace ("test"),
+      "C");
+
   addTemplateClass <test::A <float> > (
     getGlobalNamespace()
       .beginNamespace ("test")
         .beginNamespace ("detail"),
       "A2");
 
+  getGlobalNamespace()
+    .beginNamespace ("test")
+      .beginClass <test::D> ("D")
+        .addData ("d", &test::D::m_d)
+        .addMethod ("foo", &test::D::foo)
+      .endClass ()
+      .deriveClass <test::E, test::D> ("E")
+        .addData ("e", &test::E::m_e)
+      .endClass ()
+    .endNamespace ()
+    ;
+
   getGlobalNamespace ().addToState (L);
+
+  luabridge2::Stack <test::B>::push (L, test::B ());
+  lua_setglobal (L, "b");
+
+  //luabridge2::Stack <test::C const>::push (L, test::C ());
+  //lua_setglobal (L, "c");
 }
