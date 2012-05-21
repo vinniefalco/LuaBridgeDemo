@@ -45,34 +45,42 @@ using namespace luabridge2;
 namespace test
 {
 
-void foo ()
+template <class T>
+struct G
 {
-}
+  static T global;
 
-int foo2 (char const*)
-{
-  return 0;
-}
+  static T prop;
 
-float foo3 (int*, short)
-{
-  return 0;
-}
+  static int getProp ()
+  {
+    return prop;
+  }
 
-int var1;
-char* var2;
+  static void setProp (T v)
+  {
+    prop = v;
+  }
 
-int globalInteger = 0;
+  static void func1 ()
+  {
+  }
 
-int geti ()
-{
-  return globalInteger;
-}
+  static T func2 (T const*)
+  {
+    return T ();
+  }
 
-void seti (int i)
-{
-  globalInteger = i;
-}
+  static void func3 (T)
+  {
+  }
+};
+
+template <class T>
+T G <T>::global;
+
+template <class T>
+T G <T>::prop;
 
 template <class T>
 struct A
@@ -91,7 +99,31 @@ struct A
     staticProperty = v;
   }
 
+  static void staticMethod ()
+  {
+  }
+
   T dataMember;
+
+  T propertyMember;
+
+  T getProperty () const
+  {
+    return propertyMember;
+  }
+
+  void setProperty (T t)
+  {
+    propertyMember = t;
+  }
+
+  void method ()
+  {
+  }
+
+  void constMethod (int) const
+  {
+  }
 };
 
 template <class T>
@@ -100,26 +132,43 @@ T A <T>::staticData = 0;
 template <class T>
 T A <T>::staticProperty = 0;
 
-};
+}
 
 template <class T>
-void addTemplateClass (char const* name)
+void addGlobals (luabridge2::Namespace& n)
 {
-  getGlobalNamespace ()
-    .beginNamespace ("test")
-      .beginClass <T> (name)
-        .addStaticData ("staticData", &T::staticData)
-        .addStaticData ("staticDataReadOnly", &T::staticData, false)
-        .addStaticProperty ("staticProperty", &T::getStaticProperty, &T::setStaticProperty)
-        .addDataMember ("dataMember", &T::dataMember)
-        //.addPropertyMember ("propertyMember", &T::getPropertyMember, &T::setPropertyMember)
-      .endClass ()
-    .endNamespace ()
+  n .addVariable ("global", &T::global)
+    .addVariable ("globalRo", &T::global, false)
+    .addProperty ("globalProp", &T::getProp, &T::setProp)
+    .addProperty ("globalPropRo", &T::getProp)
+    .addFunction ("globalFunc1", &T::func1)
+    .addFunction ("globalFunc2", &T::func2)
+    .addFunction ("globalFunc3", &T::func3)
+    ;
+}
+
+template <class T>
+void addTemplateClass (luabridge2::Namespace& n, char const* name)
+{
+  n .beginClass <T> (name)
+      .addStaticData ("staticData", &T::staticData)
+      .addStaticData ("staticDataRo", &T::staticData, false)
+      .addStaticProperty ("staticProperty", &T::getStaticProperty, &T::setStaticProperty)
+      .addStaticProperty ("staticPropertyRo", &T::getStaticProperty)
+      .addStaticMethod ("staticMethod", &T::staticMethod)
+      .addData ("dataMember", &T::dataMember)
+      .addData ("dataMemberRo", &T::dataMember, false)
+      .addProperty ("property", &T::getProperty, &T::setProperty)
+      .addProperty ("propertyRo", &T::getProperty)
+      .addMethod ("method", &T::method)
+      .addMethod ("constMethod", &T::constMethod)
+    .endClass ()
     ;
 }
 
 void addUnitTests3 (lua_State* L)
 {
+  /*
   getGlobalNamespace ()
     .beginNamespace ("test")
       .addFunction ("foo", test::foo)
@@ -131,8 +180,22 @@ void addUnitTests3 (lua_State* L)
       .addProperty ("globirw", &test::geti, &test::seti)
     .endNamespace ()
     ;
+  */
+  
+  addGlobals <test::G <int> > (
+    getGlobalNamespace()
+      .beginNamespace ("test"));
 
-  addTemplateClass <test::A <int> > ("A");
+  addTemplateClass <test::A <int> > (
+    getGlobalNamespace()
+      .beginNamespace ("test"),
+      "A");
+
+  addTemplateClass <test::A <float> > (
+    getGlobalNamespace()
+      .beginNamespace ("test")
+        .beginNamespace ("detail"),
+      "A2");
 
   getGlobalNamespace ().addToState (L);
 }
