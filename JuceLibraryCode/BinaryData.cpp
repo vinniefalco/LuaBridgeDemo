@@ -9,7 +9,7 @@ namespace BinaryData
 {
 
 //================== UnitTests.lua ==================
-static const unsigned char temp_7406a072[] =
+static const unsigned char temp_e8ad40b2[] =
 "-- test lua script to be run with the luabridge test program\r\n"
 "\r\n"
 "print(\"Running LuaBridge tests:\");\r\n"
@@ -118,7 +118,7 @@ static const unsigned char temp_7406a072[] =
 "\r\n"
 "print(\"All tests succeeded.\");\r\n";
 
-const char* UnitTests_lua = (const char*) temp_7406a072;
+const char* UnitTests_lua = (const char*) temp_e8ad40b2;
 
 
 const char* getNamedResource (const char*, int&) throw();

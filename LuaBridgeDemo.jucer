@@ -4,11 +4,12 @@
               bundleIdentifier="com.yourcompany.LuaBridgeDemo" jucerVersion="3.0.0">
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="xU85kB" juceFolder=""
-               extraFrameworks="AudioToolbox,Carbon,Cocoa,CoreAudio,CoreMIDI,DiscRecording,IOKit,QuartzCore,WebKit">
+               extraFrameworks="AudioToolbox,Carbon,Cocoa,CoreAudio,CoreMIDI,DiscRecording,IOKit,QuartzCore,WebKit"
+               extraDefs="">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="LuaBridgeDemo"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"
-                       headerPath="../../"/>
+                       headerPath="../../" defines="LUA_USE_APICHECK"/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="LuaBridgeDemo"
                        osxSDK="default" osxCompatibility="default" osxArchitecture="default"
                        headerPath="../../"/>
@@ -18,7 +19,8 @@
             extraCompilerFlags="/EHs">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
-                       isDebug="1" optimisation="1" targetName="LuaBridgeDemo" headerPath="..\..\"/>
+                       isDebug="1" optimisation="1" targetName="LuaBridgeDemo" headerPath="..\..\"
+                       defines="LUA_USE_APICHECK"/>
         <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
                        isDebug="0" optimisation="2" targetName="LuaBridgeDemo" headerPath="..\..\"/>
       </CONFIGURATIONS>
@@ -26,11 +28,19 @@
     <LINUX_MAKE targetFolder="Builds/Linux" juceFolder="">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
-                       targetName="LuaBridgeDemo" headerPath="../../"/>
+                       targetName="LuaBridgeDemo" headerPath="../../" defines="LUA_USE_APICHECK"/>
         <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
                        targetName="LuaBridgeDemo" headerPath="../../"/>
       </CONFIGURATIONS>
     </LINUX_MAKE>
+    <VS2008 targetFolder="Builds/VisualStudio2008" libraryType="1" juceFolder="">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" isDebug="1"
+                       optimisation="1" targetName="LuaBridgeDemo" headerPath="..\..\"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" isDebug="0"
+                       optimisation="2" targetName="LuaBridgeDemo" headerPath="..\..\"/>
+      </CONFIGURATIONS>
+    </VS2008>
   </EXPORTFORMATS>
   <MAINGROUP id="NmR0e6" name="LuaBridgeDemo">
     <GROUP id="{6456FC22-301F-295A-6231-03972769E7C1}" name="JUCEAmalgam">

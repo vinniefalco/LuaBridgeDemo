@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8EC338BF-BCDD-F3E3-C66F-F7F361BB1A8A}") = "LuaBridgeDemo", "LuaBridgeDemo.vcproj", "{340ACBA7-0099-FD85-2AB7-7948DD2F983D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{340ACBA7-0099-FD85-2AB7-7948DD2F983D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{340ACBA7-0099-FD85-2AB7-7948DD2F983D}.Debug|Win32.Build.0 = Debug|Win32
+		{340ACBA7-0099-FD85-2AB7-7948DD2F983D}.Release|Win32.ActiveCfg = Release|Win32
+		{340ACBA7-0099-FD85-2AB7-7948DD2F983D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

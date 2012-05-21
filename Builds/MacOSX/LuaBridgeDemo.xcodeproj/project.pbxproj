@@ -277,6 +277,7 @@
 				"_DEBUG=1",
 				"DEBUG=1",
 				"JUCE_ObjCExtraSuffix=xU85kB",
+				"LUA_USE_APICHECK",
 				"JUCER_XCODE_MAC_F6D2F4CF=1"); }; name = Debug; };
 		6B80FBAE32D4A0C3BF81DFA0 = { isa = XCBuildConfiguration; buildSettings = {
 				SRCROOT = "../..";
