@@ -66,10 +66,6 @@ void CConsoleText::resized ()
 void CConsoleText::onLuaStatePrint (String text)
 {
   m_text->moveCaretToEnd ();
-
-  if (text != String::empty)
-  {
-    m_text->insertTextAtCaret (text);
-    //m_text->insertTextAtCaret ("\n");
-  }
+  m_text->insertTextAtCaret (text);
+  m_text->insertTextAtCaret ("\n");
 }

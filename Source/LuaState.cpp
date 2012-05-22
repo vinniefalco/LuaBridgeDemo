@@ -79,7 +79,6 @@ public:
       text << String (s, l);
       lua_pop(L, 1);  /* pop result */
     }
-    text << "\n";
     luaState->print (std::string (text.toUTF8 ()));
     return 0;
   }
@@ -130,7 +129,7 @@ public:
 
     if (result != 0)
     {
-      print (std::string (lua_tostring (m_lua, -1)) + "\n");
+      print (std::string (lua_tostring (m_lua, -1)));
     }
   }
 

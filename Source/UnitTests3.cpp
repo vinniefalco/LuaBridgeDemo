@@ -78,8 +78,32 @@ struct A
   {
     staticProp = v;
   }
+ 
+  static void staticFunc ()
+  {
+  }
+
+  int var;
+
+  int prop;
+
+  int getProp ()
+  {
+    return prop;
+  }
+
+  void setProp (int v)
+  {
+    prop = v;
+  }
+
+  void func ()
+  {
+  }
 };
 
+int A::staticVar = 0;
+int A::staticProp = 0;
 }
 
 using namespace test3;
@@ -107,6 +131,14 @@ void addUnitTests3 (lua_State* L)
       .endNamespace ()
       .beginClass <A> ("A")
       .endClass ()
+      .beginClass <A> ("A")
+        .addStaticData ("staticVar", &A::staticVar)
+        .addStaticData ("staticVarRo", &A::staticVar, false)
+        .addStaticProperty ("staticProp", &A::getStaticProp, &A::setStaticProp)
+        .addStaticProperty ("staticPropRo", &A::getStaticProp)
+        .addStaticMethod ("staticFunc", &A::staticFunc)
+        .addData ("var", &A::var)
+      .endClass ()
       .addVariable ("global", &global)
       .addVariable ("globalRo", &global, false)
       .addProperty ("prop", &getProp, &setProp)
@@ -115,4 +147,6 @@ void addUnitTests3 (lua_State* L)
     .endNamespace ()
     ;
 
+  luabridge3::Stack <A>::push (L, A());
+  lua_setglobal (L, "a");
 }
