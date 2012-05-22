@@ -63,7 +63,26 @@ void func ()
 {
 }
 
+struct A
+{
+  static int staticVar;
+
+  static int staticProp;
+
+  static int getStaticProp ()
+  {
+    return staticProp;
+  }
+
+  static void setStaticProp (int v)
+  {
+    staticProp = v;
+  }
+};
+
 }
+
+using namespace test3;
 
 #if 0
 template <class T>
@@ -86,11 +105,13 @@ void addUnitTests3 (lua_State* L)
     .beginNamespace ("test")
       .beginNamespace ("foo")
       .endNamespace ()
-      .addVariable ("global", &test3::global)
-      .addVariable ("globalRo", &test3::global, false)
-      .addProperty ("prop", &test3::getProp, &test3::setProp)
-      .addProperty ("propRo", &test3::getProp)
-      .addFunction ("func", &test3::func)
+      .beginClass <A> ("A")
+      .endClass ()
+      .addVariable ("global", &global)
+      .addVariable ("globalRo", &global, false)
+      .addProperty ("prop", &getProp, &setProp)
+      .addProperty ("propRo", &getProp)
+      .addFunction ("func", &func)
     .endNamespace ()
     ;
 
