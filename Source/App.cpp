@@ -57,12 +57,15 @@ public:
 
     m_window->setVisible (true);
 
-    std::string errorString = runUnitTests (*m_luaState);
-
+    std::string errorString;
+      
+    errorString = runUnitTests (*m_luaState);
     if (errorString.size () > 0)
       m_luaState->print (errorString.c_str ());
 
-    runUnitTests2 (*m_luaState);
+    errorString = runUnitTests2 (*m_luaState);
+    if (errorString.size () > 0)
+      m_luaState->print (errorString.c_str ());
 
     addUnitTests3 (*m_luaState);
   }

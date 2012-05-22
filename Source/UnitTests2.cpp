@@ -28,298 +28,362 @@
 */
 //==============================================================================
 
-// for k,v in pairs (_G) do print (k, v) end
+// A set of tests of different types' communication with Lua
+
+#include <cstdio>
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>
 
 #include "Lua_5_2/lua.hpp"
 
-#include "LuaBridge/LuaBridge.h"
+#include "LuaBridge/LuaBridge2.h"
 #include "LuaBridge/shared_ptr.h"
 
-#include "UnitTests2.h"
-
 #include "JUCEAmalgam/include/juce_core_amalgam.h"
- 
-using namespace juce;
-using namespace luabridge;
+#include "JUCEAmalgam/include/juce_gui_basics_amalgam.h"
 
-//==============================================================================
-/**
-  Wraps a lua_State to perform common tasks.
-*/
-class LuaStateWrapper
+#include "BinaryData.h"
+#include "UnitTests.h"
+
+namespace test2
 {
-public:
-  LuaStateWrapper (lua_State* L_) : L (L_)
-  {
-  }
 
-  inline operator lua_State* ()
-  {
-    return L;
-  }
+using namespace std;
 
-  /** Print a message
-  */
-  void print (String text)
-  {
-    lua_getglobal (L, "print");
-    lua_pushvalue (L, -1);
-    lua_pushstring (L, text.toUTF8 ());
-    lua_call (L, 1, 0);
-  }
 
-protected:
-  lua_State* L;
-};
-
-//==============================================================================
-/**
-  Scoped lifetime management for a lua_State test environment.
-
-  The test environment includes a traceback lua function as well as
-  some convenience member functions.
-*/
-class ScopedLuaTestState : public LuaStateWrapper
+// traceback function, adapted from lua.c
+// when a runtime error occurs, this will append the call stack to the error message
+int traceback (lua_State *L)
 {
-public:
-  explicit ScopedLuaTestState (TestHost& host)
-    : LuaStateWrapper (host.createTestEnvironment ())
-    , m_host (host)
+  // look up Lua's 'debug.traceback' function
+  lua_getglobal(L, "debug");
+  if (!lua_istable(L, -1))
   {
-    lua_pushcfunction (L, &traceback); // push traceback
-    m_errfunc_index = lua_gettop(L);
-  }
-
-  ~ScopedLuaTestState ()
-  {
-    lua_pop (L, 1);  // pop traceback
-
-    m_host.destroyTestEnvironment (L);
-  }
-
-  /** Load and run a string
-  */
-  void load (char const* s)
-  {
-    int error;
-    
-    error = luaL_loadstring (L, s);
-    
-    if (!error)
-      error = lua_pcall (L, 0, LUA_MULTRET, m_errfunc_index);
-
-    if (error)
-      print (lua_tostring (L, -1));
-  }
-
-  /** Call a function with arguments.
-  */
-  void call (int nArgs = 0)
-  {
-    int error = lua_pcall (L, nArgs, LUA_MULTRET, m_errfunc_index);
-
-    if (error)
-      print (lua_tostring (L, -1));
-  }
-
-private:
-  // traceback function, adapted from lua.c
-  // when a runtime error occurs, this will append the call stack to the error message
-  static int traceback (lua_State *L)
-  {
-    // look up Lua's 'debug.traceback' function
-    lua_getglobal (L, "debug");
-    if (lua_istable (L, -1))
-    {
-      lua_getfield (L, -1, "traceback");
-      if (lua_isfunction(L, -1))
-      {
-        lua_pushvalue (L, 1);     // pass error message
-        lua_pushinteger (L, 2);   // skip this function and traceback
-        lua_call (L, 2, 1);       // call debug.traceback
-      }
-      else
-      {
-        lua_pop (L, 2);
-      }
-    }
-    else
-    {
-      lua_pop (L, 1);
-    }
-
+    lua_pop(L, 1);
     return 1;
   }
+  lua_getfield(L, -1, "traceback");
+  if (!lua_isfunction(L, -1))
+  {
+    lua_pop(L, 2);
+    return 1;
+  }
+  lua_pushvalue(L, 1);  /* pass error message */
+  lua_pushinteger(L, 2);  /* skip this function and traceback */
+  lua_call(L, 2, 1);  /* call debug.traceback */
+  return 1;
+}
 
-private:
-  ScopedLuaTestState& operator= (ScopedLuaTestState const&);
+/*
+* Test classes
+*/
 
-  TestHost& m_host;
-  int m_errfunc_index;
+bool g_success = true;
+
+bool testSucceeded ()
+{
+  bool b = g_success;
+  g_success = false;
+  return b;
+}
+
+typedef int fn_type;
+enum {
+  FN_CTOR,
+  FN_DTOR,
+  FN_STATIC,
+  FN_VIRTUAL,
+  FN_PROPGET,
+  FN_PROPSET,
+  FN_STATIC_PROPGET,
+  FN_STATIC_PROPSET,
+  FN_OPERATOR,
+  NUM_FN_TYPES
 };
+
+struct fn_called {
+  bool called[NUM_FN_TYPES];
+  fn_called () { memset(called, 0, NUM_FN_TYPES * sizeof(bool)); }
+};
+
+fn_called A_functions, B_functions;
+
+bool testAFnCalled (fn_type f)
+{
+  bool b = A_functions.called[f];
+  A_functions.called[f] = false;
+  return b;
+}
+
+bool testBFnCalled (fn_type f)
+{
+  bool b = B_functions.called[f];
+  B_functions.called[f] = false;
+  return b;
+}
+
+class A
+{
+protected:
+  string name;
+  mutable bool success;
+public:
+  A (const string &name_): name(name_), success(false), testProp(47)
+  {
+    A_functions.called[FN_CTOR] = true;
+  }
+  virtual ~A ()
+  {
+    A_functions.called[FN_DTOR] = true;
+  }
+
+  virtual void testVirtual ()
+  {
+    A_functions.called[FN_VIRTUAL] = true;
+  }
+
+  const char * getName () const
+  {
+    return name.c_str();
+  }
+
+  void setSuccess () const
+  {
+    success = true;
+  }
+
+  bool testSucceeded () const
+  {
+    bool b = success;
+    success = false;
+    return b;
+  }
+
+  static void testStatic ()
+  {
+    A_functions.called[FN_STATIC] = true;
+  }
+
+  int testProp;
+  int testPropGet () const
+  {
+    A_functions.called[FN_PROPGET] = true;
+    return testProp;
+  }
+  void testPropSet (int x)
+  {
+    A_functions.called[FN_PROPSET] = true;
+    testProp = x;
+  }
+
+  static int testStaticProp;
+  static int testStaticPropGet ()
+  {
+    A_functions.called[FN_STATIC_PROPGET] = true;
+    return testStaticProp;
+  }
+  static void testStaticPropSet (int x)
+  {
+    A_functions.called[FN_STATIC_PROPSET] = true;
+    testStaticProp = x;
+  }
+
+  luabridge::shared_ptr<A> operator + (const A& other)
+  {
+    A_functions.called[FN_OPERATOR] = true;
+    return new A(name + " + " + other.name);
+  }
+};
+
+int A::testStaticProp = 47;
+
+class B: public A
+{
+public:
+  B (const string &name_): A(name_)
+  {
+    B_functions.called[FN_CTOR] = true;
+  }
+  virtual ~B ()
+  {
+    B_functions.called[FN_DTOR] = true;
+  }
+
+  virtual void testVirtual ()
+  {
+    B_functions.called[FN_VIRTUAL] = true;
+  }
+
+  static void testStatic2 ()
+  {
+    B_functions.called[FN_STATIC] = true;
+  }
+
+};
+
+/*
+* Test functions
+*/
+
+int testRetInt ()
+{
+  return 47;
+}
+float testRetFloat ()
+{
+  return 47.0f;
+}
+const char * testRetConstCharPtr ()
+{
+  return "Hello, world";
+}
+string testRetStdString ()
+{
+  static string ret("Hello, world");
+  return ret;
+}
+
+void testParamInt (int a)
+{
+  g_success = (a == 47);
+}
+void testParamBool (bool b)
+{
+  g_success = b;
+}
+void testParamFloat (float f)
+{
+  g_success = (f == 47.0f);
+}
+void testParamConstCharPtr (const char *str)
+{
+  g_success = !strcmp(str, "Hello, world");
+}
+void testParamStdString (string str)
+{
+  g_success = !strcmp(str.c_str(), "Hello, world");
+}
+void testParamStdStringRef (const string &str)
+{
+  g_success = !strcmp(str.c_str(), "Hello, world");
+}
+
+void testParamAPtr (A * a)
+{
+  a->setSuccess();
+}
+void testParamAPtrConst (A * const a)
+{
+  a->setSuccess();
+}
+void testParamConstAPtr (const A * a)
+{
+  a->setSuccess();
+}
+void testParamSharedPtrA (luabridge::shared_ptr<A> a)
+{
+  a->setSuccess();
+}
+luabridge::shared_ptr<A> testRetSharedPtrA ()
+{
+  static luabridge::shared_ptr<A> sp_A(new A("from C"));
+  return sp_A;
+}
+luabridge::shared_ptr<const A> testRetSharedPtrConstA ()
+{
+  static luabridge::shared_ptr<A> sp_A(new A("const A"));
+  return sp_A;
+}
+
+// add our own functions and classes to a Lua environment
+void register_lua_funcs (lua_State *L)
+{
+  luabridge2::getGlobalNamespace ()
+    .addFunction ("testSucceeded", &testSucceeded)
+    .addFunction ("testAFnCalled", &testAFnCalled)
+    .addFunction ("testBFnCalled", &testBFnCalled)
+    .addFunction ("testRetInt", &testRetInt)
+    .addFunction ("testRetFloat", &testRetFloat)
+    .addFunction ("testRetConstCharPtr", &testRetConstCharPtr)
+    .addFunction ("testRetStdString", &testRetStdString)
+    .addFunction ("testParamInt", &testParamInt)
+    .addFunction ("testParamBool", &testParamBool)
+    .addFunction ("testParamFloat", &testParamFloat)
+    .addFunction ("testParamConstCharPtr", &testParamConstCharPtr)
+    .addFunction ("testParamStdString", &testParamStdString)
+    .addFunction ("testParamStdStringRef", &testParamStdStringRef)
+    .beginClass <A> ("A")
+      //.constructor<void (*) (const string &), luabridge::shared_ptr>()
+      .addMethod ("testVirtual", &A::testVirtual)
+      .addMethod ("getName", &A::getName)
+      .addMethod ("testSucceeded", &A::testSucceeded)
+      .addMethod ("__add", &A::operator+)
+      .addData ("testProp", &A::testProp)
+      .addProperty ("testProp2", &A::testPropGet, &A::testPropSet)
+      .addStaticMethod ("testStatic", &A::testStatic)
+      .addStaticData ("testStaticProp", &A::testStaticProp)
+      .addStaticProperty ("testStaticProp2", &A::testStaticPropGet, &A::testStaticPropSet)
+    .endClass ()
+    .deriveClass <B, A> ("B")
+      //.constructor<void (*) (const string &), luabridge::shared_ptr>()
+      .addStaticMethod ("testStatic2", &B::testStatic2)
+    .endClass ()
+    .addFunction ("testParamAPtr", &testParamAPtr)
+    .addFunction ("testParamAPtrConst", &testParamAPtrConst)
+    .addFunction ("testParamConstAPtr", &testParamConstAPtr)
+    .addFunction ("testParamSharedPtrA", &testParamSharedPtrA)
+    .addFunction ("testRetSharedPtrA", &testRetSharedPtrA)
+    .addFunction ("testRetSharedPtrConstA", &testRetSharedPtrConstA)
+  .addToState (L)
+  ;
+}
 
 //==============================================================================
 
-struct test1
+}
+
+std::string runUnitTests2 (TestHost& host)
 {
-  static void run (TestHost& host)
-  {
-    ScopedLuaTestState L (host);
+  using namespace test2;
 
-    L.load ("print (\"test1\")");
+  std::string errorString;
+
+  lua_State* L = host.createTestEnvironment ();
+
+  // Provide user libraries
+  register_lua_funcs (L);
+
+  // Put the traceback function on the stack
+  lua_pushcfunction(L, &traceback);
+  int errfunc_index = lua_gettop(L);
+
+  // Execute lua files in order
+  int errorCode = 0;
+
+  errorCode = luaL_loadstring (L, BinaryData::UnitTests_lua);
+
+  if (errorCode != 0)
+  {
+    // compile-time error
+    errorString = lua_tostring(L, -1);
+  }
+  
+  if (!errorCode)
+  {
+    errorCode = lua_pcall(L, 0, 0, errfunc_index);
+
+    if (errorCode != 0)
+    {
+      // runtime error
+      errorString = lua_tostring(L, -1);
+    }
   }
 
-private:
-};
+  lua_pop (L, 1); // get rid of our traceback function
 
-//==============================================================================
+  host.destroyTestEnvironment (L);
 
-struct test2
-{
-  static void run (TestHost& host)
-  {
-    ScopedLuaTestState L (host);
-
-    scope s (L);
-
-    s.class_ <test2> ("test2")
-      .constructor <void (*) (void), luabridge::shared_ptr> ()
-      .method ("f", &test2::f);
-
-    L.load ("test2 (): f();");
-  }
-
-  test2 ()
-  {
-  }
-
-  void f ()
-  {
-
-  }
-};
-
-//==============================================================================
-
-struct stacktests
-{
-  struct A
-  {
-    A ()
-    {
-    }
-
-    void set (int value)
-    {
-      var () = value;
-    }
-
-    int get () const
-    {
-      return var ();
-    }
-
-    //void take (shared_ptr <A> p)
-    void take (A*)
-    {
-    }
-
-    void getState (lua_State*)
-    {
-    }
-
-  private:
-    static int& var ()
-    {
-      static int value = 0;
-      return value;
-    }
-  };
-
-  static void run (TestHost& host)
-  {
-    ScopedLuaTestState L (host);
-
-    scope s (L);
-
-    s.class_ <A> ("A")
-      .constructor <void (*) (void), luabridge::shared_ptr> ()
-      .method ("set", &A::set)
-      .method ("take", &A::take)
-      .method ("getState", &A::getState)
-      ;
-
-    L.load ("local function test () print (\"test1\"); end return test");
-    L.call ();
-
-    L.load ("local function test (t) print (t); end return test");
-    tdstack <int>::push (L, 16);
-    L.call (1);
-
-    {
-      A a;
-      L.load ("local function test (a) a:set(42); end return test");
-      tdstack <A>::push (L, a);
-      L.call (1);
-      String s;
-      s << "value = " << String (a.get ());
-      L.print (s);
-    }
-
-    {
-      A a;
-      A& ra (a);
-      L.load ("local function test (a) a:set(50); end return test");
-      tdstack <A>::push (L, ra);
-      L.call (1);
-      String s;
-      s << "value = " << String (a.get ());
-      L.print (s);
-    }
-
-    {
-      L.load ("local function test () a=A(); a:take (a); end return test");
-      L.call ();
-    }
-  }
-};
-
-//==============================================================================
-
-#if 0
-struct test3
-{
-  static void run (TestHost& host)
-  {
-    ScopedLuaTestState L (host);
-
-    scope s (L);
-
-    s.class_ <test3, std::shared_ptr> ("test3")
-      .constructor <void (*) (void)> ()
-      .method ("f", &test3::f);
-
-    L.dostring ("test3 (): f();");
-  }
-
-  test3 ()
-  {
-  }
-
-  void f ()
-  {
-
-  }
-};
-#endif
-
-//==============================================================================
-
-void runUnitTests2 (TestHost& host)
-{
-//  test1::run (host);
-//  test2::run (host);
-//  test3::run (host);
-
-  stacktests::run (host);
+  return errorString;
 }

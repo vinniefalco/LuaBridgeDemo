@@ -33,6 +33,6 @@
 
 #include "TestHost.h"
 
-extern void runUnitTests2 (TestHost& host);
+extern std::string runUnitTests2 (TestHost& host);
 
 #endif
