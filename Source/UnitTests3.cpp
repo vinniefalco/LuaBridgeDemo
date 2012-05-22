@@ -32,7 +32,7 @@
 
 #include "Lua_5_2/lua.hpp"
 
-#include "LuaBridge/LuaBridge2.h"
+#include "LuaBridge/LuaBridge3.h"
 #include "LuaBridge/shared_ptr.h"
 
 #include "UnitTests2.h"
@@ -40,227 +40,34 @@
 #include "JUCEAmalgam/include/juce_core_amalgam.h"
  
 using namespace juce;
-using namespace luabridge2;
+using namespace luabridge3;
 
-namespace test
+namespace test3
 {
 
-template <class T>
-struct G
+int global = 0;
+
+int prop = 0;
+
+int getProp ()
 {
-  static T global;
+  return prop;
+}
 
-  static T prop;
-
-  static int getProp ()
-  {
-    return prop;
-  }
-
-  static void setProp (T v)
-  {
-    prop = v;
-  }
-
-  static void func1 ()
-  {
-  }
-
-  static T func2 (T const*)
-  {
-    return T ();
-  }
-
-  static void func3 (T)
-  {
-  }
-};
-
-template <class T>
-T G <T>::global;
-
-template <class T>
-T G <T>::prop;
-
-template <class T>
-struct A
+void setProp (int i)
 {
-  static T staticData;
+  prop = i;
+}
 
-  static T staticProperty;
-
-  static T getStaticProperty ()
-  {
-    return staticProperty;
-  }
-
-  static void setStaticProperty (T v)
-  {
-    staticProperty = v;
-  }
-
-  static void staticMethod ()
-  {
-  }
-
-  T dataMember;
-
-  T propertyMember;
-
-  A ()
-  {
-  }
-
-  ~A ()
-  {
-    staticData = 0;
-  }
-
-  T getProperty () const
-  {
-    return propertyMember;
-  }
-
-  void setProperty (T t)
-  {
-    propertyMember = t;
-  }
-
-  void method ()
-  {
-  }
-
-  void constMethod (int) const
-  {
-  }
-};
-
-template <class T>
-T A <T>::staticData = 0;
-
-template <class T>
-T A <T>::staticProperty = 0;
-
-struct B
+void func ()
 {
-  static int staticData;
-
-  static int staticProperty;
-
-  static int getStaticProperty ()
-  {
-    return staticProperty;
-  }
-
-  static void setStaticProperty (int v)
-  {
-    staticProperty = v;
-  }
-
-  static void staticMethod ()
-  {
-  }
-
-  int dataMember;
-
-  int propertyMember;
-
-  int getProperty () const
-  {
-    return propertyMember;
-  }
-
-  void setProperty (int t)
-  {
-    propertyMember = t;
-  }
-
-  void method ()
-  {
-  }
-
-  void constMethod (int) const
-  {
-  }
-};
-
-int B::staticData = 0;
-
-int B::staticProperty = 0;
-
-struct C
-{
-  static float staticData;
-
-  static float staticProperty;
-
-  static float getStaticProperty ()
-  {
-    return staticProperty;
-  }
-
-  static void setStaticProperty (float v)
-  {
-    staticProperty = v;
-  }
-
-  static void staticMethod ()
-  {
-  }
-
-  float dataMember;
-
-  float propertyMember;
-
-  float getProperty () const
-  {
-    return propertyMember;
-  }
-
-  void setProperty (float t)
-  {
-    propertyMember = t;
-  }
-
-  void method ()
-  {
-  }
-
-  void constMethod (float) const
-  {
-  }
-};
-
-float C::staticData = 0;
-
-float C::staticProperty = 0;
-
-class D
-{
-public:
-  int m_d;
-
-  virtual void foo ()
-  {
-    m_d = 1;
-  }
-};
-
-class E : public D
-{
-public:
-  int m_e;
-
-  void foo ()
-  {
-    m_d = 2;
-  }
-};
+}
 
 }
 
+#if 0
 template <class T>
-void addGlobals (luabridge2::Namespace& n)
+void addGlobals (luabridge3::Namespace& n)
 {
   n .addVariable ("global", &T::global)
     .addVariable ("globalRo", &T::global, false)
@@ -271,70 +78,20 @@ void addGlobals (luabridge2::Namespace& n)
     .addFunction ("globalFunc3", &T::func3)
     ;
 }
-
-template <class T>
-void addTemplateClass (luabridge2::Namespace& n, char const* name)
-{
-  n .beginClass <T> (name)
-      .addStaticData ("staticData", &T::staticData)
-      .addStaticData ("staticDataRo", &T::staticData, false)
-      .addStaticProperty ("staticProperty", &T::getStaticProperty, &T::setStaticProperty)
-      .addStaticProperty ("staticPropertyRo", &T::getStaticProperty)
-      .addStaticMethod ("staticMethod", &T::staticMethod)
-      .addData ("dataMember", &T::dataMember)
-      .addData ("dataMemberRo", &T::dataMember, false)
-      .addProperty ("property", &T::getProperty, &T::setProperty)
-      .addProperty ("propertyRo", &T::getProperty)
-      .addMethod ("method", &T::method)
-      .addMethod ("constMethod", &T::constMethod)
-    .endClass ()
-    ;
-}
+#endif
 
 void addUnitTests3 (lua_State* L)
 {
-  addGlobals <test::G <int> > (
-    getGlobalNamespace()
-      .beginNamespace ("test"));
-
-  addTemplateClass <test::A <int> > (
-    getGlobalNamespace()
-      .beginNamespace ("test"),
-      "A");
-
-  addTemplateClass <test::B> (
-    getGlobalNamespace()
-      .beginNamespace ("test"),
-      "B");
-
-  addTemplateClass <test::C> (
-    getGlobalNamespace()
-      .beginNamespace ("test"),
-      "C");
-
-  addTemplateClass <test::A <float> > (
-    getGlobalNamespace()
-      .beginNamespace ("test")
-        .beginNamespace ("detail"),
-      "A2");
-
-  getGlobalNamespace()
+  luabridge3::getGlobalNamespace (L)
     .beginNamespace ("test")
-      .beginClass <test::D> ("D")
-        .addData ("d", &test::D::m_d)
-        .addMethod ("foo", &test::D::foo)
-      .endClass ()
-      .deriveClass <test::E, test::D> ("E")
-        .addData ("e", &test::E::m_e)
-      .endClass ()
+      .beginNamespace ("foo")
+      .endNamespace ()
+      .addVariable ("global", &test3::global)
+      .addVariable ("globalRo", &test3::global, false)
+      .addProperty ("prop", &test3::getProp, &test3::setProp)
+      .addProperty ("propRo", &test3::getProp)
+      .addFunction ("func", &test3::func)
     .endNamespace ()
     ;
 
-  getGlobalNamespace ().addToState (L);
-
-  luabridge2::Stack <test::B>::push (L, test::B ());
-  lua_setglobal (L, "b");
-
-  //luabridge2::Stack <test::C const>::push (L, test::C ());
-  //lua_setglobal (L, "c");
 }
