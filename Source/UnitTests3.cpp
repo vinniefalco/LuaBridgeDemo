@@ -87,7 +87,11 @@ struct A
 
   int prop;
 
-  int getProp ()
+  virtual ~A ()
+  {
+  }
+
+  int getProp () const
   {
     return prop;
   }
@@ -100,10 +104,68 @@ struct A
   void func ()
   {
   }
+
+  void constFunc () const
+  {
+  }
 };
 
 int A::staticVar = 0;
 int A::staticProp = 0;
+
+struct B : public A
+{
+  static float staticVar;
+
+  static float staticProp;
+
+  static float getStaticProp ()
+  {
+    return staticProp;
+  }
+
+  static void setStaticProp (float v)
+  {
+    staticProp = v;
+  }
+ 
+  static void staticFunc ()
+  {
+  }
+
+  float var;
+
+  float prop;
+
+  ~B ()
+  {
+  }
+
+  float getProp () const
+  {
+    return prop;
+  }
+
+  void setProp (float v)
+  {
+    prop = v;
+  }
+
+  void func ()
+  {
+  }
+
+  void constFunc () const
+  {
+  }
+};
+
+float B::staticVar = 0;
+float B::staticProp = 0;
+
+A a;
+B b;
+
 }
 
 using namespace test3;
@@ -130,14 +192,31 @@ void addUnitTests3 (lua_State* L)
       .beginNamespace ("foo")
       .endNamespace ()
       .beginClass <A> ("A")
-      .endClass ()
-      .beginClass <A> ("A")
         .addStaticData ("staticVar", &A::staticVar)
         .addStaticData ("staticVarRo", &A::staticVar, false)
         .addStaticProperty ("staticProp", &A::getStaticProp, &A::setStaticProp)
         .addStaticProperty ("staticPropRo", &A::getStaticProp)
         .addStaticMethod ("staticFunc", &A::staticFunc)
         .addData ("var", &A::var)
+        .addData ("varRo", &A::var, false)
+        .addProperty ("prop", &A::getProp, &A::setProp)
+        .addProperty ("propRo", &A::getProp)
+        .addMethod ("func", &A::func)
+        .addMethod ("constFunc", &A::constFunc)
+      .endClass ()
+#if 1
+      .beginClass <B> ("B")
+        .addStaticData ("staticVar", &B::staticVar)
+        .addStaticData ("staticVarRo", &B::staticVar, false)
+        .addStaticProperty ("staticProp", &B::getStaticProp, &B::setStaticProp)
+        .addStaticProperty ("staticPropRo", &B::getStaticProp)
+        .addStaticMethod ("staticFunc", &B::staticFunc)
+        .addData ("var", &B::var)
+        .addData ("varRo", &B::var, false)
+        .addProperty ("prop", &B::getProp, &B::setProp)
+        .addProperty ("propRo", &B::getProp)
+        .addMethod ("func", &B::func)
+        .addMethod ("constFunc", &B::constFunc)
       .endClass ()
       .addVariable ("global", &global)
       .addVariable ("globalRo", &global, false)
@@ -145,8 +224,12 @@ void addUnitTests3 (lua_State* L)
       .addProperty ("propRo", &getProp)
       .addFunction ("func", &func)
     .endNamespace ()
+#endif
     ;
 
-  luabridge3::Stack <A>::push (L, A());
+  //luabridge3::Stack <A const>::push (L, A());
+  luabridge3::Stack <A>::push (L, a);
   lua_setglobal (L, "a");
+  luabridge3::Stack <B>::push (L, b);
+  lua_setglobal (L, "b");
 }

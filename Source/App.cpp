@@ -67,7 +67,8 @@ public:
     if (errorString.size () > 0)
       m_luaState->print (errorString.c_str ());
 
-    addUnitTests3 (*m_luaState);
+    addUnitTests2 (*m_luaState);
+    //addUnitTests3 (*m_luaState);
   }
 
   void shutdown()

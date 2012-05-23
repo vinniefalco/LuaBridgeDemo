@@ -33,6 +33,7 @@
 
 #include "TestHost.h"
 
+extern void addUnitTests2 (lua_State* L);
 extern std::string runUnitTests2 (TestHost& host);
 
 #endif

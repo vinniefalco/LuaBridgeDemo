@@ -38,7 +38,7 @@
 
 #include "Lua_5_2/lua.hpp"
 
-#include "LuaBridge/LuaBridge2.h"
+#include "LuaBridge/LuaBridge3.h"
 #include "LuaBridge/shared_ptr.h"
 
 #include "JUCEAmalgam/include/juce_core_amalgam.h"
@@ -51,7 +51,7 @@ namespace test2
 {
 
 using namespace std;
-
+using namespace luabridge3;
 
 // traceback function, adapted from lua.c
 // when a runtime error occurs, this will append the call stack to the error message
@@ -300,7 +300,7 @@ luabridge::shared_ptr<const A> testRetSharedPtrConstA ()
 // add our own functions and classes to a Lua environment
 void register_lua_funcs (lua_State *L)
 {
-  luabridge2::getGlobalNamespace ()
+  getGlobalNamespace (L)
     .addFunction ("testSucceeded", &testSucceeded)
     .addFunction ("testAFnCalled", &testAFnCalled)
     .addFunction ("testBFnCalled", &testBFnCalled)
@@ -315,7 +315,7 @@ void register_lua_funcs (lua_State *L)
     .addFunction ("testParamStdString", &testParamStdString)
     .addFunction ("testParamStdStringRef", &testParamStdStringRef)
     .beginClass <A> ("A")
-      //.constructor<void (*) (const string &), luabridge::shared_ptr>()
+      .addConstructor <void (*) (const string &), luabridge::shared_ptr <A> > ()
       .addMethod ("testVirtual", &A::testVirtual)
       .addMethod ("getName", &A::getName)
       .addMethod ("testSucceeded", &A::testSucceeded)
@@ -327,7 +327,7 @@ void register_lua_funcs (lua_State *L)
       .addStaticProperty ("testStaticProp2", &A::testStaticPropGet, &A::testStaticPropSet)
     .endClass ()
     .deriveClass <B, A> ("B")
-      //.constructor<void (*) (const string &), luabridge::shared_ptr>()
+      .addConstructor <void (*) (const string &), luabridge::shared_ptr <B> > ()
       .addStaticMethod ("testStatic2", &B::testStatic2)
     .endClass ()
     .addFunction ("testParamAPtr", &testParamAPtr)
@@ -336,12 +336,18 @@ void register_lua_funcs (lua_State *L)
     .addFunction ("testParamSharedPtrA", &testParamSharedPtrA)
     .addFunction ("testRetSharedPtrA", &testRetSharedPtrA)
     .addFunction ("testRetSharedPtrConstA", &testRetSharedPtrConstA)
-  .addToState (L)
   ;
 }
 
 //==============================================================================
 
+}
+
+void addUnitTests2 (lua_State* L)
+{
+  using namespace test2;
+
+  register_lua_funcs (L);
 }
 
 std::string runUnitTests2 (TestHost& host)
