@@ -68,7 +68,8 @@ public:
       m_luaState->print (errorString.c_str ());
 
     addUnitTests2 (*m_luaState);
-    //addUnitTests3 (*m_luaState);
+    
+    addUnitTests3 (*m_luaState);
   }
 
   void shutdown()
