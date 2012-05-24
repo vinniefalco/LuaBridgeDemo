@@ -48,6 +48,7 @@
 #include "UnitTests.h"
 
 using namespace std;
+using namespace luabridge;
 
 // traceback function, adapted from lua.c
 // when a runtime error occurs, this will append the call stack to the error message
@@ -296,7 +297,7 @@ luabridge::shared_ptr<const A> testRetSharedPtrConstA ()
 // add our own functions and classes to a Lua environment
 void register_lua_funcs (lua_State *L)
 {
-  luabridge::scope s(L);
+  scope s(L);
 
   s .function("testSucceeded", &testSucceeded)
     .function("testAFnCalled", &testAFnCalled)
@@ -310,32 +311,30 @@ void register_lua_funcs (lua_State *L)
     .function("testParamFloat", &testParamFloat)
     .function("testParamConstCharPtr", &testParamConstCharPtr)
     .function("testParamStdString", &testParamStdString)
-    .function("testParamStdStringRef", &testParamStdStringRef);
-
-  s.class_<A>("A")
-    .constructor<void (*) (const string &), luabridge::shared_ptr>()
-    .method("testVirtual", &A::testVirtual)
-    .method("getName", &A::getName)
-    .method("testSucceeded", &A::testSucceeded)
-    .method("__add", &A::operator+)
-    .property_rw("testProp", &A::testProp)
-    .property_rw("testProp2", &A::testPropGet, &A::testPropSet)
-    .static_method("testStatic", &A::testStatic)
-    .static_property_rw("testStaticProp", &A::testStaticProp)
-    .static_property_rw("testStaticProp2", &A::testStaticPropGet,
-    &A::testStaticPropSet);
-
-
-  s.subclass<B, A>("B")
-    .constructor<void (*) (const string &), luabridge::shared_ptr>()
-    .static_method("testStatic2", &B::testStatic2);
-
-  s  .function("testParamAPtr", &testParamAPtr)
+    .function("testParamStdStringRef", &testParamStdStringRef)
+    .class_<A>("A")
+      .constructor<void (*) (const string &), luabridge::shared_ptr <A> >()
+      .method("testVirtual", &A::testVirtual)
+      .method("getName", &A::getName)
+      .method("testSucceeded", &A::testSucceeded)
+      .method("__add", &A::operator+)
+      .property_rw("testProp", &A::testProp)
+      .property_rw("testProp2", &A::testPropGet, &A::testPropSet)
+      .static_method("testStatic", &A::testStatic)
+      .static_property_rw("testStaticProp", &A::testStaticProp)
+      .static_property_rw("testStaticProp2", &A::testStaticPropGet, &A::testStaticPropSet)
+    .endClass ()
+    .subclass<B, A>("B")
+      .constructor<void (*) (const string &), luabridge::shared_ptr <B> >()
+      .static_method("testStatic2", &B::testStatic2)
+    .endClass ()
+    .function("testParamAPtr", &testParamAPtr)
     .function("testParamAPtrConst", &testParamAPtrConst)
     .function("testParamConstAPtr", &testParamConstAPtr)
     .function("testParamSharedPtrA", &testParamSharedPtrA)
     .function("testRetSharedPtrA", &testRetSharedPtrA)
-    .function("testRetSharedPtrConstA", &testRetSharedPtrConstA);
+    .function("testRetSharedPtrConstA", &testRetSharedPtrConstA)
+    ;
 }
 
 //==============================================================================

@@ -32,7 +32,7 @@
 
 #include "Lua_5_2/lua.hpp"
 
-#include "LuaBridge/LuaBridge3.h"
+#include "LuaBridge/LuaBridge.h"
 #include "LuaBridge/shared_ptr.h"
 
 #include "UnitTests2.h"
@@ -40,7 +40,7 @@
 #include "JUCEAmalgam/include/juce_core_amalgam.h"
  
 using namespace juce;
-using namespace luabridge3;
+using namespace luabridge;
 
 namespace test3
 {
@@ -170,24 +170,9 @@ B b;
 
 using namespace test3;
 
-#if 0
-template <class T>
-void addGlobals (luabridge3::Namespace& n)
-{
-  n .addVariable ("global", &T::global)
-    .addVariable ("globalRo", &T::global, false)
-    .addProperty ("globalProp", &T::getProp, &T::setProp)
-    .addProperty ("globalPropRo", &T::getProp)
-    .addFunction ("globalFunc1", &T::func1)
-    .addFunction ("globalFunc2", &T::func2)
-    .addFunction ("globalFunc3", &T::func3)
-    ;
-}
-#endif
-
 void addUnitTests3 (lua_State* L)
 {
-  luabridge3::getGlobalNamespace (L)
+  luabridge::getGlobalNamespace (L)
     .beginNamespace ("test")
       .beginNamespace ("foo")
       .endNamespace ()
@@ -204,7 +189,6 @@ void addUnitTests3 (lua_State* L)
         .addMethod ("func", &A::func)
         .addMethod ("constFunc", &A::constFunc)
       .endClass ()
-#if 1
       .beginClass <B> ("B")
         .addStaticData ("staticVar", &B::staticVar)
         .addStaticData ("staticVarRo", &B::staticVar, false)
@@ -224,12 +208,11 @@ void addUnitTests3 (lua_State* L)
       .addProperty ("propRo", &getProp)
       .addFunction ("func", &func)
     .endNamespace ()
-#endif
     ;
 
-  //luabridge3::Stack <A const>::push (L, A());
-  luabridge3::Stack <A>::push (L, a);
+  //luabridge::Stack <A const>::push (L, A());
+  luabridge::Stack <A>::push (L, a);
   lua_setglobal (L, "a");
-  luabridge3::Stack <B>::push (L, b);
+  luabridge::Stack <B>::push (L, b);
   lua_setglobal (L, "b");
 }
