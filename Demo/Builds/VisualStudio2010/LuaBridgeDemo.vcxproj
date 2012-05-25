@@ -153,6 +153,9 @@
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\Source\Main.cpp"/>
+    <ClCompile Include="..\..\Source\NewTests.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\Tests\Source\Tests.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -171,6 +174,7 @@
     <ClInclude Include="..\..\Source\CConsoleWindow.h"/>
     <ClInclude Include="..\..\Source\LuaState.h"/>
     <ClInclude Include="..\..\Source\TestHost.h"/>
+    <ClInclude Include="..\..\Source\NewTests.h"/>
     <ClInclude Include="..\..\..\Tests\Source\Tests.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h"/>

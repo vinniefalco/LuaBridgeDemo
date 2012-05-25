@@ -27,85 +27,67 @@
 */
 //==============================================================================
 
-class App : public JUCEApplication
+namespace luabridge
 {
-private:
-  ScopedPointer <LuaState> m_luaState;
-  ScopedPointer <CConsoleWindow> m_window;
 
+#include "LuaBridge/RefCountedObject.h"
+
+}
+
+namespace newtests
+{
+
+using namespace luabridge;
+
+class A : public RefCountedObjectType <int>
+{
 public:
-  App()
-    : m_luaState (LuaState::New ())
+  A ()
   {
   }
 
-  ~App()
+  virtual ~A ()
   {
-  }
-
-  void runTests ()
-  {
-    lua_State* L = m_luaState->createTestEnvironment ();
-
-    LuaBridgeTests::addToState (L);
-
-    if (luaL_loadstring (L, BinaryData::Tests_lua) != 0)
-    {
-      // compile-time error
-      m_luaState->print (lua_tostring (L, -1));
-    }
-    else if (LuaState::pcall (L, 0, 0) != LUA_OK)
-    {
-      m_luaState->print (lua_tostring (L, -1));
-    }
-    
-    m_luaState->destroyTestEnvironment (L);
-
-    runNewTests (*m_luaState);
-  }
-
-  void initialise (const String&)
-  {
-    // Do your application's initialisation code here..
-
-    m_window = new CConsoleWindow (*m_luaState);
-
-    m_window->setVisible (true);
-
-    runTests ();
-  }
-
-  void shutdown()
-  {
-    // Do your application's shutdown code here..
-
-    m_window = nullptr;
-  }
-
-  void systemRequestedQuit()
-  {
-    quit();
-  }
-
-  const String getApplicationName()
-  {
-    return "LuaBridge Demo";
-  }
-
-  const String getApplicationVersion()
-  {
-    return "1.0";
-  }
-
-  bool moreThanOneInstanceAllowed()
-  {
-    return true;
-  }
-
-  void anotherInstanceStarted (const String&)
-  {
-
   }
 };
 
-START_JUCE_APPLICATION (App)
+class B : public A
+{
+public:
+  B ()
+  {
+  }
+
+  ~B ()
+  {
+  }
+};
+
+void addToState (lua_State* L)
+{
+  getGlobalNamespace (L)
+    .beginNamespace ("test")
+      .beginClass <A> ("A")
+        .addConstructor <void (*)(void), RefCountedObjectPtr <A> > ()
+      .endClass ()
+      .deriveClass <B, A> ("B")
+        .addConstructor <void (*)(void), RefCountedObjectPtr <B> > ()
+      .endClass ()
+    .endNamespace ()
+    ;
+}
+
+void runTests (lua_State* L)
+{
+  luaL_dostring (L, "a = test.A(); a = nil; collectgarbage ()");
+}
+
+}
+
+void runNewTests (LuaState& state)
+{
+  lua_State* L = state.getState ();
+
+  newtests::addToState (L);
+  newtests::runTests (L);
+}

@@ -50,11 +50,13 @@ using namespace juce;
 #include "CConsoleText.h"
 #include "CConsoleWindow.h"
 #include "LuaState.h"
+#include "NewTests.h"
 
 #include "CConsole.cpp"
 #include "CConsoleEdit.cpp"
 #include "CConsoleText.cpp"
 #include "CConsoleWindow.cpp"
 #include "LuaState.cpp"
+#include "NewTests.cpp"
 
 #include "App.cpp"

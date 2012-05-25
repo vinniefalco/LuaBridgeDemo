@@ -222,6 +222,17 @@
         <File RelativePath="..\..\Source\TestHost.h"/>
       </Filter>
       <Filter Name="Tests">
+        <File RelativePath="..\..\Source\NewTests.cpp">
+          <FileConfiguration Name="Debug|Win32"
+                             ExcludedFromBuild="true">
+            <Tool Name="VCCLCompilerTool"/>
+          </FileConfiguration>
+          <FileConfiguration Name="Release|Win32"
+                             ExcludedFromBuild="true">
+            <Tool Name="VCCLCompilerTool"/>
+          </FileConfiguration>
+        </File>
+        <File RelativePath="..\..\Source\NewTests.h"/>
         <File RelativePath="..\..\..\Tests\Source\Tests.cpp">
           <FileConfiguration Name="Debug|Win32"
                              ExcludedFromBuild="true">

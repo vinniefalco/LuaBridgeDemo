@@ -27,85 +27,9 @@
 */
 //==============================================================================
 
-class App : public JUCEApplication
-{
-private:
-  ScopedPointer <LuaState> m_luaState;
-  ScopedPointer <CConsoleWindow> m_window;
+#ifndef LUABRIDGEDEMO_NEWTESTS_HEADER
+#define LUABRIDGEDEMO_NEWTESTS_HEADER
 
-public:
-  App()
-    : m_luaState (LuaState::New ())
-  {
-  }
+extern void runNewTests (LuaState& state);
 
-  ~App()
-  {
-  }
-
-  void runTests ()
-  {
-    lua_State* L = m_luaState->createTestEnvironment ();
-
-    LuaBridgeTests::addToState (L);
-
-    if (luaL_loadstring (L, BinaryData::Tests_lua) != 0)
-    {
-      // compile-time error
-      m_luaState->print (lua_tostring (L, -1));
-    }
-    else if (LuaState::pcall (L, 0, 0) != LUA_OK)
-    {
-      m_luaState->print (lua_tostring (L, -1));
-    }
-    
-    m_luaState->destroyTestEnvironment (L);
-
-    runNewTests (*m_luaState);
-  }
-
-  void initialise (const String&)
-  {
-    // Do your application's initialisation code here..
-
-    m_window = new CConsoleWindow (*m_luaState);
-
-    m_window->setVisible (true);
-
-    runTests ();
-  }
-
-  void shutdown()
-  {
-    // Do your application's shutdown code here..
-
-    m_window = nullptr;
-  }
-
-  void systemRequestedQuit()
-  {
-    quit();
-  }
-
-  const String getApplicationName()
-  {
-    return "LuaBridge Demo";
-  }
-
-  const String getApplicationVersion()
-  {
-    return "1.0";
-  }
-
-  bool moreThanOneInstanceAllowed()
-  {
-    return true;
-  }
-
-  void anotherInstanceStarted (const String&)
-  {
-
-  }
-};
-
-START_JUCE_APPLICATION (App)
+#endif

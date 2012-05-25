@@ -79,6 +79,9 @@
     <ClCompile Include="..\..\Source\Main.cpp">
       <Filter>LuaBridgeDemo\Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\NewTests.cpp">
+      <Filter>LuaBridgeDemo\Tests</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\Tests\Source\Tests.cpp">
       <Filter>LuaBridgeDemo\Tests</Filter>
     </ClCompile>
@@ -122,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\TestHost.h">
       <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\NewTests.h">
+      <Filter>LuaBridgeDemo\Tests</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Tests\Source\Tests.h">
       <Filter>LuaBridgeDemo\Tests</Filter>
