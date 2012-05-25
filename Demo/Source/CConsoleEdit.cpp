@@ -54,7 +54,7 @@ void CConsoleEdit::textEditorReturnKeyPressed (TextEditor& editor)
 {
   String text = editor.getText ();
 
-  editor.clear ();
+  editor.selectAll ();
 
   m_luaState.doString (text);
 }

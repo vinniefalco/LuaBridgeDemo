@@ -29,7 +29,7 @@
 
 CConsoleWindow::CConsoleWindow (LuaState& luaState)
   : DocumentWindow (
-      TRANS("Lua Console"),
+      TRANS("LuaBridge Demo"),
       Colours::black,
       DocumentWindow::allButtons,
       false)

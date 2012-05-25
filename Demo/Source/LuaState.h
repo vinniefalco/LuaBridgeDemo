@@ -35,7 +35,10 @@
 /**
   lua_State wrapper.
 
-  Output from print() is captured and provided to all Listener observers.
+  The state hs the standard Lua libraries opened, and an override for print which
+  sends the text to observers. There is also a traceback feature installed that
+  displays the stack when an error occurs. To get the traceback, use the pcall()
+  of this class.
 */
 class LuaState : public TestHost
 {
@@ -52,7 +55,14 @@ public:
   virtual void addListener (Listener* listener) = 0;
   virtual void removeListener (Listener* listener) = 0;
 
-  virtual operator lua_State* () = 0;
+  virtual lua_State* getState () = 0;
+
+  inline operator lua_State* ()
+  {
+    return getState ();
+  }
+
+  virtual int pcall (int numberOfArguments, int numberOfReturnValues) = 0;
 
   virtual void doString (String chunk) = 0;
 };

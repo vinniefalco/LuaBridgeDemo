@@ -37,21 +37,51 @@ private:
 
   State m_state;
   ListenerList <Listener> m_listeners;
-  lua_State* m_lua;
+  lua_State* L;
 
 public:
-  LuaStateImp () : m_lua (createEnvironment ())
+  LuaStateImp () : L (createEnvironment ())
   {
   }
 
   ~LuaStateImp ()
   {
-    lua_close (m_lua);
+    lua_close (L);
   }
 
-  operator lua_State* ()
+  lua_State* getState ()
   {
-    return m_lua;
+    return L;
+  }
+
+  static void* getTracebackKey ()
+  {
+    static char key;
+    return &key;
+  }
+
+  // traceback function, adapted from lua.c
+  // when a runtime error occurs, this will append the call stack to the error message
+  //
+  static int tracebackFunction (lua_State* L)
+  {
+    // look up Lua's 'debug.traceback' function
+    lua_getglobal(L, "debug");
+    if (!lua_istable(L, -1))
+    {
+      lua_pop(L, 1);
+      return 1;
+    }
+    lua_getfield(L, -1, "traceback");
+    if (!lua_isfunction(L, -1))
+    {
+      lua_pop(L, 2);
+      return 1;
+    }
+    lua_pushvalue(L, 1);  /* pass error message */
+    lua_pushinteger(L, 2);  /* skip this function and traceback */
+    lua_call(L, 2, 1);  /* call debug.traceback */
+    return 1;
   }
 
   // from luaB_print()
@@ -85,17 +115,22 @@ public:
 
   lua_State* createEnvironment ()
   {
-    lua_State* L (luaL_newstate ());
+    lua_State* L_ (luaL_newstate ());
 
-    luaL_openlibs (L);
+    luaL_openlibs (L_);
 
     // Hook the print function.
     // Must happen after opening the io lib.
-    lua_pushlightuserdata (L, this);
-    lua_pushcclosure (L, &LuaStateImp::print, 1);
-    lua_setglobal (L, "print");
+    //
+    lua_pushlightuserdata (L_, this);
+    lua_pushcclosure (L_, &LuaStateImp::print, 1);
+    lua_setglobal (L_, "print");
 
-    return L;
+    // Install the traceback
+    lua_pushcfunction (L_, tracebackFunction);
+    lua_rawsetp (L_, LUA_REGISTRYINDEX, getTracebackKey ());
+
+    return L_;
   }
   
   //----------------------------------------------------------------------------
@@ -123,13 +158,31 @@ public:
     m_listeners.call (&Listener::onLuaStatePrint, s);
   }
 
+  int pcall (int numberOfArguments, int numberOfReturnValues)
+  {
+    // push msgh
+    lua_rawgetp (L, LUA_REGISTRYINDEX, getTracebackKey ());
+    int msgh = -(numberOfArguments+1);
+    lua_insert (L, msgh);
+
+    int result = lua_pcall (L, numberOfArguments, numberOfReturnValues, msgh);
+
+    // remove msgh
+    if (result == LUA_OK)
+      lua_remove (L, -(numberOfReturnValues+1));
+    else
+      lua_remove (L, -2);
+
+    return result;
+  }
+
   void doString (String text)
   {
-    int result = luaL_dostring (m_lua, text.toUTF8());
+    int result = luaL_dostring (L, text.toUTF8());
 
     if (result != 0)
     {
-      print (std::string (lua_tostring (m_lua, -1)));
+      print (std::string (lua_tostring (L, -1)));
     }
   }
 
