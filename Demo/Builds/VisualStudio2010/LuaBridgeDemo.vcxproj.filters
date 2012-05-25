@@ -17,8 +17,8 @@
     <Filter Include="LuaBridgeDemo\Source">
       <UniqueIdentifier>{C229198E-1100-DAD5-E48D-684A1778856B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="LuaBridgeDemo\Unit Tests">
-      <UniqueIdentifier>{5F7F26DF-5D5F-C8C9-5051-8FD71B316915}</UniqueIdentifier>
+    <Filter Include="LuaBridgeDemo\Tests">
+      <UniqueIdentifier>{B3EC0745-33CA-BE28-461B-2871C999B3B7}</UniqueIdentifier>
     </Filter>
     <Filter Include="Juce Library Code">
       <UniqueIdentifier>{8B4D1BAA-6DB4-CAEC-A0FA-271F354D5C61}</UniqueIdentifier>
@@ -79,11 +79,8 @@
     <ClCompile Include="..\..\Source\Main.cpp">
       <Filter>LuaBridgeDemo\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\UnitTests.cpp">
-      <Filter>LuaBridgeDemo\Unit Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\UnitTests2.cpp">
-      <Filter>LuaBridgeDemo\Unit Tests</Filter>
+    <ClCompile Include="..\..\..\Tests\Source\Tests.cpp">
+      <Filter>LuaBridgeDemo\Tests</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
       <Filter>Juce Library Code</Filter>
@@ -120,11 +117,8 @@
     <ClInclude Include="..\..\Source\TestHost.h">
       <Filter>LuaBridgeDemo\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\UnitTests.h">
-      <Filter>LuaBridgeDemo\Unit Tests</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\UnitTests2.h">
-      <Filter>LuaBridgeDemo\Unit Tests</Filter>
+    <ClInclude Include="..\..\..\Tests\Source\Tests.h">
+      <Filter>LuaBridgeDemo\Tests</Filter>
     </ClInclude>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h">
       <Filter>Juce Library Code</Filter>
@@ -137,8 +131,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Source\UnitTests.lua">
-      <Filter>LuaBridgeDemo\Unit Tests</Filter>
+    <None Include="..\..\..\Tests\Source\Tests.lua">
+      <Filter>LuaBridgeDemo\Tests</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

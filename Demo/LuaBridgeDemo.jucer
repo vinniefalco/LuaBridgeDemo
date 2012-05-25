@@ -94,12 +94,10 @@
       <FILE id="zdep57" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="Bb1uiD" name="TestHost.h" compile="0" resource="0" file="Source/TestHost.h"/>
     </GROUP>
-    <GROUP id="{B260E974-4098-CE7E-07A9-D6A5F5AB84A7}" name="Unit Tests">
-      <FILE id="TaGHWu" name="UnitTests.cpp" compile="1" resource="0" file="Source/UnitTests.cpp"/>
-      <FILE id="bEkfYH" name="UnitTests.h" compile="0" resource="0" file="Source/UnitTests.h"/>
-      <FILE id="iIvCpF" name="UnitTests.lua" compile="0" resource="1" file="Source/UnitTests.lua"/>
-      <FILE id="Iseeup" name="UnitTests2.cpp" compile="1" resource="0" file="Source/UnitTests2.cpp"/>
-      <FILE id="UhxtSt" name="UnitTests2.h" compile="0" resource="0" file="Source/UnitTests2.h"/>
+    <GROUP id="{B260E974-4098-CE7E-07A9-D6A5F5AB84A7}" name="Tests">
+      <FILE id="T9l3Gh" name="Tests.cpp" compile="0" resource="0" file="../Tests/Source/Tests.cpp"/>
+      <FILE id="c4gLTp" name="Tests.h" compile="0" resource="0" file="../Tests/Source/Tests.h"/>
+      <FILE id="tHVjUr" name="Tests.lua" compile="0" resource="1" file="../Tests/Source/Tests.lua"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

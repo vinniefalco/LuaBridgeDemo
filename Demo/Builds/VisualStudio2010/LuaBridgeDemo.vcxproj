@@ -153,8 +153,9 @@
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\Source\Main.cpp"/>
-    <ClCompile Include="..\..\Source\UnitTests.cpp"/>
-    <ClCompile Include="..\..\Source\UnitTests2.cpp"/>
+    <ClCompile Include="..\..\..\Tests\Source\Tests.cpp">
+      <ExcludedFromBuild>true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp"/>
   </ItemGroup>
   <ItemGroup>
@@ -168,14 +169,13 @@
     <ClInclude Include="..\..\Source\CConsoleWindow.h"/>
     <ClInclude Include="..\..\Source\LuaState.h"/>
     <ClInclude Include="..\..\Source\TestHost.h"/>
-    <ClInclude Include="..\..\Source\UnitTests.h"/>
-    <ClInclude Include="..\..\Source\UnitTests2.h"/>
+    <ClInclude Include="..\..\..\Tests\Source\Tests.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Source\UnitTests.lua"/>
+    <None Include="..\..\..\Tests\Source\Tests.lua"/>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include=".\resources.rc"/>

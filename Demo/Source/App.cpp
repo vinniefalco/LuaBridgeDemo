@@ -27,11 +27,6 @@
 */
 //==============================================================================
 
-#include "LuaState.h"
-#include "CConsoleWindow.h"
-#include "UnitTests.h"
-#include "UnitTests2.h"
-
 class App : public JUCEApplication
 {
 private:
@@ -48,6 +43,25 @@ public:
   {
   }
 
+  void runTests ()
+  {
+    lua_State* L = m_luaState->createTestEnvironment ();
+
+    LuaBridgeTests::addToState (L);
+
+    if (luaL_loadstring (L, BinaryData::Tests_lua) != 0)
+    {
+      // compile-time error
+      m_luaState->print (lua_tostring (L, -1));
+    }
+    else if (LuaState::pcall (L, 0, 0) != LUA_OK)
+    {
+      m_luaState->print (lua_tostring (L, -1));
+    }
+    
+    m_luaState->destroyTestEnvironment (L);
+  }
+
   void initialise (const String&)
   {
     // Do your application's initialisation code here..
@@ -56,17 +70,7 @@ public:
 
     m_window->setVisible (true);
 
-    std::string errorString;
-      
-    errorString = runUnitTests (*m_luaState);
-    if (errorString.size () > 0)
-      m_luaState->print (errorString.c_str ());
-
-    errorString = runUnitTests2 (*m_luaState);
-    if (errorString.size () > 0)
-      m_luaState->print (errorString.c_str ());
-
-    addUnitTests2 (*m_luaState);
+    runTests ();
   }
 
   void shutdown()

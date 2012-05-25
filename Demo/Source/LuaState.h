@@ -65,6 +65,8 @@ public:
   virtual int pcall (int numberOfArguments, int numberOfReturnValues) = 0;
 
   virtual void doString (String chunk) = 0;
+
+  static int pcall (lua_State* L, int numberOfArguments, int numberOfReturnValues);
 };
 
 #endif

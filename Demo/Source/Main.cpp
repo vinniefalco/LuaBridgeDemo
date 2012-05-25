@@ -28,7 +28,12 @@
 //==============================================================================
 
 #include "Lua/LuaLibrary.h"
+
 #include "LuaBridge/LuaBridge.h"
+#include "LuaBridge/shared_ptr.h"
+
+#include "Tests/Source/Tests.h"
+#include "Tests/Source/Tests.cpp"
 
 #include "Demo/JUCEAmalgam/include/juce_core_amalgam.h"
 #include "Demo/JUCEAmalgam/include/juce_data_structures_amalgam.h"
@@ -37,6 +42,8 @@
 #include "Demo/JUCEAmalgam/include/juce_gui_basics_amalgam.h"
 
 using namespace juce;
+
+#include "BinaryData.h"
 
 #include "CConsole.h"
 #include "CConsoleEdit.h"

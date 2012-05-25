@@ -8,8 +8,8 @@
 namespace BinaryData
 {
 
-//================== UnitTests.lua ==================
-static const unsigned char temp_8351233[] =
+//================== Tests.lua ==================
+static const unsigned char temp_45ff2ab1[] =
 "-- test lua script to be run with the luabridge test program\r\n"
 "\r\n"
 "print(\"Running LuaBridge tests:\");\r\n"
@@ -118,7 +118,7 @@ static const unsigned char temp_8351233[] =
 "\r\n"
 "print(\"All tests succeeded.\");\r\n";
 
-const char* UnitTests_lua = (const char*) temp_8351233;
+const char* Tests_lua = (const char*) temp_45ff2ab1;
 
 
 const char* getNamedResource (const char*, int&) throw();
@@ -131,8 +131,8 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
 
     switch (hash)
     {
-        case 0x75161396:
-        case 0x1798b562:  numBytes = 3877; return UnitTests_lua;
+        case 0x322b48ba:
+        case 0x2a41f024:  numBytes = 3877; return Tests_lua;
         default: break;
     }
 

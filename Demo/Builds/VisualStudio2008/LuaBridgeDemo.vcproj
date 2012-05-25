@@ -219,10 +219,8 @@
         <File RelativePath="..\..\Source\Main.cpp"/>
         <File RelativePath="..\..\Source\TestHost.h"/>
       </Filter>
-      <Filter Name="Unit Tests">
-        <File RelativePath="..\..\Source\UnitTests.cpp"/>
-        <File RelativePath="..\..\Source\UnitTests.h"/>
-        <File RelativePath="..\..\Source\UnitTests.lua">
+      <Filter Name="Tests">
+        <File RelativePath="..\..\..\Tests\Source\Tests.cpp">
           <FileConfiguration Name="Debug|Win32"
                              ExcludedFromBuild="true">
             <Tool Name="VCCLCompilerTool"/>
@@ -232,8 +230,17 @@
             <Tool Name="VCCLCompilerTool"/>
           </FileConfiguration>
         </File>
-        <File RelativePath="..\..\Source\UnitTests2.cpp"/>
-        <File RelativePath="..\..\Source\UnitTests2.h"/>
+        <File RelativePath="..\..\..\Tests\Source\Tests.h"/>
+        <File RelativePath="..\..\..\Tests\Source\Tests.lua">
+          <FileConfiguration Name="Debug|Win32"
+                             ExcludedFromBuild="true">
+            <Tool Name="VCCLCompilerTool"/>
+          </FileConfiguration>
+          <FileConfiguration Name="Release|Win32"
+                             ExcludedFromBuild="true">
+            <Tool Name="VCCLCompilerTool"/>
+          </FileConfiguration>
+        </File>
       </Filter>
     </Filter>
     <Filter Name="Juce Library Code">

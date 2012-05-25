@@ -160,20 +160,7 @@ public:
 
   int pcall (int numberOfArguments, int numberOfReturnValues)
   {
-    // push msgh
-    lua_rawgetp (L, LUA_REGISTRYINDEX, getTracebackKey ());
-    int msgh = -(numberOfArguments+1);
-    lua_insert (L, msgh);
-
-    int result = lua_pcall (L, numberOfArguments, numberOfReturnValues, msgh);
-
-    // remove msgh
-    if (result == LUA_OK)
-      lua_remove (L, -(numberOfReturnValues+1));
-    else
-      lua_remove (L, -2);
-
-    return result;
+    return LuaState::pcall (L, numberOfArguments, numberOfReturnValues);
   }
 
   void doString (String text)
@@ -211,3 +198,22 @@ LuaState* LuaState::New ()
 {
   return new LuaStateImp;
 }
+
+int LuaState::pcall (lua_State* L, int numberOfArguments, int numberOfReturnValues)
+{
+  // push msgh
+  lua_rawgetp (L, LUA_REGISTRYINDEX, LuaStateImp::getTracebackKey ());
+  int msgh = -(numberOfArguments+2);
+  lua_insert (L, msgh);
+
+  int result = lua_pcall (L, numberOfArguments, numberOfReturnValues, msgh);
+
+  // remove msgh
+  if (result == LUA_OK)
+    lua_remove (L, -(numberOfReturnValues+1));
+  else
+    lua_remove (L, -2);
+
+  return result;
+}
+
