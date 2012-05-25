@@ -27,28 +27,79 @@
 */
 //==============================================================================
 
-#include "Lua_5_2/lua.hpp"
-
-#include "LuaBridge/LuaBridge.h"
-
-#include "JUCEAmalgam/include/juce_core_amalgam.h"
-#include "JUCEAmalgam/include/juce_data_structures_amalgam.h"
-#include "JUCEAmalgam/include/juce_events_amalgam.h"
-#include "JUCEAmalgam/include/juce_graphics_amalgam.h"
-#include "JUCEAmalgam/include/juce_gui_basics_amalgam.h"
-
-using namespace juce;
-
-#include "CConsole.h"
-#include "CConsoleEdit.h"
-#include "CConsoleText.h"
-#include "CConsoleWindow.h"
 #include "LuaState.h"
+#include "CConsoleWindow.h"
+#include "UnitTests.h"
+#include "UnitTests2.h"
 
-#include "CConsole.cpp"
-#include "CConsoleEdit.cpp"
-#include "CConsoleText.cpp"
-#include "CConsoleWindow.cpp"
-#include "LuaState.cpp"
+class App : public JUCEApplication
+{
+private:
+  ScopedPointer <LuaState> m_luaState;
+  ScopedPointer <CConsoleWindow> m_window;
 
-#include "App.cpp"
+public:
+  App()
+    : m_luaState (LuaState::New ())
+  {
+  }
+
+  ~App()
+  {
+  }
+
+  void initialise (const String&)
+  {
+    // Do your application's initialisation code here..
+
+    m_window = new CConsoleWindow (*m_luaState);
+
+    m_window->setVisible (true);
+
+    std::string errorString;
+      
+    errorString = runUnitTests (*m_luaState);
+    if (errorString.size () > 0)
+      m_luaState->print (errorString.c_str ());
+
+    errorString = runUnitTests2 (*m_luaState);
+    if (errorString.size () > 0)
+      m_luaState->print (errorString.c_str ());
+
+    addUnitTests2 (*m_luaState);
+  }
+
+  void shutdown()
+  {
+    // Do your application's shutdown code here..
+
+    m_window = nullptr;
+  }
+
+  void systemRequestedQuit()
+  {
+    quit();
+  }
+
+  const String getApplicationName()
+  {
+    return "LuaBridge Demo";
+  }
+
+  const String getApplicationVersion()
+  {
+    return "1.0";
+  }
+
+  bool moreThanOneInstanceAllowed()
+  {
+    return true;
+  }
+
+  void anotherInstanceStarted (const String&)
+  {
+
+  }
+};
+
+START_JUCE_APPLICATION (App)

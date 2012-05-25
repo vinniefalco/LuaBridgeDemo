@@ -17,12 +17,12 @@ ifeq ($(CONFIG),Debug)
   LIBDIR := build
   OBJDIR := build/intermediate/Debug
   OUTDIR := build
-  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "LUA_USE_APICHECK" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../
+  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "LUA_USE_APICHECK" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0
   CXXFLAGS += $(CFLAGS) 
   LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -ldl -lfreetype -lpthread -lrt -lX11 -lGL -lXinerama -lasound -lXext 
   LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "LUA_USE_APICHECK" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../
+  RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "LUA_USE_APICHECK" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../
   TARGET := LuaBridgeDemo
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
 endif
@@ -32,12 +32,12 @@ ifeq ($(CONFIG),Release)
   LIBDIR := build
   OBJDIR := build/intermediate/Release
   OUTDIR := build
-  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../
+  CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os
   CXXFLAGS += $(CFLAGS) 
   LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -ldl -lfreetype -lpthread -lrt -lX11 -lGL -lXinerama -lasound -lXext 
   LDDEPS :=
-  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../
+  RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../
   TARGET := LuaBridgeDemo
   BLDCMD = $(CXX) -o $(OUTDIR)/$(TARGET) $(OBJECTS) $(LDFLAGS) $(RESOURCES) $(TARGET_ARCH)
 endif
@@ -48,11 +48,10 @@ OBJECTS := \
   $(OBJDIR)/juce_events_amalgam_7d753996.o \
   $(OBJDIR)/juce_graphics_amalgam_f3add948.o \
   $(OBJDIR)/juce_gui_basics_amalgam_dc5a1886.o \
-  $(OBJDIR)/LuaLibrary_2b643dac.o \
+  $(OBJDIR)/LuaLibrary_449d2d1e.o \
   $(OBJDIR)/Main_90ebc5c2.o \
   $(OBJDIR)/UnitTests_cf65a5de.o \
   $(OBJDIR)/UnitTests2_1d6f2bde.o \
-  $(OBJDIR)/UnitTests3_1d7d435f.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
 
 .PHONY: clean
@@ -95,7 +94,7 @@ $(OBJDIR)/juce_gui_basics_amalgam_dc5a1886.o: ../../JUCEAmalgam/include/juce_gui
 	@echo "Compiling juce_gui_basics_amalgam.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/LuaLibrary_2b643dac.o: ../../Source/LuaLibrary.cpp
+$(OBJDIR)/LuaLibrary_449d2d1e.o: ../../../Lua/LuaLibrary.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling LuaLibrary.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
@@ -113,11 +112,6 @@ $(OBJDIR)/UnitTests_cf65a5de.o: ../../Source/UnitTests.cpp
 $(OBJDIR)/UnitTests2_1d6f2bde.o: ../../Source/UnitTests2.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling UnitTests2.cpp"
-	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
-
-$(OBJDIR)/UnitTests3_1d7d435f.o: ../../Source/UnitTests3.cpp
-	-@mkdir -p $(OBJDIR)
-	@echo "Compiling UnitTests3.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp

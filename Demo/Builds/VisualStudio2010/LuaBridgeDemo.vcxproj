@@ -55,14 +55,14 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\JuceLibraryCode;../../../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;DEBUG;_DEBUG;LUA_USE_APICHECK;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
-      <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
-      <ObjectFileName>.\Debug\</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug\</ProgramDataBaseFileName>
+      <AssemblerListingLocation>$(IntDir)\</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)\</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -72,17 +72,17 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <OutputFile>.\Debug\LuaBridgeDemo.exe</OutputFile>
+      <OutputFile>$(OutDir)\LuaBridgeDemo.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcmt.lib; msvcrt.lib;;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug\LuaBridgeDemo.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(IntDir)\LuaBridgeDemo.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug\LuaBridgeDemo.bsc</OutputFile>
+      <OutputFile>$(IntDir)\LuaBridgeDemo.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -95,14 +95,14 @@
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <AdditionalIncludeDirectories>..\..\JuceLibraryCode;..\..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\JuceLibraryCode;../../../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader/>
-      <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
-      <ObjectFileName>.\Release\</ObjectFileName>
-      <ProgramDataBaseFileName>.\Release\</ProgramDataBaseFileName>
+      <AssemblerListingLocation>$(IntDir)\</AssemblerListingLocation>
+      <ObjectFileName>$(IntDir)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(IntDir)\</ProgramDataBaseFileName>
       <WarningLevel>Level4</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -112,11 +112,11 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <OutputFile>.\Release\LuaBridgeDemo.exe</OutputFile>
+      <OutputFile>$(OutDir)\LuaBridgeDemo.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Release\LuaBridgeDemo.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(IntDir)\LuaBridgeDemo.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <OptimizeReferences>true</OptimizeReferences>
@@ -124,7 +124,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Release\LuaBridgeDemo.bsc</OutputFile>
+      <OutputFile>$(IntDir)\LuaBridgeDemo.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -133,105 +133,7 @@
     <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.cpp"/>
     <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.cpp"/>
     <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.cpp"/>
-    <ClCompile Include="..\..\Lua_5_2\lapi.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lauxlib.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lbaselib.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lbitlib.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lcode.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lcorolib.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lctype.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\ldblib.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\ldebug.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\ldo.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\ldump.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lfunc.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lgc.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\linit.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\liolib.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\llex.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lmathlib.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lmem.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\loadlib.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lobject.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lopcodes.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\loslib.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lparser.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lstate.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lstring.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lstrlib.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\ltable.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\ltablib.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\ltm.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lua.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lundump.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lvm.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\Lua_5_2\lzio.c">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\..\Lua\LuaLibrary.cpp"/>
     <ClCompile Include="..\..\Source\App.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -250,40 +152,16 @@
     <ClCompile Include="..\..\Source\LuaState.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\Source\LuaLibrary.cpp"/>
     <ClCompile Include="..\..\Source\Main.cpp"/>
     <ClCompile Include="..\..\Source\UnitTests.cpp"/>
     <ClCompile Include="..\..\Source\UnitTests2.cpp"/>
-    <ClCompile Include="..\..\Source\UnitTests3.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp"/>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Lua_5_2\lapi.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lauxlib.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lcode.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lctype.h"/>
-    <ClInclude Include="..\..\Lua_5_2\ldebug.h"/>
-    <ClInclude Include="..\..\Lua_5_2\ldo.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lfunc.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lgc.h"/>
-    <ClInclude Include="..\..\Lua_5_2\llex.h"/>
-    <ClInclude Include="..\..\Lua_5_2\llimits.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lmem.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lobject.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lopcodes.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lparser.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lstate.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lstring.h"/>
-    <ClInclude Include="..\..\Lua_5_2\ltable.h"/>
-    <ClInclude Include="..\..\Lua_5_2\ltm.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lua.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lua.hpp"/>
-    <ClInclude Include="..\..\Lua_5_2\luaconf.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lualib.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lundump.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lvm.h"/>
-    <ClInclude Include="..\..\Lua_5_2\lzio.h"/>
-    <ClInclude Include="..\..\LuaBridge\LuaBridge.h"/>
+    <ClInclude Include="..\..\..\Lua\LuaLibrary.h"/>
+    <ClInclude Include="..\..\..\LuaBridge\LuaBridge.h"/>
+    <ClInclude Include="..\..\..\LuaBridge\LuaBridgeExtras.h"/>
+    <ClInclude Include="..\..\..\LuaBridge\shared_ptr.h"/>
     <ClInclude Include="..\..\Source\CConsole.h"/>
     <ClInclude Include="..\..\Source\CConsoleEdit.h"/>
     <ClInclude Include="..\..\Source\CConsoleText.h"/>
@@ -292,13 +170,11 @@
     <ClInclude Include="..\..\Source\TestHost.h"/>
     <ClInclude Include="..\..\Source\UnitTests.h"/>
     <ClInclude Include="..\..\Source\UnitTests2.h"/>
-    <ClInclude Include="..\..\Source\UnitTests3.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\LuaBridge\CHANGES.TXT"/>
     <None Include="..\..\Source\UnitTests.lua"/>
   </ItemGroup>
   <ItemGroup>

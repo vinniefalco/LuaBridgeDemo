@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="Z8yiuR" name="LuaBridgeDemo" projectType="guiapp" version="1.0.0"
+              bundleIdentifier="com.yourcompany.LuaBridgeDemo" jucerVersion="3.0.0">
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX" objCExtraSuffix="xU85kB" juceFolder=""
+               extraFrameworks="AudioToolbox,Carbon,Cocoa,CoreAudio,CoreMIDI,DiscRecording,IOKit,QuartzCore,WebKit"
+               extraDefs="">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="LuaBridgeDemo"
+                       osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       headerPath="../../../" defines="LUA_USE_APICHECK"/>
+        <CONFIGURATION name="Release" isDebug="0" optimisation="2" targetName="LuaBridgeDemo"
+                       osxSDK="default" osxCompatibility="default" osxArchitecture="default"
+                       headerPath="../../../"/>
+      </CONFIGURATIONS>
+    </XCODE_MAC>
+    <VS2010 targetFolder="Builds/VisualStudio2010" libraryType="1" juceFolder=""
+            extraCompilerFlags="/EHs">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="1" optimisation="1" targetName="LuaBridgeDemo" headerPath="../../../"
+                       defines="LUA_USE_APICHECK"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" winArchitecture="32-bit"
+                       isDebug="0" optimisation="2" targetName="LuaBridgeDemo" headerPath="../../../"/>
+      </CONFIGURATIONS>
+    </VS2010>
+    <LINUX_MAKE targetFolder="Builds/Linux" juceFolder="">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" libraryPath="/usr/X11R6/lib/" isDebug="1" optimisation="1"
+                       targetName="LuaBridgeDemo" headerPath="../../../" defines="LUA_USE_APICHECK"/>
+        <CONFIGURATION name="Release" libraryPath="/usr/X11R6/lib/" isDebug="0" optimisation="2"
+                       targetName="LuaBridgeDemo" headerPath="../../../"/>
+      </CONFIGURATIONS>
+    </LINUX_MAKE>
+    <VS2008 targetFolder="Builds/VisualStudio2008" libraryType="1" juceFolder="">
+      <CONFIGURATIONS>
+        <CONFIGURATION name="Debug" winWarningLevel="4" generateManifest="1" isDebug="1"
+                       optimisation="1" targetName="LuaBridgeDemo" headerPath="../../../"/>
+        <CONFIGURATION name="Release" winWarningLevel="4" generateManifest="1" isDebug="0"
+                       optimisation="2" targetName="LuaBridgeDemo" headerPath="../../../"/>
+      </CONFIGURATIONS>
+    </VS2008>
+  </EXPORTFORMATS>
+  <MAINGROUP id="NmR0e6" name="LuaBridgeDemo">
+    <GROUP id="{6456FC22-301F-295A-6231-03972769E7C1}" name="JUCEAmalgam">
+      <FILE id="ASPtWE" name="juce_core_amalgam.cpp" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_core_amalgam.cpp"/>
+      <FILE id="nCBBtu" name="juce_core_amalgam.mm" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_core_amalgam.mm"/>
+      <FILE id="EqCXSy" name="juce_data_structures_amalgam.cpp" compile="1"
+            resource="0" file="JUCEAmalgam/include/juce_data_structures_amalgam.cpp"/>
+      <FILE id="bhTBY0" name="juce_data_structures_amalgam.mm" compile="1"
+            resource="0" file="JUCEAmalgam/include/juce_data_structures_amalgam.mm"/>
+      <FILE id="MCAvWS" name="juce_events_amalgam.cpp" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_events_amalgam.cpp"/>
+      <FILE id="X56283" name="juce_events_amalgam.mm" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_events_amalgam.mm"/>
+      <FILE id="haBiXi" name="juce_graphics_amalgam.cpp" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_graphics_amalgam.cpp"/>
+      <FILE id="U4NVqz" name="juce_graphics_amalgam.mm" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_graphics_amalgam.mm"/>
+      <FILE id="asToi9" name="juce_gui_basics_amalgam.cpp" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_gui_basics_amalgam.cpp"/>
+      <FILE id="VnjiMq" name="juce_gui_basics_amalgam.mm" compile="1" resource="0"
+            file="JUCEAmalgam/include/juce_gui_basics_amalgam.mm"/>
+    </GROUP>
+    <GROUP id="{B260E974-4098-CE7E-07A9-D6A5F5AB84A7}" name="Lua">
+      <FILE id="uvSSZR" name="LuaLibrary.cpp" compile="1" resource="0" file="../Lua/LuaLibrary.cpp"/>
+      <FILE id="RkeW5x" name="LuaLibrary.h" compile="0" resource="0" file="../Lua/LuaLibrary.h"/>
+    </GROUP>
+    <GROUP id="{57691745-83BC-D2F2-FC34-5F751803C298}" name="LuaBridge">
+      <FILE id="iROfuW" name="LuaBridge.h" compile="0" resource="0" file="../LuaBridge/LuaBridge.h"/>
+      <FILE id="S5BJKc" name="LuaBridgeExtras.h" compile="0" resource="0"
+            file="../LuaBridge/LuaBridgeExtras.h"/>
+      <FILE id="VEKQkR" name="shared_ptr.h" compile="0" resource="0" file="../LuaBridge/shared_ptr.h"/>
+    </GROUP>
+    <GROUP id="{1FEE5481-FE4D-3591-BEC4-5213CEAAB221}" name="Source">
+      <FILE id="coAbb7" name="App.cpp" compile="0" resource="0" file="Source/App.cpp"/>
+      <FILE id="VPBPmf" name="CConsole.cpp" compile="0" resource="0" file="Source/CConsole.cpp"/>
+      <FILE id="GUUOAa" name="CConsole.h" compile="0" resource="0" file="Source/CConsole.h"/>
+      <FILE id="ajfyad" name="CConsoleEdit.cpp" compile="0" resource="0"
+            file="Source/CConsoleEdit.cpp"/>
+      <FILE id="CZqzoS" name="CConsoleEdit.h" compile="0" resource="0" file="Source/CConsoleEdit.h"/>
+      <FILE id="HCxNTq" name="CConsoleText.cpp" compile="0" resource="0"
+            file="Source/CConsoleText.cpp"/>
+      <FILE id="WTlzkR" name="CConsoleText.h" compile="0" resource="0" file="Source/CConsoleText.h"/>
+      <FILE id="LaI8kl" name="CConsoleWindow.cpp" compile="0" resource="0"
+            file="Source/CConsoleWindow.cpp"/>
+      <FILE id="o78Buz" name="CConsoleWindow.h" compile="0" resource="0"
+            file="Source/CConsoleWindow.h"/>
+      <FILE id="mWUwMt" name="LuaState.cpp" compile="0" resource="0" file="Source/LuaState.cpp"/>
+      <FILE id="HA3Su9" name="LuaState.h" compile="0" resource="0" file="Source/LuaState.h"/>
+      <FILE id="zdep57" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="Bb1uiD" name="TestHost.h" compile="0" resource="0" file="Source/TestHost.h"/>
+    </GROUP>
+    <GROUP id="{B260E974-4098-CE7E-07A9-D6A5F5AB84A7}" name="Unit Tests">
+      <FILE id="TaGHWu" name="UnitTests.cpp" compile="1" resource="0" file="Source/UnitTests.cpp"/>
+      <FILE id="bEkfYH" name="UnitTests.h" compile="0" resource="0" file="Source/UnitTests.h"/>
+      <FILE id="iIvCpF" name="UnitTests.lua" compile="0" resource="1" file="Source/UnitTests.lua"/>
+      <FILE id="Iseeup" name="UnitTests2.cpp" compile="1" resource="0" file="Source/UnitTests2.cpp"/>
+      <FILE id="UhxtSt" name="UnitTests2.h" compile="0" resource="0" file="Source/UnitTests2.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <MODULES>
+    <MODULE id="juce_gui_audio" showAllCode="1" useLocalCopy="1"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+</JUCERPROJECT>

@@ -4,7 +4,6 @@
   https://github.com/vinniefalco/LuaBridgeDemo
   
   Copyright (C) 2012, Vinnie Falco <vinnie.falco@gmail.com>
-  Copyright (C) 2007, Nathan Reed
 
   License: The MIT License (http://www.opensource.org/licenses/mit-license.php)
 
@@ -28,11 +27,27 @@
 */
 //==============================================================================
 
-#ifndef LUABRIDGEDEMO_UNITTESTS3_HEADER
-#define LUABRIDGEDEMO_UNITTESTS3_HEADER
+#include "Lua/LuaLibrary.h"
+#include "LuaBridge/LuaBridge.h"
 
-#include "TestHost.h"
+#include "Demo/JUCEAmalgam/include/juce_core_amalgam.h"
+#include "Demo/JUCEAmalgam/include/juce_data_structures_amalgam.h"
+#include "Demo/JUCEAmalgam/include/juce_events_amalgam.h"
+#include "Demo/JUCEAmalgam/include/juce_graphics_amalgam.h"
+#include "Demo/JUCEAmalgam/include/juce_gui_basics_amalgam.h"
 
-extern void addUnitTests3 (lua_State* L);
+using namespace juce;
 
-#endif
+#include "CConsole.h"
+#include "CConsoleEdit.h"
+#include "CConsoleText.h"
+#include "CConsoleWindow.h"
+#include "LuaState.h"
+
+#include "CConsole.cpp"
+#include "CConsoleEdit.cpp"
+#include "CConsoleText.cpp"
+#include "CConsoleWindow.cpp"
+#include "LuaState.cpp"
+
+#include "App.cpp"
