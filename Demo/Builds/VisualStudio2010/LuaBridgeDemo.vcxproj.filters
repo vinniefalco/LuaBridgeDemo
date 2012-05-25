@@ -90,6 +90,9 @@
     <ClInclude Include="..\..\..\Lua\LuaLibrary.h">
       <Filter>LuaBridgeDemo\Lua</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\LuaBridge\FuncTraits.h">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\LuaBridge\LuaBridge.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
