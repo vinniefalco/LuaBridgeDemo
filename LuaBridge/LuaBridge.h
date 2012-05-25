@@ -248,6 +248,23 @@
   that is *not* registered with Lua, there is no need to declare it as a
   subclass.
 
+  ### Access to the `lua_State`
+
+  Sometimes it is convenient from within a bound function or member function
+  to gain access to the `lua_State` normally available to a `lua_CFunction`.
+  With LuaBridge, all you need to do is add a `lua_State*` parameter at any
+  position in your bound function:
+
+      void useState (lua_State* L);
+
+      s.function ("useState", &useState);
+
+  You can still include regular arguments while receiving the state:
+
+      void useStateAndArgs (lua_State* L, int i, std::string s);
+
+      s.function ("useStateAndArgs", &useStateAndArgs);
+
   ## Limitations 
 
   LuaBridge does not support:
@@ -294,6 +311,8 @@
 
 #include <cassert>
 #include <string>
+
+#define THROWSPEC throw()
 
 namespace luabridge
 {
@@ -786,7 +805,10 @@ protected:
         lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getConstKey ());
       else
         lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getClassKey ());
+
+      // If this goes off it means the class T is unregistered!
       assert (lua_istable (L, -1));
+
       lua_setmetatable (L, -2);
       return ud;
     }
@@ -1634,6 +1656,447 @@ struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const>
       tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
   }
 };
+
+#ifdef THROWSPEC
+
+/* Ordinary function pointers. */
+
+template <typename Ret>
+struct FunctionPointer <Ret (*) () THROWSPEC>
+{
+  static const bool mfp = false;
+  typedef Ret resulttype;
+  typedef nil params;
+  static Ret call (Ret (*fp) () THROWSPEC, const typevallist<params> &tvl)
+  {
+    (void)tvl;
+    return fp();
+  }
+};
+
+template <typename Ret, typename P1>
+struct FunctionPointer <Ret (*) (P1) THROWSPEC>
+{
+  static const bool mfp = false;
+  typedef Ret resulttype;
+  typedef typelist<P1> params;
+  static Ret call (Ret (*fp) (P1) THROWSPEC, const typevallist<params> &tvl)
+  {
+    return fp(tvl.hd);
+  }
+};
+
+template <typename Ret, typename P1, typename P2>
+struct FunctionPointer <Ret (*) (P1, P2) THROWSPEC>
+{
+  static const bool mfp = false;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2> > params;
+  static Ret call (Ret (*fp) (P1, P2) THROWSPEC, const typevallist<params> &tvl)
+  {
+    return fp(tvl.hd, tvl.tl.hd);
+  }
+};
+
+template <typename Ret, typename P1, typename P2, typename P3>
+struct FunctionPointer <Ret (*) (P1, P2, P3) THROWSPEC>
+{
+  static const bool mfp = false;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3> > > params;
+  static Ret call (Ret (*fp) (P1, P2, P3) THROWSPEC, const typevallist<params> &tvl)
+  {
+    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
+  }
+};
+
+template <typename Ret, typename P1, typename P2, typename P3, typename P4>
+struct FunctionPointer <Ret (*) (P1, P2, P3, P4) THROWSPEC>
+{
+  static const bool mfp = false;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4> > > > params;
+  static Ret call (Ret (*fp) (P1, P2, P3, P4) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
+  }
+};
+
+template <typename Ret, typename P1, typename P2, typename P3, typename P4,
+  typename P5>
+struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5) THROWSPEC>
+{
+  static const bool mfp = false;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4,
+    typelist<P5> > > > > params;
+  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <typename Ret, typename P1, typename P2, typename P3, typename P4,
+  typename P5, typename P6>
+struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5, P6) THROWSPEC>
+{
+  static const bool mfp = false;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5, 
+    typelist<P6> > > > > > params;
+  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5, P6) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <typename Ret, typename P1, typename P2, typename P3, typename P4,
+  typename P5, typename P6, typename P7>
+struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC>
+{
+  static const bool mfp = false;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
+    typelist<P6, typelist<P7> > > > > > > params;
+  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <typename Ret, typename P1, typename P2, typename P3, typename P4,
+  typename P5, typename P6, typename P7, typename P8>
+struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC>
+{
+  static const bool mfp = false;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
+    typelist<P6, typelist<P7, typelist<P8> > > > > > > > params;
+  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+/* Non-const member function pointers. */
+
+template <class T, typename Ret>
+struct FunctionPointer <Ret (T::*) () THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = false;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef nil params;
+  static Ret call (T *obj, Ret (T::*fp) () THROWSPEC, const typevallist<params> &tvl)
+  {
+    (void)tvl;
+    return (obj->*fp)();
+  }
+};
+
+template <class T, typename Ret, typename P1>
+struct FunctionPointer <Ret (T::*) (P1) THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = false;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1> params;
+  static Ret call (T *obj, Ret (T::*fp) (P1) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2>
+struct FunctionPointer <Ret (T::*) (P1, P2) THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = false;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2> > params;
+  static Ret call (T *obj, Ret (T::*fp) (P1, P2) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3) THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = false;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3> > > params;
+  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3,
+  typename P4>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4) THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = false;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4> > > > params;
+  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3,
+  typename P4, typename P5>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5) THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = false;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4,
+    typelist<P5> > > > > params;
+  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6) THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = false;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
+    typelist<P6> > > > > > params;
+  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5, P6) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = false;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
+    typelist<P6, typelist<P7> > > > > > > params;
+  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7, typename P8>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = false;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
+    typelist<P6, typelist<P7, typelist <P8> > > > > > > > params;
+  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+/* Const member function pointers. */
+
+template <class T, typename Ret>
+struct FunctionPointer <Ret (T::*) () const THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = true;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef nil params;
+  static Ret call (T const* const obj, Ret (T::*fp) () const THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    (void)tvl;
+    return (obj->*fp)();
+  }
+};
+
+template <class T, typename Ret, typename P1>
+struct FunctionPointer <Ret (T::*) (P1) const THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = true;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1> params;
+  static Ret call (T const* const obj, Ret (T::*fp) (P1) const THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2>
+struct FunctionPointer <Ret (T::*) (P1, P2) const THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = true;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2> > params;
+  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2) const THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3) const THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = true;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3> > > params;
+  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2, P3) const THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3,
+  typename P4>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4) const THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = true;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4> > > > params;
+  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2, P3, P4) const THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3,
+  typename P4, typename P5>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5) const THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = true;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4,
+    typelist<P5> > > > > params;
+  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2, P3, P4, P5) const THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6) const THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = true;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
+    typelist<P6> > > > > > params;
+  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2, P3, P4, P5, P6) const THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7) const THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = true;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
+    typelist<P6, typelist<P7> > > > > > > params;
+  static Ret call (T const* const obj,
+    Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7) const THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename Ret, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7, typename P8>
+struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const THROWSPEC>
+{
+  static const bool mfp = true;
+  static const bool const_mfp = true;
+  typedef T classtype;
+  typedef Ret resulttype;
+  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
+    typelist<P6, typelist<P7, typelist<P8> > > > > > > > params;
+  static Ret call (T const* const obj,
+    Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8) const THROWSPEC,
+    const typevallist<params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+#endif
 
 /*
 * Constructor generators.  These templates allow you to call operator new and
@@ -2911,7 +3374,7 @@ private:
     template <class U>
     inline Class <T>& property_ro (char const* name, U (T::* get) () const)
     {
-      return addProperty (name, get, 0);
+      return addProperty (name, get);
     }
 
     template <class MemFn>
