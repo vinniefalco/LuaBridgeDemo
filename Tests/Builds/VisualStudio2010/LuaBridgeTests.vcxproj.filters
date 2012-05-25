@@ -22,7 +22,7 @@
     <ClCompile Include="..\..\..\Lua\LuaLibrary.cpp">
       <Filter>LuaBridgeTests\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\Main.cpp">
+    <ClCompile Include="..\..\Source\TestsMain.cpp">
       <Filter>LuaBridgeTests\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Tests.cpp">

@@ -60,7 +60,7 @@
       <FILE id="i1Gcd0" name="shared_ptr.h" compile="0" resource="0" file="../LuaBridge/shared_ptr.h"/>
     </GROUP>
     <GROUP id="{077A9A84-32D7-C467-DD50-0CC70DE4B5EE}" name="Source">
-      <FILE id="yhQDiV" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="yhQDiV" name="TestsMain.cpp" compile="1" resource="0" file="Source/TestsMain.cpp"/>
       <FILE id="B21XbB" name="Tests.cpp" compile="0" resource="0" file="Source/Tests.cpp"/>
       <FILE id="tT3RVM" name="Tests.h" compile="0" resource="0" file="Source/Tests.h"/>
       <FILE id="PlJyT6" name="Tests.lua" compile="0" resource="1" file="Source/Tests.lua"/>

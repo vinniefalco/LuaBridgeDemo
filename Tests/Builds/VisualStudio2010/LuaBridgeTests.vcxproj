@@ -127,7 +127,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Lua\LuaLibrary.cpp"/>
-    <ClCompile Include="..\..\Source\Main.cpp"/>
+    <ClCompile Include="..\..\Source\TestsMain.cpp"/>
     <ClCompile Include="..\..\Source\Tests.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>

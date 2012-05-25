@@ -44,7 +44,7 @@ endif
 
 OBJECTS := \
   $(OBJDIR)/LuaLibrary_449d2d1e.o \
-  $(OBJDIR)/Main_90ebc5c2.o \
+  $(OBJDIR)/TestsMain_d88417db.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
 
 .PHONY: clean
@@ -67,9 +67,9 @@ $(OBJDIR)/LuaLibrary_449d2d1e.o: ../../../Lua/LuaLibrary.cpp
 	@echo "Compiling LuaLibrary.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp
+$(OBJDIR)/TestsMain_d88417db.o: ../../Source/TestsMain.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling Main.cpp"
+	@echo "Compiling TestsMain.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/BinaryData_ce4232d4.o: ../../JuceLibraryCode/BinaryData.cpp

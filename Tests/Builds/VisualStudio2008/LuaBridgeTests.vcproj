@@ -139,7 +139,7 @@
         <File RelativePath="..\..\..\LuaBridge\shared_ptr.h"/>
       </Filter>
       <Filter Name="Source">
-        <File RelativePath="..\..\Source\Main.cpp"/>
+        <File RelativePath="..\..\Source\TestsMain.cpp"/>
         <File RelativePath="..\..\Source\Tests.cpp">
           <FileConfiguration Name="Debug|Win32"
                              ExcludedFromBuild="true">
