@@ -39,6 +39,8 @@ CConsoleEdit::CConsoleEdit (LuaState& luaState)
     c->addListener (this);
     m_edit = c;
   }
+
+  triggerAsyncUpdate ();
 }
 
 CConsoleEdit::~CConsoleEdit ()
@@ -48,6 +50,11 @@ CConsoleEdit::~CConsoleEdit ()
 void CConsoleEdit::resized ()
 {
   m_edit->setBounds (0, 0, getWidth (), getHeight ());
+}
+
+void CConsoleEdit::handleAsyncUpdate ()
+{
+  grabKeyboardFocus ();
 }
 
 void CConsoleEdit::textEditorReturnKeyPressed (TextEditor& editor)

@@ -35,6 +35,7 @@
 class CConsoleEdit
   : public Component
   , private TextEditor::Listener
+  , private AsyncUpdater
 {
 public:
   explicit CConsoleEdit (LuaState& luaState);
@@ -43,6 +44,8 @@ public:
   void resized ();
 
 private:
+  void handleAsyncUpdate ();
+
   void textEditorReturnKeyPressed (TextEditor& editor);
 
 private:
