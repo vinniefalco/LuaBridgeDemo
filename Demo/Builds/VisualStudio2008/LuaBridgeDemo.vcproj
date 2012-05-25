@@ -149,6 +149,7 @@
         <File RelativePath="..\..\..\LuaBridge\FuncTraits.h"/>
         <File RelativePath="..\..\..\LuaBridge\LuaBridge.h"/>
         <File RelativePath="..\..\..\LuaBridge\LuaBridgeExtras.h"/>
+        <File RelativePath="..\..\..\LuaBridge\RefCountedObject.h"/>
         <File RelativePath="..\..\..\LuaBridge\shared_ptr.h"/>
       </Filter>
       <Filter Name="Source">

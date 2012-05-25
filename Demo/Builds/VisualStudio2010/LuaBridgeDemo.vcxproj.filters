@@ -99,6 +99,9 @@
     <ClInclude Include="..\..\..\LuaBridge\LuaBridgeExtras.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\LuaBridge\RefCountedObject.h">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\LuaBridge\shared_ptr.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>

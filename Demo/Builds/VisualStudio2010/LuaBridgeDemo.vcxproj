@@ -163,6 +163,7 @@
     <ClInclude Include="..\..\..\LuaBridge\FuncTraits.h"/>
     <ClInclude Include="..\..\..\LuaBridge\LuaBridge.h"/>
     <ClInclude Include="..\..\..\LuaBridge\LuaBridgeExtras.h"/>
+    <ClInclude Include="..\..\..\LuaBridge\RefCountedObject.h"/>
     <ClInclude Include="..\..\..\LuaBridge\shared_ptr.h"/>
     <ClInclude Include="..\..\Source\CConsole.h"/>
     <ClInclude Include="..\..\Source\CConsoleEdit.h"/>
