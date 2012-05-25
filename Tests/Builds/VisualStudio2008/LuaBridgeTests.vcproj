@@ -133,6 +133,11 @@
         <File RelativePath="..\..\..\Lua\LuaLibrary.h"/>
         <File RelativePath="..\..\..\Lua\LuaLibrary.cpp"/>
       </Filter>
+      <Filter Name="LuaBridge">
+        <File RelativePath="..\..\..\LuaBridge\LuaBridge.h"/>
+        <File RelativePath="..\..\..\LuaBridge\LuaBridgeExtras.h"/>
+        <File RelativePath="..\..\..\LuaBridge\shared_ptr.h"/>
+      </Filter>
       <Filter Name="Source">
         <File RelativePath="..\..\Source\Main.cpp"/>
         <File RelativePath="..\..\Source\Tests.cpp">

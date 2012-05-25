@@ -53,6 +53,12 @@
       <FILE id="bYVpxI" name="LuaLibrary.h" compile="0" resource="0" file="../Lua/LuaLibrary.h"/>
       <FILE id="NJBQtz" name="LuaLibrary.cpp" compile="1" resource="0" file="../Lua/LuaLibrary.cpp"/>
     </GROUP>
+    <GROUP id="{3FF76B2F-00BF-EB5F-76E0-C07F30498B91}" name="LuaBridge">
+      <FILE id="IGA3Cq" name="LuaBridge.h" compile="0" resource="0" file="../LuaBridge/LuaBridge.h"/>
+      <FILE id="q5PFWJ" name="LuaBridgeExtras.h" compile="0" resource="0"
+            file="../LuaBridge/LuaBridgeExtras.h"/>
+      <FILE id="i1Gcd0" name="shared_ptr.h" compile="0" resource="0" file="../LuaBridge/shared_ptr.h"/>
+    </GROUP>
     <GROUP id="{077A9A84-32D7-C467-DD50-0CC70DE4B5EE}" name="Source">
       <FILE id="yhQDiV" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="B21XbB" name="Tests.cpp" compile="0" resource="0" file="Source/Tests.cpp"/>

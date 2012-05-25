@@ -8,6 +8,9 @@
     <Filter Include="LuaBridgeTests\Lua">
       <UniqueIdentifier>{CCF4926C-65EC-86D5-6269-AEED2DFE137F}</UniqueIdentifier>
     </Filter>
+    <Filter Include="LuaBridgeTests\LuaBridge">
+      <UniqueIdentifier>{5CEEC36B-49EE-E46E-2D98-B0C9636EF93B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="LuaBridgeTests\Source">
       <UniqueIdentifier>{5B9442C6-ACEC-79A7-E777-456D11CBB6BE}</UniqueIdentifier>
     </Filter>
@@ -32,6 +35,15 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Lua\LuaLibrary.h">
       <Filter>LuaBridgeTests\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LuaBridge\LuaBridge.h">
+      <Filter>LuaBridgeTests\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LuaBridge\LuaBridgeExtras.h">
+      <Filter>LuaBridgeTests\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LuaBridge\shared_ptr.h">
+      <Filter>LuaBridgeTests\LuaBridge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Tests.h">
       <Filter>LuaBridgeTests\Source</Filter>

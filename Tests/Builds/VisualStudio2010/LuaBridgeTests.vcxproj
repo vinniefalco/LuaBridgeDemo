@@ -135,6 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Lua\LuaLibrary.h"/>
+    <ClInclude Include="..\..\..\LuaBridge\LuaBridge.h"/>
+    <ClInclude Include="..\..\..\LuaBridge\LuaBridgeExtras.h"/>
+    <ClInclude Include="..\..\..\LuaBridge\shared_ptr.h"/>
     <ClInclude Include="..\..\Source\Tests.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h"/>
