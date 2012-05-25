@@ -1,8 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaBridgeDemo", "LuaBridgeDemo.vcxproj", "{340ACBA7-0099-FD85-2AB7-7948DD2F983D}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaBridgeTests", "..\..\Tests\Builds\VisualStudio2010\LuaBridgeTests.vcxproj", "{FCE7759B-A150-5B3D-4F34-7CDFD3F94209}"
+Project("{A6A44DE4-C16B-0B63-1658-5361E7C66830}") = "LuaBridgeTests", "LuaBridgeTests.vcxproj", "{FCE7759B-A150-5B3D-4F34-7CDFD3F94209}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -10,10 +8,6 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{340ACBA7-0099-FD85-2AB7-7948DD2F983D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{340ACBA7-0099-FD85-2AB7-7948DD2F983D}.Debug|Win32.Build.0 = Debug|Win32
-		{340ACBA7-0099-FD85-2AB7-7948DD2F983D}.Release|Win32.ActiveCfg = Release|Win32
-		{340ACBA7-0099-FD85-2AB7-7948DD2F983D}.Release|Win32.Build.0 = Release|Win32
 		{FCE7759B-A150-5B3D-4F34-7CDFD3F94209}.Debug|Win32.ActiveCfg = Debug|Win32
 		{FCE7759B-A150-5B3D-4F34-7CDFD3F94209}.Debug|Win32.Build.0 = Debug|Win32
 		{FCE7759B-A150-5B3D-4F34-7CDFD3F94209}.Release|Win32.ActiveCfg = Release|Win32

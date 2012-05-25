@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<VisualStudioProject ProjectType="Visual C++"
+                     Version="9.00"
+                     Name="LuaBridgeTests"
+                     ProjectGUID="{FCE7759B-A150-5B3D-4F34-7CDFD3F94209}"
+                     TargetFrameworkVersion="131072">
+  <Platforms>
+    <Platform Name="Win32"/>
+  </Platforms>
+  <ToolFiles/>
+  <Configurations>
+    <Configuration Name="Debug|Win32"
+                   OutputDirectory=".\Debug"
+                   IntermediateDirectory=".\Debug"
+                   ConfigurationType="1"
+                   UseOfMFC="0"
+                   ATLMinimizesCRunTimeLibraryUsage="false"
+                   CharacterSet="2">
+      <Tool Name="VCPreBuildEventTool"/>
+      <Tool Name="VCCustomBuildTool"/>
+      <Tool Name="VCXMLDataGeneratorTool"/>
+      <Tool Name="VCWebServiceProxyGeneratorTool"/>
+      <Tool Name="VCMIDLTool"
+            PreprocessorDefinitions="_DEBUG"
+            MkTypLibCompatible="true"
+            SuppressStartupBanner="true"
+            TargetEnvironment="1"
+            TypeLibraryName="$(IntDir)\LuaBridgeTests.tlb"
+            HeaderFileName=""/>
+      <Tool Name="VCCLCompilerTool"
+            Optimization="0"
+            BufferSecurityCheck=""
+            DebugInformationFormat="4"
+            AdditionalIncludeDirectories="..\..\JuceLibraryCode;../../../Lua"
+            PreprocessorDefinitions="_CONSOLE;WIN32;_WINDOWS;DEBUG;_DEBUG;JUCER_VS2008_78A5006=1"
+            RuntimeLibrary="1"
+            RuntimeTypeInfo="true"
+            UsePrecompiledHeader="0"
+            PrecompiledHeaderFile="$(IntDir)\LuaBridgeTests.pch"
+            AssemblerListingLocation="$(IntDir)\"
+            ObjectFile="$(IntDir)\"
+            ProgramDataBaseFileName="$(IntDir)\"
+            WarningLevel="4"
+            SuppressStartupBanner="true"/>
+      <Tool Name="VCManagedResourceCompilerTool"/>
+      <Tool Name="VCResourceCompilerTool"
+            PreprocessorDefinitions="_DEBUG"/>
+      <Tool Name="VCPreLinkEventTool"/>
+      <Tool Name="VCLinkerTool"
+            OutputFile="$(OutDir)\LuaBridgeTests.exe"
+            SuppressStartupBanner="true"
+            IgnoreDefaultLibraryNames="libcmt.lib, msvcrt.lib"
+            GenerateDebugInformation="true"
+            ProgramDatabaseFile="$(IntDir)\LuaBridgeTests.pdb"
+            SubSystem="1"
+            GenerateManifest="true"
+            TargetMachine="1"/>
+      <Tool Name="VCALinkTool"/>
+      <Tool Name="VCManifestTool"/>
+      <Tool Name="VCXDCMakeTool"/>
+      <Tool Name="VCBscMakeTool"
+            SuppressStartupBanner="true"
+            OutputFile="$(IntDir)\LuaBridgeTests.bsc"/>
+      <Tool Name="VCFxCopTool"/>
+      <Tool Name="VCAppVerifierTool"/>
+      <Tool Name="VCPostBuildEventTool"/>
+    </Configuration>
+    <Configuration Name="Release|Win32"
+                   OutputDirectory=".\Release"
+                   IntermediateDirectory=".\Release"
+                   ConfigurationType="1"
+                   UseOfMFC="0"
+                   ATLMinimizesCRunTimeLibraryUsage="false"
+                   CharacterSet="2"
+                   WholeProgramOptimization="1">
+      <Tool Name="VCPreBuildEventTool"/>
+      <Tool Name="VCCustomBuildTool"/>
+      <Tool Name="VCXMLDataGeneratorTool"/>
+      <Tool Name="VCWebServiceProxyGeneratorTool"/>
+      <Tool Name="VCMIDLTool"
+            PreprocessorDefinitions="NDEBUG"
+            MkTypLibCompatible="true"
+            SuppressStartupBanner="true"
+            TargetEnvironment="1"
+            TypeLibraryName="$(IntDir)\LuaBridgeTests.tlb"
+            HeaderFileName=""/>
+      <Tool Name="VCCLCompilerTool"
+            Optimization="1"
+            InlineFunctionExpansion="1"
+            StringPooling="true"
+            AdditionalIncludeDirectories="..\..\JuceLibraryCode;../../../Lua"
+            PreprocessorDefinitions="_CONSOLE;WIN32;_WINDOWS;NDEBUG;JUCER_VS2008_78A5006=1"
+            RuntimeLibrary="0"
+            RuntimeTypeInfo="true"
+            UsePrecompiledHeader="0"
+            PrecompiledHeaderFile="$(IntDir)\LuaBridgeTests.pch"
+            AssemblerListingLocation="$(IntDir)\"
+            ObjectFile="$(IntDir)\"
+            ProgramDataBaseFileName="$(IntDir)\"
+            WarningLevel="4"
+            SuppressStartupBanner="true"/>
+      <Tool Name="VCManagedResourceCompilerTool"/>
+      <Tool Name="VCResourceCompilerTool"
+            PreprocessorDefinitions="NDEBUG"/>
+      <Tool Name="VCPreLinkEventTool"/>
+      <Tool Name="VCLinkerTool"
+            OutputFile="$(OutDir)\LuaBridgeTests.exe"
+            SuppressStartupBanner="true"
+            IgnoreDefaultLibraryNames=""
+            GenerateDebugInformation="false"
+            ProgramDatabaseFile="$(IntDir)\LuaBridgeTests.pdb"
+            SubSystem="1"
+            GenerateManifest="true"
+            OptimizeReferences="2"
+            EnableCOMDATFolding="2"
+            TargetMachine="1"/>
+      <Tool Name="VCALinkTool"/>
+      <Tool Name="VCManifestTool"/>
+      <Tool Name="VCXDCMakeTool"/>
+      <Tool Name="VCBscMakeTool"
+            SuppressStartupBanner="true"
+            OutputFile="$(IntDir)\LuaBridgeTests.bsc"/>
+      <Tool Name="VCFxCopTool"/>
+      <Tool Name="VCAppVerifierTool"/>
+      <Tool Name="VCPostBuildEventTool"/>
+    </Configuration>
+  </Configurations>
+  <References/>
+  <Files>
+    <Filter Name="LuaBridgeTests">
+      <Filter Name="Lua">
+        <File RelativePath="..\..\..\Lua\LuaLibrary.h"/>
+        <File RelativePath="..\..\..\Lua\LuaLibrary.cpp"/>
+      </Filter>
+      <Filter Name="Source">
+        <File RelativePath="..\..\Source\Main.cpp"/>
+        <File RelativePath="..\..\Source\Tests.cpp">
+          <FileConfiguration Name="Debug|Win32"
+                             ExcludedFromBuild="true">
+            <Tool Name="VCCLCompilerTool"/>
+          </FileConfiguration>
+          <FileConfiguration Name="Release|Win32"
+                             ExcludedFromBuild="true">
+            <Tool Name="VCCLCompilerTool"/>
+          </FileConfiguration>
+        </File>
+        <File RelativePath="..\..\Source\Tests.h"/>
+        <File RelativePath="..\..\Source\Tests.lua">
+          <FileConfiguration Name="Debug|Win32"
+                             ExcludedFromBuild="true">
+            <Tool Name="VCCLCompilerTool"/>
+          </FileConfiguration>
+          <FileConfiguration Name="Release|Win32"
+                             ExcludedFromBuild="true">
+            <Tool Name="VCCLCompilerTool"/>
+          </FileConfiguration>
+        </File>
+      </Filter>
+    </Filter>
+    <Filter Name="Juce Library Code">
+      <File RelativePath="..\..\JuceLibraryCode\AppConfig.h"/>
+      <File RelativePath="..\..\JuceLibraryCode\BinaryData.cpp"/>
+      <File RelativePath="..\..\JuceLibraryCode\BinaryData.h"/>
+      <File RelativePath="..\..\JuceLibraryCode\JuceHeader.h"/>
+      <File RelativePath="resources.rc"/>
+    </Filter>
+  </Files>
+  <Globals/>
+</VisualStudioProject>

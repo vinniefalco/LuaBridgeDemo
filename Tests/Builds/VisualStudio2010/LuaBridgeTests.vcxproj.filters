@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="LuaBridgeTests">
+      <UniqueIdentifier>{A96618DE-BB98-2E8A-F822-6ABB0C143EBA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeTests\Lua">
+      <UniqueIdentifier>{CCF4926C-65EC-86D5-6269-AEED2DFE137F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeTests\Source">
+      <UniqueIdentifier>{5B9442C6-ACEC-79A7-E777-456D11CBB6BE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Juce Library Code">
+      <UniqueIdentifier>{8B4D1BAA-6DB4-CAEC-A0FA-271F354D5C61}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Lua\LuaLibrary.cpp">
+      <Filter>LuaBridgeTests\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Main.cpp">
+      <Filter>LuaBridgeTests\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Tests.cpp">
+      <Filter>LuaBridgeTests\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
+      <Filter>Juce Library Code</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Lua\LuaLibrary.h">
+      <Filter>LuaBridgeTests\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Tests.h">
+      <Filter>LuaBridgeTests\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h">
+      <Filter>Juce Library Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h">
+      <Filter>Juce Library Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
+      <Filter>Juce Library Code</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Source\Tests.lua">
+      <Filter>LuaBridgeTests\Source</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include=".\resources.rc">
+      <Filter>Juce Library Code</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
