@@ -12,7 +12,56 @@ namespace BinaryData
 static const unsigned char temp_f41bbc2b[] =
 "# LuaBridgeDemo\r\n"
 "\r\n"
-"This is a demonstration and test application for LuaBridge.\r\n";
+"The LuaBridgeDemo is a stand-alone graphical program for compiling and running\r\n"
+"the test suite with an included interactive window where you can enter execute\r\n"
+"Lua statements in a persistent environment. The demo has these features:\r\n"
+"\r\n"
+"- Cross platform: Compiles on Mac OS, Windows, iOS, Android, and GNU/Linux\r\n"
+"\r\n"
+"- No external dependencies: Comes with Lua, LuaBridge, and [JUCE][5], just build and run!\r\n"
+"\r\n"
+"- Demonstrates the usage of LuaBridge with functional code.\r\n"
+"\r\n"
+"Also included is a separate project for building a command line version of\r\n"
+"the test suite, suitable as a starting point for building an automated\r\n"
+"testing suite.\r\n"
+"\r\n"
+"[LuaBridge][3] is a lightweight, dependency-free library for making C++ data,\r\n"
+"functions, and classes available to Lua. It works with Lua revisions starting\r\n"
+"from 5.1.2. [Lua][4] is a powerful, fast, lightweight, embeddable scripting\r\n"
+"language.\r\n"
+"\r\n"
+"This is what the application looks like:\r\n"
+"\r\n"
+"<a href=\"https://github.com/vinniefalco/LuaBridgeDemo\">\r\n"
+"<img src=\"http://vinniefalco.github.com/LuaBridgeDemo/LuaBridgeDemoScreenshot.png\">\r\n"
+"</a><br>\r\n"
+"\r\n"
+"<a href=\"https://github.com/vinniefalco/LuaBridgeDemo/downloads\">\r\n"
+"<img src=\"http://vinniefalco.github.com/images/ThreeOSDownloadNow.png\">\r\n"
+"</a><br>\r\n"
+"\r\n"
+"## JUCE\r\n"
+"\r\n"
+"[JUCE][5] is licensed separately, visit http://rawmaterialsoftware.com for more\r\n"
+"details.\r\n"
+"\r\n"
+"## License\r\n"
+"\r\n"
+"Copyright (C) 2012, [Vinnie Falco][1] ([e-mail][0]) <br>\r\n"
+"Copyright (C) 2007, Nathan Reed <br>\r\n"
+"  \r\n"
+"Portions from The Loki Library: <br>\r\n"
+"Copyright (C) 2001 by Andrei Alexandrescu\r\n"
+"\r\n"
+"License: The [MIT License][2]\r\n"
+"\r\n"
+"[0]: mailto:vinnie.falco@gmail.com \"Vinnie Falco (Email)\"\r\n"
+"[1]: http://www.vinniefalco.com \"Vinnie Falco\"\r\n"
+"[2]: http://www.opensource.org/licenses/mit-license.html \"The MIT License\"\r\n"
+"[3]: https://github.com/vinniefalco/LuaBridge \"LuaBridge\"\r\n"
+"[4]: http://lua.org \"The Lua Programming Language\"\r\n"
+"[5]: http://www.rawmaterialsoftware.com \"The JUCE Library\"\r\n";
 
 const char* README_md = (const char*) temp_f41bbc2b;
 
@@ -140,7 +189,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
     switch (hash)
     {
         case 0x64791dc8:
-        case 0xee58bcf8:  numBytes = 80; return README_md;
+        case 0xee58bcf8:  numBytes = 1941; return README_md;
         case 0x322b48ba:
         case 0x2a41f024:  numBytes = 3877; return Tests_lua;
         default: break;
