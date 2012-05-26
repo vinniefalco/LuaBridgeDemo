@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="LuaBridgeDemo">
+      <UniqueIdentifier>{7F8DCBD1-928B-A2E2-7028-60069398EAC1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeDemo\JUCEAmalgam">
+      <UniqueIdentifier>{624173F2-A8D8-6494-001C-6B692A254F84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeDemo\Lua">
+      <UniqueIdentifier>{FA61A657-A79F-BBF9-87D6-98659F160CFD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeDemo\LuaBridge">
+      <UniqueIdentifier>{F8E77F02-AB72-D4D9-BD84-50BE42BDA9A8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeDemo\Source">
+      <UniqueIdentifier>{C229198E-1100-DAD5-E48D-684A1778856B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="LuaBridgeDemo\Tests">
+      <UniqueIdentifier>{B3EC0745-33CA-BE28-461B-2871C999B3B7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Juce Library Code">
+      <UniqueIdentifier>{8B4D1BAA-6DB4-CAEC-A0FA-271F354D5C61}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_data_structures_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_data_structures_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.cpp">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.mm">
+      <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Lua\LuaLibrary.cpp">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\App.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CConsole.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CConsoleEdit.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CConsoleText.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CConsoleWindow.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LuaState.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Main.cpp">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\NewTests.cpp">
+      <Filter>LuaBridgeDemo\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Tests\Source\Tests.cpp">
+      <Filter>LuaBridgeDemo\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
+      <Filter>Juce Library Code</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Lua\LuaLibrary.h">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LuaBridge\FuncTraits.h">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LuaBridge\LuaBridge.h">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LuaBridge\LuaBridgeExtras.h">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LuaBridge\RefCountedObject.h">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LuaBridge\shared_ptr.h">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CConsole.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CConsoleEdit.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CConsoleText.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CConsoleWindow.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LuaState.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\TestHost.h">
+      <Filter>LuaBridgeDemo\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\NewTests.h">
+      <Filter>LuaBridgeDemo\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Tests\Source\Tests.h">
+      <Filter>LuaBridgeDemo\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h">
+      <Filter>Juce Library Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h">
+      <Filter>Juce Library Code</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
+      <Filter>Juce Library Code</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\README.md">
+      <Filter>LuaBridgeDemo</Filter>
+    </None>
+    <None Include="..\..\..\Tests\Source\Tests.lua">
+      <Filter>LuaBridgeDemo\Tests</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include=".\resources.rc">
+      <Filter>Juce Library Code</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

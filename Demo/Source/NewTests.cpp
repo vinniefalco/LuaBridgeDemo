@@ -1,0 +1,93 @@
+//==============================================================================
+/*
+  https://github.com/vinniefalco/LuaBridge
+  https://github.com/vinniefalco/LuaBridgeDemo
+  
+  Copyright (C) 2012, Vinnie Falco <vinnie.falco@gmail.com>
+
+  License: The MIT License (http://www.opensource.org/licenses/mit-license.php)
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+*/
+//==============================================================================
+
+namespace luabridge
+{
+
+#include "LuaBridge/RefCountedObject.h"
+
+}
+
+namespace newtests
+{
+
+using namespace luabridge;
+
+class A : public RefCountedObjectType <int>
+{
+public:
+  A ()
+  {
+  }
+
+  virtual ~A ()
+  {
+  }
+};
+
+class B : public A
+{
+public:
+  B ()
+  {
+  }
+
+  ~B ()
+  {
+  }
+};
+
+void addToState (lua_State* L)
+{
+  getGlobalNamespace (L)
+    .beginNamespace ("test")
+      .beginClass <A> ("A")
+        .addConstructor <void (*)(void), RefCountedObjectPtr <A> > ()
+      .endClass ()
+      .deriveClass <B, A> ("B")
+        .addConstructor <void (*)(void), RefCountedObjectPtr <B> > ()
+      .endClass ()
+    .endNamespace ()
+    ;
+}
+
+void runTests (lua_State* L)
+{
+  luaL_dostring (L, "a = test.A(); a = nil; collectgarbage ()");
+}
+
+}
+
+void runNewTests (LuaState& state)
+{
+  lua_State* L = state.getState ();
+
+  newtests::addToState (L);
+  newtests::runTests (L);
+}
