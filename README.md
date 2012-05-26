@@ -10,6 +10,10 @@ Lua statements in a persistent environment. The demo has these features:
 
 - Demonstrates the usage of LuaBridge with functional code.
 
+Also included is a separate project for building a command line version of
+the test suite, suitable as a starting point for building an automated
+testing suite.
+
 [LuaBridge][3] is a lightweight, dependency-free library for making C++ data,
 functions, and classes available to Lua. It works with Lua revisions starting
 from 5.1.2. [Lua][4] is a powerful, fast, lightweight, embeddable scripting
