@@ -77,17 +77,52 @@ void addToState (lua_State* L)
     ;
 }
 
-void runTests (lua_State* L)
+//------------------------------------------------------------------------------
+
+void performTest (TestHost& host, std::string script)
 {
-  luaL_dostring (L, "a = test.A(); a = nil; collectgarbage ()");
+  lua_State* L = host.createTestEnvironment ();
+
+  addToState (L);
+
+  int result = luaL_loadstring (L, script.c_str ());
+
+  if (result == LUA_OK)
+  {
+    result = lua_pcall (L, 0, 0, 0);
+  }
+
+  if (result == LUA_OK )
+  {
+    host.print (std::string ("PASS: ") + script);
+  }
+  else
+  {
+    std::string errorText = lua_tostring (L, -1);
+
+    host.print (errorText);
+  }
+
+  host.destroyTestEnvironment (L);
 }
+
+//------------------------------------------------------------------------------
+
+void runTests (TestHost& host)
+{
+  host.print ("Running newtests.");
+
+  performTest (host, "a = test.A(); a = nil; collectgarbage ()");
+}
+
+//------------------------------------------------------------------------------
 
 }
 
 void runNewTests (LuaState& state)
 {
-  lua_State* L = state.getState ();
+  //lua_State* L = state.getState ();
+  //newtests::addToState (L);
 
-  newtests::addToState (L);
-  newtests::runTests (L);
+  newtests::runTests (state);
 }
