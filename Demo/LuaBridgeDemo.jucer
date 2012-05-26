@@ -66,7 +66,7 @@
       <FILE id="VnjiMq" name="juce_gui_basics_amalgam.mm" compile="1" resource="0"
             file="JUCEAmalgam/include/juce_gui_basics_amalgam.mm"/>
     </GROUP>
-    <GROUP id="{B260E974-4098-CE7E-07A9-D6A5F5AB84A7}" name="Lua">
+    <GROUP id="{B260E974-4098-CE7E-07A9-D6A5F5AB84A8}" name="Lua">
       <FILE id="uvSSZR" name="LuaLibrary.cpp" compile="1" resource="0" file="../Lua/LuaLibrary.cpp"/>
       <FILE id="RkeW5x" name="LuaLibrary.h" compile="0" resource="0" file="../Lua/LuaLibrary.h"/>
     </GROUP>

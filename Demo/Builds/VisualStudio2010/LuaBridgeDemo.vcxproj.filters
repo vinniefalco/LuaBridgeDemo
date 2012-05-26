@@ -25,6 +25,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\README.md">
+      <Filter>LuaBridgeDemo</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\JUCEAmalgam\include\juce_core_amalgam.cpp">
       <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
     </ClCompile>
@@ -85,6 +88,9 @@
     <ClCompile Include="..\..\..\Tests\Source\Tests.cpp">
       <Filter>LuaBridgeDemo\Tests</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Tests\Source\Tests.lua">
+      <Filter>LuaBridgeDemo\Tests</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
       <Filter>Juce Library Code</Filter>
     </ClCompile>
@@ -141,14 +147,6 @@
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h">
       <Filter>Juce Library Code</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\README.md">
-      <Filter>LuaBridgeDemo</Filter>
-    </None>
-    <None Include="..\..\..\Tests\Source\Tests.lua">
-      <Filter>LuaBridgeDemo\Tests</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include=".\resources.rc">
