@@ -143,6 +143,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\README.md">
+      <Filter>LuaBridgeDemo</Filter>
+    </None>
     <None Include="..\..\..\Tests\Source\Tests.lua">
       <Filter>LuaBridgeDemo\Tests</Filter>
     </None>

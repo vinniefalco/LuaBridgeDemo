@@ -181,6 +181,7 @@
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\README.md"/>
     <None Include="..\..\..\Tests\Source\Tests.lua"/>
   </ItemGroup>
   <ItemGroup>

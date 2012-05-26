@@ -65,6 +65,7 @@
 		8B3CB1647A28C52EC11ED38C = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BinaryData.h; path = ../../JuceLibraryCode/BinaryData.h; sourceTree = "SOURCE_ROOT"; };
 		997DC26E587CE2AACDC199F8 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiscRecording.framework; path = System/Library/Frameworks/DiscRecording.framework; sourceTree = SDKROOT; };
 		9FE0A5CF358437864D6D15E7 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		A16B3351FB3E108584E95C20 = { isa = PBXFileReference; lastKnownFileType = file.md; name = README.md; path = ../../../README.md; sourceTree = "SOURCE_ROOT"; };
 		AAB551947738F69D0C1C18B7 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		C7AC45A4DFCA9CDC698CA9DC = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LuaState.h; path = ../../Source/LuaState.h; sourceTree = "SOURCE_ROOT"; };
 		CC2216294164E0031F0E66C5 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_events_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_events_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
@@ -119,6 +120,7 @@
 				573FD7BBF3EC4EB53BED1F80,
 				51926E2C85EFC707CF49E460 ); name = Tests; sourceTree = "<group>"; };
 		35B0215222A399CB6AB25D94 = { isa = PBXGroup; children = (
+				A16B3351FB3E108584E95C20,
 				E240EEDFC26F332741DD81D3,
 				9FEE52F5B78E0D5802A7CE32,
 				80EDA40E308415BDBA9B2647,

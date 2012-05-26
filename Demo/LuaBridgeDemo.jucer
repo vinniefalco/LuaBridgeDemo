@@ -43,6 +43,7 @@
     </VS2008>
   </EXPORTFORMATS>
   <MAINGROUP id="NmR0e6" name="LuaBridgeDemo">
+    <FILE id="QEKV6p" name="README.md" compile="0" resource="1" file="../README.md"/>
     <GROUP id="{6456FC22-301F-295A-6231-03972769E7C1}" name="JUCEAmalgam">
       <FILE id="ASPtWE" name="juce_core_amalgam.cpp" compile="1" resource="0"
             file="JUCEAmalgam/include/juce_core_amalgam.cpp"/>
