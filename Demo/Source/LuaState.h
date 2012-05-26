@@ -46,6 +46,7 @@ public:
   class Listener
   {
   public:
+    virtual ~Listener () { }
     virtual void onLuaStatePrint (String text) = 0;
   };
 
