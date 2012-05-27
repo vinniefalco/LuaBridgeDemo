@@ -19,7 +19,8 @@ functions, and classes available to Lua. It works with Lua revisions starting
 from 5.1.2. [Lua][4] is a powerful, fast, lightweight, embeddable scripting
 language.
 
-This is what the application looks like:
+This is the LuaBridge Demo application, and the corresponding registration code
+to export classes `A` and `B` to Lua.
 
 <a href="https://github.com/vinniefalco/LuaBridgeDemo">
 <img src="http://vinniefalco.github.com/LuaBridgeDemo/LuaBridgeDemoScreenshot.png">
