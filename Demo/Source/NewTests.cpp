@@ -55,8 +55,7 @@ void addToState (lua_State* L) {
   getGlobalNamespace (L)
     .beginNamespace ("test")
       .beginClass <A> ("A")
-        .addConstructor <void (*)(void),
-                         shared_ptr <A> > ()
+        .addConstructor <void (*)(void)> ()
         .addMethod ("print", &A::print)
       .endClass ()
       .deriveClass <B, A> ("B")
