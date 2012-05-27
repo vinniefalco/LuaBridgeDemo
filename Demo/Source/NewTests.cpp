@@ -173,7 +173,7 @@ void testStack (lua_State* L)
   push (L, ss); lua_pop (L, 1);
 
   A a;
-  A const ac;
+  A const ac (a);
 
   push (L, &a);
   push (L, &ac);
