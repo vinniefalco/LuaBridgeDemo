@@ -87,8 +87,6 @@ struct C
 };
 
 void addToState (lua_State* L) {
-  getGlobalNamespace (L).endNamespace ();
-
   getGlobalNamespace (L)
     .beginNamespace ("test")
       .beginClass <A> ("A")
