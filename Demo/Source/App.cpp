@@ -45,7 +45,6 @@ public:
 
   void runTests ()
   {
-#if 1
     lua_State* L = m_luaState->createTestEnvironment ();
 
     LuaBridgeTests::addToState (L);
@@ -61,9 +60,8 @@ public:
     }
     
     m_luaState->destroyTestEnvironment (L);
-#endif
 
-    //runNewTests (*m_luaState);
+    runNewTests (*m_luaState);
   }
 
   void initialise (const String&)

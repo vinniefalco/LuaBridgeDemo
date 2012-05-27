@@ -39,45 +39,31 @@ namespace newtests
 
 using namespace luabridge;
 
-class A : public RefCountedObjectType <int>
-{
-public:
-  A ()
-  {
-  }
-
-  virtual ~A ()
-  {
+struct A {
+  virtual void print (lua_State* L) {
+    luaL_dostring (L, "print ('called A::print')");
   }
 };
 
-class B : public A
-{
-public:
-  B ()
-  {
-  }
-
-  ~B ()
-  {
+struct B : A {
+  virtual void print (lua_State* L) {
+    luaL_dostring (L, "print ('called B::print')");
   }
 };
 
-void addToState (lua_State* L)
-{
+void addToState (lua_State* L) {
   getGlobalNamespace (L)
     .beginNamespace ("test")
       .beginClass <A> ("A")
-//        .addConstructor <void (*)(void), RefCountedObjectPtr <A> > ()
+        .addConstructor <void (*)(void),
+                         shared_ptr <A> > ()
+        .addMethod ("print", &A::print)
       .endClass ()
       .deriveClass <B, A> ("B")
-//        .addConstructor <void (*)(void), RefCountedObjectPtr <B> > ()
+        .addConstructor <void (*)(void),
+                         shared_ptr <B> > ()
       .endClass ()
-    .endNamespace ()
-    ;
-
-  //RefCountedObjectPtr <A const> ca (new A);
-  //Stack <RefCountedObjectPtr <A const> >::push (L, ca);
+    .endNamespace ();
 }
 
 //------------------------------------------------------------------------------
@@ -115,6 +101,7 @@ void testStack (lua_State* L)
 {
   int const idx = lua_gettop (L);
 
+  /*
   int i = 0;
   long l = 0;
   bool b = false;
@@ -154,10 +141,9 @@ void testStack (lua_State* L)
   RefCountedObjectPtr <A> pa;
   RefCountedObjectPtr <A const> pac;
 
-  //push (L, pa);
-  //push (L, pac);
+  push (L, pa);
+  push (L, pac);
 
-  /*
   push (L, a);
   push (L, ac);
 
@@ -176,6 +162,7 @@ void testStack (lua_State* L)
 
 void runTests (TestHost& host)
 {
+#if 0
   host.print ("Running newtests.");
 
   performTest (host, "a = test.A (); a = nil; collectgarbage ()");
@@ -189,6 +176,9 @@ void runTests (TestHost& host)
 
     host.destroyTestEnvironment (L);
   }
+#else
+
+#endif
 }
 
 //------------------------------------------------------------------------------
@@ -197,8 +187,7 @@ void runTests (TestHost& host)
 
 void runNewTests (LuaState& state)
 {
-  //lua_State* L = state.getState ();
-  //newtests::addToState (L);
+  newtests::addToState (state.getState ());
 
   newtests::runTests (state);
 }
