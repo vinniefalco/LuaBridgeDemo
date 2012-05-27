@@ -71,7 +71,7 @@
       <FILE id="RkeW5x" name="LuaLibrary.h" compile="0" resource="0" file="../Lua/LuaLibrary.h"/>
     </GROUP>
     <GROUP id="{57691745-83BC-D2F2-FC34-5F751803C298}" name="LuaBridge">
-      <FILE id="EkfCS4" name="FuncTraits.h" compile="0" resource="0" file="../LuaBridge/FuncTraits.h"/>
+      <FILE id="EkfCS4" name="TypeTraits.h" compile="0" resource="0" file="../LuaBridge/TypeTraits.h"/>
       <FILE id="iROfuW" name="LuaBridge.h" compile="0" resource="0" file="../LuaBridge/LuaBridge.h"/>
       <FILE id="S5BJKc" name="LuaBridgeExtras.h" compile="0" resource="0"
             file="../LuaBridge/LuaBridgeExtras.h"/>

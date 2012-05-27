@@ -68,13 +68,16 @@ void addToState (lua_State* L)
   getGlobalNamespace (L)
     .beginNamespace ("test")
       .beginClass <A> ("A")
-        .addConstructor <void (*)(void), RefCountedObjectPtr <A> > ()
+//        .addConstructor <void (*)(void), RefCountedObjectPtr <A> > ()
       .endClass ()
       .deriveClass <B, A> ("B")
-        .addConstructor <void (*)(void), RefCountedObjectPtr <B> > ()
+//        .addConstructor <void (*)(void), RefCountedObjectPtr <B> > ()
       .endClass ()
     .endNamespace ()
     ;
+
+  //RefCountedObjectPtr <A const> ca (new A);
+  //Stack <RefCountedObjectPtr <A const> >::push (L, ca);
 }
 
 //------------------------------------------------------------------------------
@@ -108,11 +111,84 @@ void performTest (TestHost& host, std::string script)
 
 //------------------------------------------------------------------------------
 
+void testStack (lua_State* L)
+{
+  int const idx = lua_gettop (L);
+
+  int i = 0;
+  long l = 0;
+  bool b = false;
+  short s = 0;
+  float f = 0;
+  double d = 0;
+  unsigned int ui = 0;
+  unsigned char uc = 0;
+  unsigned short us = 0;
+  unsigned long ul = 0;
+  char c = 'a';
+  char const* cc = "";
+  std::string ss = "";
+
+  push (L, i);
+  push (L, l);
+  push (L, b);
+  push (L, s);
+  push (L, f);
+  push (L, d);
+  push (L, ui);
+  push (L, uc);
+  push (L, us);
+  push (L, ul);
+  push (L, c);
+  push (L, cc);
+  push (L, ss);
+
+  A a;
+  A const ac;
+
+  push (L, &a);
+  push (L, &ac);
+  push <A&> (L, a);
+  push <A const&> (L, a);
+
+  RefCountedObjectPtr <A> pa;
+  RefCountedObjectPtr <A const> pac;
+
+  //push (L, pa);
+  //push (L, pac);
+
+  /*
+  push (L, a);
+  push (L, ac);
+
+  luabridge::Stack <A*>::push (L, &a);
+  lua_pop (L, 1);
+
+  luabridge::Stack <A* const>::push (L, &a);
+  lua_pop (L, 1);
+
+  luabridge::Stack <A const*>::push (L, &a);
+  lua_pop (L, 1);
+  */
+
+  lua_settop (L, idx);
+}
+
 void runTests (TestHost& host)
 {
   host.print ("Running newtests.");
 
-  performTest (host, "a = test.A(); a = nil; collectgarbage ()");
+  performTest (host, "a = test.A (); a = nil; collectgarbage ()");
+
+  {
+    lua_State* L = host.createTestEnvironment ();
+
+    addToState (L);
+
+    testStack (L);
+
+    host.destroyTestEnvironment (L);
+  }
 }
 
 //------------------------------------------------------------------------------
