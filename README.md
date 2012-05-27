@@ -1,3 +1,7 @@
+<a href="http://lua.org">
+<img src="http://vinniefalco.github.com/LuaBridgeDemo/powered-by-lua.png">
+</a><br>
+
 # LuaBridgeDemo
 
 The LuaBridgeDemo is a stand-alone graphical program for compiling and running
