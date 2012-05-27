@@ -30,7 +30,9 @@
 #include "Lua/LuaLibrary.h"
 
 #include "LuaBridge/LuaBridge.h"
-#include "LuaBridge/shared_ptr.h"
+#include "LuaBridge/LuaBridgeExtras.h"
+#include "LuaBridge/RefCountedPtr.h"
+#include "LuaBridge/RefCountedObject.h"
 
 #include "Tests/Source/Tests.h"
 #include "Tests/Source/Tests.cpp"

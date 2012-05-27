@@ -93,9 +93,6 @@
     <ClInclude Include="..\..\..\Lua\LuaLibrary.h">
       <Filter>LuaBridgeDemo\Lua</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\LuaBridge\TypeTraits.h">
-      <Filter>LuaBridgeDemo\LuaBridge</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\LuaBridge\LuaBridge.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
@@ -105,7 +102,7 @@
     <ClInclude Include="..\..\..\LuaBridge\RefCountedObject.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\LuaBridge\shared_ptr.h">
+    <ClInclude Include="..\..\..\LuaBridge\RefCountedPtr.h">
       <Filter>LuaBridgeDemo\LuaBridge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CConsole.h">

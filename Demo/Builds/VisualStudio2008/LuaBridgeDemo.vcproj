@@ -156,11 +156,10 @@
         <File RelativePath="..\..\..\Lua\LuaLibrary.h"/>
       </Filter>
       <Filter Name="LuaBridge">
-        <File RelativePath="..\..\..\LuaBridge\TypeTraits.h"/>
         <File RelativePath="..\..\..\LuaBridge\LuaBridge.h"/>
         <File RelativePath="..\..\..\LuaBridge\LuaBridgeExtras.h"/>
         <File RelativePath="..\..\..\LuaBridge\RefCountedObject.h"/>
-        <File RelativePath="..\..\..\LuaBridge\shared_ptr.h"/>
+        <File RelativePath="..\..\..\LuaBridge\RefCountedPtr.h"/>
       </Filter>
       <Filter Name="Source">
         <File RelativePath="..\..\Source\App.cpp">

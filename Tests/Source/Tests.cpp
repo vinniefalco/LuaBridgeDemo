@@ -96,7 +96,7 @@ enum {
 };
 
 struct fn_called {
-  bool called[NUM_FN_TYPES];
+  bool called [NUM_FN_TYPES];
   fn_called () { memset(called, 0, NUM_FN_TYPES * sizeof(bool)); }
 };
 
@@ -105,14 +105,14 @@ fn_called A_functions, B_functions;
 bool testAFnCalled (fn_type f)
 {
   bool b = A_functions.called[f];
-  A_functions.called[f] = false;
+  A_functions.called [f] = false;
   return b;
 }
 
 bool testBFnCalled (fn_type f)
 {
   bool b = B_functions.called[f];
-  B_functions.called[f] = false;
+  B_functions.called [f] = false;
   return b;
 }
 
@@ -122,18 +122,18 @@ protected:
   string name;
   mutable bool success;
 public:
-  A (const string &name_): name(name_), success(false), testProp(47)
+  A (string const& name_) : name (name_), success (false), testProp (47)
   {
-    A_functions.called[FN_CTOR] = true;
+    A_functions.called [FN_CTOR] = true;
   }
   virtual ~A ()
   {
-    A_functions.called[FN_DTOR] = true;
+    A_functions.called [FN_DTOR] = true;
   }
 
   virtual void testVirtual ()
   {
-    A_functions.called[FN_VIRTUAL] = true;
+    A_functions.called [FN_VIRTUAL] = true;
   }
 
   const char * getName () const
@@ -155,37 +155,37 @@ public:
 
   static void testStatic ()
   {
-    A_functions.called[FN_STATIC] = true;
+    A_functions.called [FN_STATIC] = true;
   }
 
   int testProp;
   int testPropGet () const
   {
-    A_functions.called[FN_PROPGET] = true;
+    A_functions.called [FN_PROPGET] = true;
     return testProp;
   }
   void testPropSet (int x)
   {
-    A_functions.called[FN_PROPSET] = true;
+    A_functions.called [FN_PROPSET] = true;
     testProp = x;
   }
 
   static int testStaticProp;
   static int testStaticPropGet ()
   {
-    A_functions.called[FN_STATIC_PROPGET] = true;
+    A_functions.called [FN_STATIC_PROPGET] = true;
     return testStaticProp;
   }
   static void testStaticPropSet (int x)
   {
-    A_functions.called[FN_STATIC_PROPSET] = true;
+    A_functions.called [FN_STATIC_PROPSET] = true;
     testStaticProp = x;
   }
   
-  luabridge::shared_ptr<A> operator + (const A& other)
+  RefCountedPtr <A> operator + (A const& other)
   {
-    A_functions.called[FN_OPERATOR] = true;
-    return new A(name + " + " + other.name);
+    A_functions.called [FN_OPERATOR] = true;
+    return new A (name + " + " + other.name);
   }
 };
 
@@ -194,23 +194,24 @@ int A::testStaticProp = 47;
 class B: public A
 {
 public:
-  B (const string &name_): A(name_)
+  explicit B (string const& name_) : A (name_)
   {
-    B_functions.called[FN_CTOR] = true;
+    B_functions.called [FN_CTOR] = true;
   }
+
   virtual ~B ()
   {
-    B_functions.called[FN_DTOR] = true;
+    B_functions.called [FN_DTOR] = true;
   }
 
   virtual void testVirtual ()
   {
-    B_functions.called[FN_VIRTUAL] = true;
+    B_functions.called [FN_VIRTUAL] = true;
   }
 
   static void testStatic2 ()
   {
-    B_functions.called[FN_STATIC] = true;
+    B_functions.called [FN_STATIC] = true;
   }
 
 };
@@ -223,17 +224,20 @@ int testRetInt ()
 {
   return 47;
 }
+
 float testRetFloat ()
 {
   return 47.0f;
 }
-const char * testRetConstCharPtr ()
+
+char const* testRetConstCharPtr ()
 {
   return "Hello, world";
 }
+
 string testRetStdString ()
 {
-  static string ret("Hello, world");
+  static string ret ("Hello, world");
   return ret;
 }
 
@@ -241,51 +245,61 @@ void testParamInt (int a)
 {
   g_success = (a == 47);
 }
+
 void testParamBool (bool b)
 {
   g_success = b;
 }
+
 void testParamFloat (float f)
 {
   g_success = (f == 47.0f);
 }
-void testParamConstCharPtr (const char *str)
+
+void testParamConstCharPtr (char const* str)
 {
-  g_success = !strcmp(str, "Hello, world");
+  g_success = !strcmp (str, "Hello, world");
 }
+
 void testParamStdString (string str)
 {
-  g_success = !strcmp(str.c_str(), "Hello, world");
+  g_success = !strcmp (str.c_str(), "Hello, world");
 }
+
 void testParamStdStringRef (const string &str)
 {
-  g_success = !strcmp(str.c_str(), "Hello, world");
+  g_success = !strcmp (str.c_str(), "Hello, world");
 }
 
 void testParamAPtr (A * a)
 {
   a->setSuccess();
 }
+
 void testParamAPtrConst (A * const a)
 {
   a->setSuccess();
 }
+
 void testParamConstAPtr (const A * a)
 {
   a->setSuccess();
 }
-void testParamSharedPtrA (luabridge::shared_ptr<A> a)
+
+void testParamSharedPtrA (RefCountedPtr <A> a)
 {
   a->setSuccess();
 }
-luabridge::shared_ptr<A> testRetSharedPtrA ()
+
+RefCountedPtr <A> testRetSharedPtrA ()
 {
-  static luabridge::shared_ptr<A> sp_A(new A("from C"));
+  static RefCountedPtr <A> sp_A (new A("from C"));
   return sp_A;
 }
-luabridge::shared_ptr<const A> testRetSharedPtrConstA ()
+
+RefCountedPtr <A const> testRetSharedPtrConstA ()
 {
-  static luabridge::shared_ptr<A> sp_A(new A("const A"));
+  static RefCountedPtr <A> sp_A (new A("const A"));
   return sp_A;
 }
 
@@ -307,7 +321,7 @@ void addToState (lua_State *L)
     .addFunction ("testParamStdString", &testParamStdString)
     .addFunction ("testParamStdStringRef", &testParamStdStringRef)
     .beginClass <A> ("A")
-      .addConstructor <void (*) (const string &), luabridge::shared_ptr <A> > ()
+      .addConstructor <void (*) (const string &), RefCountedPtr <A> > ()
       .addMethod ("testVirtual", &A::testVirtual)
       .addMethod ("getName", &A::getName)
       .addMethod ("testSucceeded", &A::testSucceeded)
@@ -319,7 +333,7 @@ void addToState (lua_State *L)
       .addStaticProperty ("testStaticProp2", &A::testStaticPropGet, &A::testStaticPropSet)
     .endClass ()
     .deriveClass <B, A> ("B")
-      .addConstructor <void (*) (const string &), luabridge::shared_ptr <B> > ()
+      .addConstructor <void (*) (const string &), RefCountedPtr <B> > ()
       .addStaticMethod ("testStatic2", &B::testStatic2)
     .endClass ()
     .addFunction ("testParamAPtr", &testParamAPtr)

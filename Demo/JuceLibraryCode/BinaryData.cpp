@@ -9,7 +9,7 @@ namespace BinaryData
 {
 
 //================== README.md ==================
-static const unsigned char temp_f41bbc2b[] =
+static const unsigned char temp_1bef008b[] =
 "# LuaBridgeDemo\r\n"
 "\r\n"
 "The LuaBridgeDemo is a stand-alone graphical program for compiling and running\r\n"
@@ -31,7 +31,8 @@ static const unsigned char temp_f41bbc2b[] =
 "from 5.1.2. [Lua][4] is a powerful, fast, lightweight, embeddable scripting\r\n"
 "language.\r\n"
 "\r\n"
-"This is what the application looks like:\r\n"
+"This is the LuaBridge Demo application, and the corresponding registration code\r\n"
+"to export classes `A` and `B` to Lua.\r\n"
 "\r\n"
 "<a href=\"https://github.com/vinniefalco/LuaBridgeDemo\">\r\n"
 "<img src=\"http://vinniefalco.github.com/LuaBridgeDemo/LuaBridgeDemoScreenshot.png\">\r\n"
@@ -63,10 +64,10 @@ static const unsigned char temp_f41bbc2b[] =
 "[4]: http://lua.org \"The Lua Programming Language\"\r\n"
 "[5]: http://www.rawmaterialsoftware.com \"The JUCE Library\"\r\n";
 
-const char* README_md = (const char*) temp_f41bbc2b;
+const char* README_md = (const char*) temp_1bef008b;
 
 //================== Tests.lua ==================
-static const unsigned char temp_b2ffced1[] =
+static const unsigned char temp_b6c6a671[] =
 "-- test lua script to be run with the luabridge test program\r\n"
 "\r\n"
 "print(\"Running LuaBridge tests:\");\r\n"
@@ -175,7 +176,7 @@ static const unsigned char temp_b2ffced1[] =
 "\r\n"
 "print(\"All tests succeeded.\");\r\n";
 
-const char* Tests_lua = (const char*) temp_b2ffced1;
+const char* Tests_lua = (const char*) temp_b6c6a671;
 
 
 const char* getNamedResource (const char*, int&) throw();
@@ -189,7 +190,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
     switch (hash)
     {
         case 0x64791dc8:
-        case 0xee58bcf8:  numBytes = 1941; return README_md;
+        case 0xee58bcf8:  numBytes = 2019; return README_md;
         case 0x322b48ba:
         case 0x2a41f024:  numBytes = 3877; return Tests_lua;
         default: break;

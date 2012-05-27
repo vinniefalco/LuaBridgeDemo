@@ -41,7 +41,7 @@
 #include "LuaLibrary.h"
 
 #include "../../LuaBridge/LuaBridge.h"
-#include "../../LuaBridge/shared_ptr.h"
+#include "../../LuaBridge/RefCountedPtr.h"
 
 #include "BinaryData.h"
 #include "Tests.h"

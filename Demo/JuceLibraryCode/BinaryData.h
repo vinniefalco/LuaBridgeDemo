@@ -8,7 +8,7 @@
 namespace BinaryData
 {
     extern const char*   README_md;
-    const int            README_mdSize = 1941;
+    const int            README_mdSize = 2019;
 
     extern const char*   Tests_lua;
     const int            Tests_luaSize = 3877;

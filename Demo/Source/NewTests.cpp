@@ -27,19 +27,16 @@
 */
 //==============================================================================
 
-namespace luabridge
-{
-
 #include "LuaBridge/RefCountedObject.h"
 
-}
+typedef RefCountedObjectType <int> RefCountedObject;
 
 namespace newtests
 {
 
 using namespace luabridge;
 
-struct A {
+struct A : RefCountedObject {
   virtual void print (lua_State* L) {
     luaL_dostring (L, "print ('called A::print')");
   }
@@ -55,12 +52,12 @@ void addToState (lua_State* L) {
   getGlobalNamespace (L)
     .beginNamespace ("test")
       .beginClass <A> ("A")
-        .addConstructor <void (*)(void)> ()
+        .addConstructor <void (*)(void), RefCountedObjectPtr <A> > ()
         .addMethod ("print", &A::print)
       .endClass ()
       .deriveClass <B, A> ("B")
         .addConstructor <void (*)(void),
-                         shared_ptr <B> > ()
+                         RefCountedObjectPtr <B> > ()
       .endClass ()
     .endNamespace ();
 }
@@ -100,7 +97,6 @@ void testStack (lua_State* L)
 {
   int const idx = lua_gettop (L);
 
-  /*
   int i = 0;
   long l = 0;
   bool b = false;
@@ -115,53 +111,47 @@ void testStack (lua_State* L)
   char const* cc = "";
   std::string ss = "";
 
-  push (L, i);
-  push (L, l);
-  push (L, b);
-  push (L, s);
-  push (L, f);
-  push (L, d);
-  push (L, ui);
-  push (L, uc);
-  push (L, us);
-  push (L, ul);
-  push (L, c);
-  push (L, cc);
-  push (L, ss);
+  push (L, i);  lua_pop (L, 1);
+  push (L, l);  lua_pop (L, 1);
+  push (L, b);  lua_pop (L, 1);
+  push (L, s);  lua_pop (L, 1);
+  push (L, f);  lua_pop (L, 1);
+  push (L, d);  lua_pop (L, 1);
+  push (L, ui); lua_pop (L, 1);
+  push (L, uc); lua_pop (L, 1);
+  push (L, us); lua_pop (L, 1);
+  push (L, ul); lua_pop (L, 1);
+  push (L, c);  lua_pop (L, 1);
+  push (L, cc); lua_pop (L, 1);
+  push (L, ss); lua_pop (L, 1);
 
   A a;
   A const ac;
 
   push (L, &a);
   push (L, &ac);
-  push <A&> (L, a);
+
+  push <A&>       (L, a);
   push <A const&> (L, a);
 
   RefCountedObjectPtr <A> pa;
   RefCountedObjectPtr <A const> pac;
 
-  push (L, pa);
-  push (L, pac);
+  push (L, pa);   lua_pop (L, 1);
+  push (L, pac);  lua_pop (L, 1);
+  push (L, a);    lua_pop (L, 1);
+  push (L, ac);   lua_pop (L, 1);
 
-  push (L, a);
-  push (L, ac);
-
-  luabridge::Stack <A*>::push (L, &a);
-  lua_pop (L, 1);
-
-  luabridge::Stack <A* const>::push (L, &a);
-  lua_pop (L, 1);
-
-  luabridge::Stack <A const*>::push (L, &a);
-  lua_pop (L, 1);
-  */
+  luabridge::Stack <A*>::push (L, &a); lua_pop (L, 1);
+  luabridge::Stack <A* const>::push (L, &a); lua_pop (L, 1);
+  luabridge::Stack <A const*>::push (L, &a); lua_pop (L, 1);
+  luabridge::Stack <A const* const>::push (L, &a); lua_pop (L, 1);
 
   lua_settop (L, idx);
 }
 
 void runTests (TestHost& host)
 {
-#if 0
   host.print ("Running newtests.");
 
   performTest (host, "a = test.A (); a = nil; collectgarbage ()");
@@ -175,9 +165,6 @@ void runTests (TestHost& host)
 
     host.destroyTestEnvironment (L);
   }
-#else
-
-#endif
 }
 
 //------------------------------------------------------------------------------
