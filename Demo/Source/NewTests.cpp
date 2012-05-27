@@ -58,22 +58,20 @@ typedef float Vec [3];
 
 #endif
 
-/*
 struct VecHelper : public Vec
 {
   template <unsigned index>
-  inline float get (Vec* vec)
+  static float get (Vec* vec)
   {
     return vec->coord [index];
   }
 
   template <unsigned index>
-  inline void set (Vec const* vec, float value)
+  static void set (Vec const* vec, float value)
   {
     vec->coord [index] = value;
   }
 };
-*/
 
 struct C
 {
@@ -101,11 +99,9 @@ void addToState (lua_State* L) {
       .endClass ()
       .beginClass <Vec> ("Vec")
         .addConstructor <void (*)(void)> ()
-        /*
-        .addProperty <float> ("x", &VecHelper::get <0>, &VecHelper::set <0>)
+        .addProperty ("x", &VecHelper::get <0>, &VecHelper::set <0>)
         .addProperty ("y", &VecHelper::get <1>, &VecHelper::set <1>)
         .addProperty ("z", &VecHelper::get <2>, &VecHelper::set <2>)
-        */
       .endClass ()
       .beginClass <C> ("C")
         .addProperty ("v", &C::get, &C::set)
