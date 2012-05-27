@@ -47,8 +47,8 @@
 #ifndef LUABRIDGE_LUABRIDGE_HEADER
 #define LUABRIDGE_LUABRIDGE_HEADER
 
+#include <stdexcept>
 #include <typeinfo>
-#include <stdint.h>
 #include <string.h>
 
 //==============================================================================
@@ -57,198 +57,420 @@
 
   @details
 
+  <a href="http://lua.org">
+  <img src="http://vinniefalco.github.com/LuaBridgeDemo/powered-by-lua.png">
+  </a><br>
+
   # LuaBridge
 
-  [LuaBridge][3] is a lightweight, dependency-free library for binding to C++.
-  It works with Lua revisions starting from 5.1.2. [Lua][4] is a powerful, fast,
-  lightweight, embeddable scripting language.
+  [LuaBridge][3] is a lightweight, dependency-free library for making C++ data,
+  functions, and classes available to Lua. It works with Lua revisions starting
+  from 5.1.2. [Lua][5] is a powerful, fast, lightweight, embeddable scripting
+  language.
 
-  ## Compiling
+  LuaBridge offers the following features:
 
-  LuaBridge is distributed as a single header file "LuaBridge.h" that you simply
-  include where you want to register your functions, classes, and variables.
-  There are no additional source files, no compilation settings, and no
-  Makefiles or IDE-specific project files. LuaBridge is easy to integrate.
+  - Nothing to compile, just include one header file!
 
-  ## Usage
+  - Simple, light, and nothing else needed (like Boost).
 
-  LuaBridge is based on C++ template metaprogramming.  It contains template code
-  to automatically generate at compile-time the various Lua API calls necessary
-  to export your program's classes and functions to the Lua environment.
+  - Supports different object lifetime management models.
 
-  ### Registering functions
+  - Convenient, type-safe access to the Lua stack.
 
-  If `L` is a pointer to an instance of `lua_State`, the following code creates
-  a LuaBridge scope for registering C++ functions and classes to `L`:
+  - Automatic function parameter type binding.
 
-      luabridge::scope s (L);
+  - Does not require C++11.
 
-  Functions can then be registered as follows:
+  LuaBridge is distributed as a single header file. You simply add 
+  `#include "LuaBridge.h"` where you want to bind your functions, classes, and
+  variables. There are no additional source files, no compilation settings, and
+  no Makefiles or IDE-specific project files. LuaBridge is easy to integrate.
+  A few additional header files provide optional features. Like the main header
+  file, these are simply used via `#include`. No additional source files need
+  to be compiled.
 
-      s .function ("foo", &foo)
-        .function ("bar", &bar);
+  C++ concepts like variables and classes are made available to Lua through
+  a process called _registration_. Because Lua is weakly typed, the resulting
+  structure is not rigid. The API is based on C++ template metaprogramming.
+  It contains template code to automatically generate at compile-time the
+  various Lua C API calls necessary to export your program's classes and
+  functions to the Lua environment.
 
-  The `function` function returns a reference to `s`, so you can chain many
-  definitions together.  The first argument is the name by which the function
-  will be available in Lua, and the second is the function's address. LuaBridge
-  will automatically detect the number (up to 8, by default) and type of the
-  parameters.  Functions registered this way will be available at the global
-  scope to Lua scripts executed by `L`.  Overloading of function names is not
-  supported, nor is it likely to be supported in the future.
+  ## LuaBridge Demo and Tests
 
-  ### Registering data
-
-  Variables can also be registered.  You can expose a 'bare' variable to Lua, or
-  wrap it in getter and setter functions:
-
-      s .variable_rw ("var1", &var1)
-        .variable_rw ("var2", &getter2, &setter2)
-        .variable_ro ("var3", &var3)
-        .variable_ro ("var4", &getter4)
-
-  The first registration above gives Lua direct access to the `var1` variable.
-  The second creates a variable which appears like any other variable to Lua
-  code, but is retrieved and set through the `getter2` and `setter2` function.
-  The getter must take no parameters and return a value, and the setter must
-  take a value of the same type and return nothing.  The `variable_rw` function
-  creates a readable and writeable variable, while `variable_ro` creates a
-  read-only one. Obviously, there is no setter for the read-only variable.
-
-  Basic types for supported variables, and function arguments and returns, are:
+  LuaBridge provides both a command line program and a stand-alone graphical
+  program for compiling and running the test suite. The graphical program brings
+  up an interactive window where you can enter execute Lua statements in a
+  persistent environment. This application is cross platform and works on
+  Windows, Mac OS, iOS, Android, and GNU/Linux systems with X11. The stand-alone
+  program should work anywhere. Both of these applications include LuaBridge,
+  Lua version 5.2, and the code necessary to produce a cross platform graphic
+  application. They are all together in a separate repository, with no
+  additional dependencies, available on Github at [LuaBridge Demo and Tests][4].
+  This is what the GUI application looks like, along with the C++ code snippet
+  for registering the two classes:
   
-  - `bool`
-  - `char`, converted to a string of length one.
-  - Integers, `float`, and `double`, converted to Lua_number.
-  - Strings: `char const*` and `std::string`
+  <a href="https://github.com/vinniefalco/LuaBridgeDemo">
+  <img src="http://vinniefalco.github.com/LuaBridgeDemo/LuaBridgeDemoScreenshot.png">
+  </a><br>
 
-  Of course, LuaBridge supports passing objects of class type, in a variety of
-  ways including dynamically allocated objects created with `new`. The behavior
-  of the object with respect to lifetime management depends on the manner in
-  which the object is passed. Given `class T`, these argument types are
-  supported:
+  ## Registration
 
-  - `T`, `T const` : Pass `T` by value. The lifetime is managed by Lua.
-  - `T*`, `T&`, `T const*`, `T const&` : Pass `T` by reference. The lifetime
-     is managed by C++.
-  - `C <T>`, `C <T const>` : Pass `T` by container. The lifetime
-     is managed by the container.
+  There are four types of objects that LuaBridge can register:
 
-  When Lua manages the lifetime of the object, it is subjected to all of the
-  normal garbage collection rules. C++ functions and member functions can
-  receive pointers and references to these objects, but care must be taken
-  to make sure that no attempt is made to access the object after it is
-  garbage collected. Usually this is done by simply not storing a pointer to
-  the object somewhere inside your C++.
+  - **Data**: Global varaibles, static class data members, and class data
+              members.
 
-  When C++ manages the lifetime of the object, the Lua garbage collector has
-  no effect on it. Care must be taken to make sure that the C++ code does not
-  destroy the object while Lua still has a reference to it.
+  - **Functions**: Regular functions, static class members, and class member
+                   functions
 
-  ### Shared Pointers
+  - **Namespaces**: A namespace is simply a table containing registrations of
+                    functions, data, properties, and other namespaces.
 
-  A `C` container template allows for object lifetime management that
-  behaves like `std::shared_ptr`. That is, objects are dynamically allocated
-  and reference counted. The object is not destroyed until the reference count
-  drops to zero. Such objects are safe to store in C++ and Lua code. A
-  garbage collection will only decrement the reference count.
+  - **Properties**: Global properties, static class properties, and class member
+                    properties. These appear like data to Lua, but are
+                    implemented using get and set functions on the C++ side.
 
-  LuaBridge registraton templates will automatically detect arguments which
-  behave like containers. For example, this registration is valid:
+  Both data and properties can be marked as _read-only_ at the time of
+  registration. This is different from `const`; the values of these objects can
+  be modified on the C++ side, but Lua scripts cannot change them. Code samples
+  that follow are in C++ or Lua, depending on context. For brevity of exposition
+  code samples in C++ assume the traditional variable `lua_State* L` is defined,
+  and that a `using namespace luabridge` using-directive is in effect.
 
-      extern void func (shared_ptr <T> p);
+  ### Namespaces
 
-      s.function ("func", &func);
+  All LuaBridge registrations take place in a _namespace_. When we refer to a
+  _namespace_ we are always talking about a namespace in the Lua sense, which is
+  implemented using tables. The namespace need not correspond to a C++ namespace;
+  in fact no C++ namespaces need to exist at all unless you want them to.
+  LuaBridge namespaces are visible only to Lua scripts; they are used as a
+  logical grouping tool. To obtain access to the global namespace we write:
 
-  Any container may be used. LuaBridge expects that the container in question
-  is a class template with one template argument, and a member function called
-  get() which returns a pointer to the underlying object. If you need to use
-  a container with a different interface, you can specialize the `C`
-  class for your container type and provide an extraction function. Your
-  specialization needs to be in the `luabridge` namespace. Here's an example
-  specialization for a container called `ReferenceCountedObject` which provides
-  a member function `getObject` that retrieves the pointer.
+      getGlobalNamespace (L);
 
-      namespace luabridge
-      {
-          template <>
-          struct C <ReferenceCountedObjectPtr>
-          {
-            template <class T>
-            static T* get (ReferenceCountedObjectPtr <T> const& p)
-            {
-              return p.getObject ();
-            }
-         };
-      }
+  This returns an object on which further registrations can be performed. The
+  subsequent registrations will go into the global namespace, a practice which
+  is not recommended. Instead, we can add our own namespace by writing:
 
-  ### Registering classes
+      getGlobalNamespace (L)
+        .beginNamespace ("test");
 
-  C++ classes can be registered with Lua as follows:
+  This creates a table in `_G` called "test". Since we have not performed any
+  registrations, this table will be empty except for some bookkeeping key/value
+  pairs. LuaBridge reserves all identifiers that start with a double underscore.
+  So `__test` would be an invalid name (although LuaBridge will silently accept
+  it). Functions like `beginNamespace` return the corresponding object on which
+  we can make more registrations. Given:
 
-      s .class_ <MyClass> ("MyClass")
-        .Constructor <void (*) (void)> ()
-        .method ("method1", &MyClass::method1)
-        .method ("method2", &MyClass::method2);
+      getGlobalNamespace (L)
+        .beginNamespace ("test")
+          .beginNamespace ("detail")
+          .endNamespace ()
+          .beginNamespace ("utility")
+          .endNamespace ()
+        .endNamespace ();
 
-      s .subclass <MySubclass, MyBaseClass> ("MySubclass")
-        .Constructor <...>
-        ...
+  The results are accessible to Lua as `test`, `test.detail`, and
+  `test.utility`. Here we introduce the `endNamespace` function; it returns an
+  object representing the original enclosing namespace. All LuaBridge functions which 
+  create registrations return an object upon which subsequent registrations can
+  be made, allowing for an unlimited number of registrations to be chained
+  together using the dot operator `.`. Adding two objects with the same name, in
+  the same namespace, results in undefined behavior (although LuaBridge will
+  silently accept it).
 
-  The `class_` function registers a class; its Constructor will be available as
-  a global function with name given as argument to `class_`.  The object
-  returned can then be used to register the Constructor (no overloading is
-  supported, so there can only be one Constructor) and methods.
+  A namespace can be re-opened later to add
+  more functions. This lets you split up the registration between different
+  source files. These are equivalent:
 
-  LuaBridge cannot automatically determine the number and types of Constructor
-  parameters like it can for functions and methods, so you must provide them.
-  This is done by letting the `Constructor` function take a template parameter,
-  which must be a function pointer type.  The parameter types will be extracted
-  from this (the return type is ignored).  For example, to register a
-  Constructor taking two parameters, one `int` and one `char const*`, you would
-  write:
+      getGlobalNamespace (L)
+        .beginNamespace ("test")
+          .addFunction ("foo", foo)
+        .endNamespace ();
 
-      s .class_ <MyClass> ()
-        .Constructor <void (*) (int, const char *)> ()
+      getGlobalNamespace (L)
+        .beginNamespace ("test")
+          .addFunction ("bar", bar)
+        .endNamespace ();
 
-  Note that in the example above, the name of the class was ommitted from the
-  argument to the `class` function. This allows you to add additional
-  registrations to a class that has already been registered.
+  and
+
+      getGlobalNamespace (L)
+        .beginNamespace ("test")
+          .addFunction ("foo", foo)
+          .addFunction ("bar", bar)
+        .endNamespace ();
+
+
+  ### Data, Properties, and Functions
+
+  These are registered into a namespace using `addVariable`, `addProperty`,
+  and `addFunction`. When registered functions are called by scripts, LuaBridge
+  automatically takes care of the conversion of arguments into the appropriate
+  data type when doing so is possible. This automated system works for the
+  function's return value, and up to 8 parameters although more can be added by
+  extending the templates. Pointers, references, and objects of class type as
+  parameters are treated specially, and explained later. If we have:
+
+      int globalVar;
+      static float staticVar;
+
+      std::string stringProperty;
+      std::string getString () { return stringProperty; }
+      void setString (std::string s) { return s; }
+
+      int foo () { return 42; }
+      void bar (char const*) { }
+
+  These are registered with:
+
+      getGlobalNamespace (L)
+        .beginNamespace ("test")
+          .addVariable ("var1", &globalVar)
+          .addVariable ("var2", &staticVar, false)     // read-only
+          .addProperty ("prop1", getString, setString)
+          .addProperty ("prop2", getString)            // read only
+          .addFunction ("foo", foo)
+          .addFunction ("bar", bar)
+        .endNamespace ();
+
+  Variables can be marked _read-only_ by passing `false` in the second optional
+  parameter. If the parameter is omitted, `true` is used making the variable
+  read/write. Properties are marked read-only by omitting the set function.
+  After the registrations above, the following Lua identifiers are valid:
+
+      test        -- a namespace
+      test.var1   -- a lua_Number variable
+      test.var2   -- a read-only lua_Number variable
+      test.prop1  -- a lua_String property
+      test.prop2  -- a read-only lua_String property
+      test.foo    -- a function returning a lua_Number
+      test.bar    -- a function taking a lua_String as a parameter
+
+  Note that `test.prop1` and `test.prop2` both refer to the same value. However,
+  since `test.prop2` is read-only, assignment does not work. These Lua
+  statements have the stated effects:
+
+      test.var1 = 5         -- okay
+      test.var2 = 6         -- error: var2 is not writable
+      test.prop1 = "Hello"  -- okay
+      test.prop1 = 68       -- okay, Lua converts the number to a string.
+      test.prop2 = "bar"    -- error: prop2 is not writable
+
+      test.foo ()           -- calls foo and discards the return value
+      test.var1 = foo ()    -- calls foo and stores the result in var1
+      test.bar ("Employee") -- calls bar with a string
+      test.bar (test)       -- error: bar expects a string not a table
+
+  LuaBridge does not support overloaded functions nor is it likely to in the
+  future. Since Lua is dynamically typed, any system that tries to resolve a set
+  of parameters passed from a script will face considerable ambiguity when
+  trying to choose an appropriately matching C++ function signature.
+
+  ### Classes
+
+  A class registration is opened using either `beginClass` or `deriveClass` and
+  ended using `endClass`. Once registered, a class can later be re-opened for
+  more registrations using `beginClass`. However, `deriveClass` should only be
+  used once. To add more registrations to an already registered derived class,
+  use `beginClass`. We use the word _method_ as an unambiguous synonym for
+  _member function_ - static or otherwise. These declarations:
+
+      struct A {
+        static int staticData;
+        static float staticProperty;
+        
+        static float getStaticProperty () { return staticProperty; }
+        static void setStaticProperty (float f) { staticProperty = f; }
+        static void staticFunc () { }
+
+        std::string dataMember;
+
+        char dataProperty;
+        char getProperty () const { return dataProperty; }
+        void setProperty (char v) { dataProperty = v; }
+
+        void func1 () { }
+        virtual void virtualFunc () { }
+      };
+
+      struct B : public A {
+        double dataMember2;
+
+        void func1 () { }
+        void func2 () { }
+        void virtualFunc () { }
+      };
+
+      int A::staticData;
+      float A::staticProperty;
+
+  Are registered using:
+
+      getGlobalNamespace (L)
+        .beginNamespace ("test")
+          .beginClass <A> ("A")
+            .addStaticData ("staticData", &A::staticData)
+            .addStaticProperty ("staticProperty", &A::staticProperty)
+            .addStaticMethod ("staticFunc", &A::staticFunc)
+            .addData ("data", &A::dataMember)
+            .addProperty ("prop", &A::getProperty, &A::setProperty)
+            .addMethod ("func1", &A::func1)
+            .addMethod ("virtualFunc", &A::virtualFunc)
+          .endClass ()
+          .deriveClass <B, A> ("B")
+            .addData ("data", &B::dataMember2)
+            .addMethod ("func1", &B::func1)
+            .addMethod ("func2", &B::func2)
+          .endClass ()
+        .endClass ();
 
   Method registration works just like function registration.  Virtual methods
   work normally; no special syntax is needed. const methods are detected and
   const-correctness is enforced, so if a function returns a const object (or
-  rather, a `shared_ptr` to a const object) to Lua, that reference to the object
-  will be considered const and only const methods will be called on it.
+  a container holding to a const object) to Lua, that reference to the object
+  will be considered const and only const methods can be called on it.
   Destructors are registered automatically for each class.
 
-  Static methods may be registered using the `static_method` function, which is
-  simply an alias for the `function` function:
-
-      s .class_ <MyClass> ()
-        .static_method ("method3", &MyClass::method3)
-
-  LuaBridge also supports properties, which allow class data members to be read
-  and written from Lua as if they were variables.  Properties work much like
-  variables do, and the syntax for registering them is as follows:
-
-      s .class_ <MyClass> ()
-        .property_rw ("property1", &MyClass::property1)
-        .property_rw ("property2", &MyClass::getter2, &MyClass::setter2)
-        .property_ro ("property3", &MyClass::property3)
-        .property_ro ("property4", &MyClass::getter4)
-
-  Static properties on classes are also supported, using `static_property_rw`
-  and `static_property_ro`, which are simply aliases for `variable_rw` and
-  `variable_ro`.
-
-  To register a subclass of another class that has been registered with Lua, use
-  the `subclass` function.  This takes two template arguments: the class to be
-  registered, and its base class.  Inherited methods do not have to be
-  re-declared and will function normally in Lua.  If a class has a base class
-  that is *not* registered with Lua, there is no need to declare it as a
+  As with regular variables and properties, class data and properties can be
+  marked read-only by passing false in the second parameter, or omitting the set
+  set function respectively. The `deriveClass` takes two template arguments: the
+  class to be registered, and its base class.  Inherited methods do not have to
+  be re-declared and will function normally in Lua. If a class has a base class
+  that is **not** registered with Lua, there is no need to declare it as a
   subclass.
 
-  ### Access to the `lua_State`
+  ### Class Property Proxies
+
+  Sometimes when registering a class which comes from a third party library, the
+  data is not exposed in a way that can be expressed as a pointer to member,
+  there are no get or set functions, or the get and set functons do not have the
+  right function signature. LuaBridge handles this by supporting _property
+  member proxies_. This is a flat function which takes as its first parameter
+  a pointer to the class which is closed for modification. This is easily
+  understood with the following example:
+
+      // External structure, can't be changed
+      struct Vec 
+      {
+        float coord [3];
+      };
+
+  Taking the address of an array element, e.g. `&Vec::coord [0]` results in an
+  error instead of a pointer-to-member. The class is closed for modifications,
+  but we want to export Vec objects to Lua using the familiar object notation.
+  To do this, first we add a "helper" class:
+
+      struct VecHelper
+      {
+        template <unsigned index>
+        static float get (Vec const* vec)
+        {
+          return vec->coord [index];
+        }
+
+        template <unsigned index>
+        static void set (Vec* vec, float value)
+        {
+          vec->coord [index] = value;
+        }
+      };
+
+  This helper class is only used to provide property member proxies. `Vec`
+  continues to be used in the C++ code as it was before. Now we can register
+  our class like this:
+
+      getGlobalNamespace (L)
+        .beginNamespace ("test")
+          .beginClass <Vec> ("Vec")
+            .addProperty ("x", &VecHelper::get <0>, &VecHelper::set <0>)
+            .addProperty ("y", &VecHelper::get <1>, &VecHelper::set <1>)
+            .addProperty ("z", &VecHelper::get <2>, &VecHelper::set <2>)
+          .endClass ()
+        .endNamespace ();
+
+  ### Constructors
+
+  A single constructor may be added for a class using `addConstructor`.
+  LuaBridge cannot automatically determine the number and types of constructor
+  parameters like it can for functions and methods, so you must provide them.
+  This is done by providing the signature of the desired constructor function
+  as the first template parameter to `addConstructor`. The parameter types will
+  be extracted from this (the return type is ignored).  For example, these
+  statements register constructors for the given classes:
+
+      struct A
+      {
+        A () { }
+      };
+
+      struct B
+      {
+        explicit B (char const* s, int nChars) { }
+      };
+
+      getGlobalNamespace (L)
+        .beginNamespace ("test")
+          .beginClass <A> ("A")
+            .addConstructor <void (*) (void)> ()
+          .endClass ()
+          .beginClass <B> ("B")
+            .addConstructor <void (*) (char const*, int)> ()
+          .endClass ();
+        .endNamespace ()
+
+  Constructors added in this fashion are called from Lua using the fully
+  qualified name of the class. This Lua code will create instances of `A` and
+  `B`
+
+    a = test.A ()           -- Create a new A.
+    b = test.B ("hello", 5) -- Create a new B.
+    b = test.B ()           -- Error: expected string in argument 1
+
+  ## The Lua Stack
+
+  In the Lua C API, all operations on the `lua_State` are performed through the
+  Lua stack. In order to pass parameters back and forth between C++ and Lua,
+  LuaBridge uses specializations of this template class concept:
+
+      template <class T>
+      struct Stack
+      {
+        static void push (lua_State* L, T t);
+        static T get (lua_State* L, int index);
+      };
+
+  The Stack template class specializations are used automatically for variables,
+  properties, data members, property members, function arguments and return
+  values. These basic types are supported:
+
+  - `bool`
+  - `char`, converted to a string of length one.
+  - `char const*` and `std::string` strings.
+  - Integers, `float`, and `double`, converted to `Lua_number`.
+
+  User-defined types which are convertible to one of the basic types are
+  possible, simply provide a `Stack <>` specialization in the `luabridge`
+  namespace for your user-defined type, modeled after the existing types.
+  For example, here is a specialization for a [juce::String][6]:
+
+      template <>
+      struct Stack <juce::String>
+      {
+        static void push (lua_State* L, juce::String s)
+        {
+          lua_pushstring (L, s.toUTF8 ());
+        }
+
+        static juce::String get (lua_State* L, int index)
+        {
+          return juce::String (luaL_checkstring (L, index));
+        }
+      };
+
+  ### The `lua_State`
 
   Sometimes it is convenient from within a bound function or member function
   to gain access to the `lua_State` normally available to a `lua_CFunction`.
@@ -257,24 +479,309 @@
 
       void useState (lua_State* L);
 
-      s.function ("useState", &useState);
+      getGlobalNamespace (L).addFunction ("useState", &useState);
 
   You can still include regular arguments while receiving the state:
 
-      void useStateAndArgs (lua_State* L, int i, std::string s);
+      void useStateAndArgs (int i, lua_State* L, std::string s);
 
-      s.function ("useStateAndArgs", &useStateAndArgs);
+      getGlobalNamespace (L).addFunction ("useStateAndArgs", &useStateAndArgs);
+
+  When a script calls `useStateandArgs`, it passes only the integer and string
+  parameters. LuaBridge takes care of inserting the `lua_State` into the
+  argument list for the corresponding C++ function. This will work correctly
+  even for the state created by coroutines.
+
+  ### Class Object Types
+
+  An object of a registered class `T` may be passed to Lua as:
+
+  - `T*` or `T&`: Passed by reference, with _C++ lifetime_.
+  - `T const*` or `T const&`: Passed by const reference, with _C++ lifetime_.
+  - `T` or `T const`: Passed by value (a copy), with _Lua lifetime_.
+
+  When a pointer or pointer to const is passed and the value is null (zero),
+  LuaBridge will
+  ### C++ Lifetime
+
+  The creation and deletion of objects with _C++ lifetime_ is controlled by
+  the C++ code. Lua does nothing when it garbge collects a reference to such an
+  object. Specifically, the object's destructor is not called (since C++ owns
+  it). Care must be taken to ensure that objects with C++ lifetime are not
+  deleted while still being referenced by a `lua_State`, or else undefined
+  behavior results. In the previous examples, an instance of `A` can be passed
+  to Lua with C++ lifetime, like this:
+
+      A a;
+
+      push (L, &a);             // pointer to 'a', C++ lifetime
+      lua_setglobal (L, "a");
+
+      push (L, (A const*)&a);   // pointer to 'a const', C++ lifetime
+      lua_setglobal (L, "ac");
+
+      push <A const*> (L, &a);  // equivalent to push (L, (A const*)&a)
+      lua_setglobal (L, "ac2");
+
+      push (L, new A);          // compiles, but will leak memory
+      lua_setglobal (L, "ap");
+
+  ### Lua Lifetime
+
+  When an object of a registered class is passed by value to Lua, it will have
+  _Lua lifetime_. A copy of the passed object is constructed inside the
+  userdata. When Lua has no more references to the object, it becomes eligible
+  for garbage collection. When the userdata is collected, the destructor for
+  the class will be called on the object. Care must be taken to ensure that
+  objects with Lua lifetime are not accessed by C++ after they are garbage
+  collected, or else undefined behavior results. An instance of `B` can be
+  passed to Lua with Lua lifetime this way:
+
+      B b;
+
+      push (L, b);                    // Copy of b passed, Lua lifetime.
+      lua_setglobal (L, "b");
+
+  Given the previous code segments, these Lua statements are applicable:
+
+      print (test.A.staticData)       -- Prints the static data member.
+      print (test.A.staticProperty)   -- Prints the static property member.
+      test.A.staticFunc ()            -- Calls the static method.
+
+      print (a.data)                  -- Prints the data member.
+      print (a.prop)                  -- Prints the property member.
+      a:func1 ()                      -- Calls A::func1 ().
+      test.A.func1 (a)                -- Equivalent to a:func1 ().
+      test.A.func1 ("hello")          -- Error: "hello" is not a class A.
+      a:virtualFunc ()                -- Calls A::virtualFunc ().
+
+      print (b.data)                  -- Prints B::dataMember.
+      print (b.prop)                  -- Prints inherited property member.
+      b:func1 ()                      -- Calls B::func1 ().
+      b:func2 ()                      -- Calls B::func2 ().
+      test.B.func2 (a)                -- Error: a is not a class B.
+      test.A.func1 (b)                -- Calls A::func1 ().
+      b:virtualFunc ()                -- Calls B::virtualFunc ().
+      test.B.virtualFunc (b)          -- Calls B::virtualFunc ().
+      test.A.virtualFunc (b)          -- Calls B::virtualFunc ().
+      test.B.virtualFunc (a)          -- Error: a is not a class B.
+
+      a = nil; collectgarbage ()      -- 'a' still exists in C++.
+      b = nil; collectgarbage ()      -- Lua calls ~B() on the copy of b.
+
+  When Lua script creates an object of class type using a registered
+  constructor, the resulting value will have Lua lifetime. After Lua no longer
+  references the object, it becomes eligible for garbage collection. You can
+  still pass these to C++, either by reference or by value. If passed by
+  reference, the usual warnings apply about accessing the reference later,
+  after it has been garbage collected.
+
+  ### Pointers, References, and Pass by Value
+
+  When C++ objects are passed from Lua back to C++ as arguments to functions,
+  or set as data members, LuaBridge does its best to automate the conversion.
+  Using the previous definitions, the following functions may be registered
+  to Lua:
+
+      void func0 (A a);
+      void func1 (A* a);
+      void func2 (A const* a);
+      void func3 (A& a);
+      void func4 (A const& a);
+
+  Executing this Lua code will have the prescribed effect:
+
+      func0 (a)   -- Passes a copy of a, using A's copy constructor.
+      func1 (a)   -- Passes a pointer to a.
+      func2 (a)   -- Passes a pointer to a const a.
+      func3 (a)   -- Passes a reference to a.
+      func4 (a)   -- Passes a reference to a const a.
+
+  In the example above, all functions can read the data members and property
+  members of `a`, or call const member functions of `a`. Only `func0`, `func1`
+  and `func3` can modify the data members and data properties, or call
+  non-const member functions of `a`.
+
+  The usual C++ inheritance and pointer assignment rules apply. Given:
+
+      void func5 (B b);
+      void func6 (B* b);
+
+  These Lua statements hold:
+
+      func5 (b)   - Passes a copy of b, using B's copy constructor.
+      func6 (b)   - Passes a pointer to b.
+      func6 (a)   - Error: Pointer to B expected.
+      func1 (b)   - Okay, b is a subclass of a.
+
+  ## Shared Lifetime
+
+  LuaBridge supports a "shared lifetime" model: dynamically allocated and
+  reference counted objects whose ownership is shared by both Lua and C++.
+  The object remains in existence until there are no remaining C++ or Lua
+  references, and Lua performs its usual garbage collection cycle. A container
+  is recognized by a specialization of the `ContainerTraits` template class.
+  LuaBridge will automatically recognize when a data type is a container when
+  the correspoding specialization is present. Two styles of containers come with
+  LuaBridge, including the necessary specializations:
+
+  ### The `RefCountedObjectPtr` Container
+
+  This is an intrusive style container. Your existing class declaration must be
+  changed to be also derived from `RefCountedObject`. Given `class T`, derived
+  from `RefCountedObject`, the container `RefCountedObjectPtr <T>` may be used.
+  In order for reference counts to be maintained properly, all C++ code must
+  store a container instead of the pointer. This is similar in style to
+  `std::shared_ptr` although there are slight differences. For example:
+
+      // A is reference counted.
+      struct A : public RefCountedObject
+      {
+        void foo () { }
+      };
+
+      struct B
+      {
+        RefCountedObjectPtr <A> a; // holds a reference to A
+      };
+
+      void bar (RefCountedObjectPtr <A> a)
+      {
+        a->foo ();
+      }
+
+  ### The `RefCountedPtr` Container
+
+  This is a non intrusive reference counted pointer. The reference counts are
+  kept in a global hash table, which does incur a small performance penalty.
+  However, it does not require changing any already existing class declarations.
+  This is especially useful when the classes to be registered come from a third
+  party library and cannot be modified. To use it, simply wrap all pointers
+  to class objects with the container instead:
+
+      struct A
+      {
+        void foo () { }
+      };
+
+      struct B
+      {
+        RefCountedPtr <A> a;
+      };
+
+      RefCountedPtr <A> createA ()
+      {
+        return new A;
+      }
+
+      void bar (RefCountedPtr <A> a)
+      {
+        a->foo ();
+      }
+
+      void callFoo ()
+      {
+        bar (createA ());
+
+        // The created A will be destroyed
+        // when we leave this scope
+      }
+
+  ### Custom Containers
+
+  If you have your own container, you must provide a specialization of
+  `ContainerTraits` in the `luabridge` namespace for yor type before it will be
+  recognized by LuaBridge (or else the code will not compile):
+
+      template <class T>
+      struct ContainerTraits <CustomContainer <T> >
+      {
+        typedef typename T Type;
+
+        static T* get (CustomContainer <T> const& c)
+        {
+          return c.getPointerToObject ();
+        }
+      };
+
+  Standard containers like `std::shared_ptr` or `boost::shared_ptr` **will not
+  work**. This is because of type erasure; when the object goes from C++ to
+  Lua and back to C++, there is no way to associate the object with the
+  original container. The new container is constructed from a pointer to the
+  object instead of an existing container. The result is undefined behavior
+  since there are now two sets of reference counts.
+
+  ### Container Construction
+
+  When a constructor is registered for a class, there is an additional
+  optional second template parameter describing the type of container to use.
+  If this parameter is specified, calls to the constructor will create the
+  object dynamically, via operator new, and place it a container of that
+  type. The container must have been previously specialized in
+  `ContainerTraits`, or else a compile error will result. This code will
+  register two objects, each using a constructor that creates an object
+  with Lua lifetime using the specified container:
+
+      class C : public RefCountedObject
+      {
+        C () { }
+      };
+
+      class D
+      {
+        D () { }
+      };
+
+      getGlobalNamespace (L)
+        .beginNamespace ("test")
+          .beginClass <C> ("C")
+            .addConstructor <void (*) (void), RefCountedObjectPtr <C> > ()
+          .endClass ()
+          .beginClass <D> ("D")
+            .addConstructor <void (*) (void), RefCountedPtr <D> > ()
+          .endClass ();
+        .endNamespace ()
+
+  ### Mixing Lifetimes
+
+  Mixing object lifetime models is entirely possible, subject to the usual
+  caveats of holding references to objects which could get deleted. For
+  example, C++ can be called from Lua with a pointer to an object of class
+  type; the function can modify the object or call non-const data members.
+  These modifications are visible to Lua (since they both refer to the same
+  object). An object store in a container can be passed to a function expecting
+  a pointer. These conversion work seamlessly.
+
+  ## Security
+
+  The metatables and userdata that LuaBridge creates in the `lua_State` are
+  protected using a security system, to eliminate the possibility of undefined
+  behavior resulting from scripted manipulation of the environment. This
+  security system can be bypassed if scripts are given access to the debug
+  library.
+
+  When a class member function is called, or class property member accessed,
+  the `this` pointer is type-checked. This is because member functions exposed
+  to Lua are just plain functions that usually get called with the Lua colon
+  notation, which passes the object in question as the first parameter.
+
+  If a type check error occurs, LuaBridge uses the `lua_error` mechanism to
+  trigger a failure. A host program can always recover from an error through
+  the use of `lua_pcall`; proper usage of LuaBridge will never result in
+  undefined behavior.
 
   ## Limitations 
 
   LuaBridge does not support:
 
+  - Enumerated constants
   - More than 8 parameters on a function or method (although this can be
-    increased by adding more `typelist` specializations).
+    increased by adding more `TypeListValues` specializations).
   - Overloaded functions, methods, or constructors.
   - Global variables (variables must be wrapped in a named scope).
   - Automatic conversion between STL container types and Lua tables.
   - Inheriting Lua classes from C++ classes.
+  - Passing nil to a C++ function that expects a pointer or reference.
 
   ## Development
 
@@ -306,98 +813,1313 @@
   [1]: http://www.vinniefalco.com "Vinnie Falco"
   [2]: http://www.opensource.org/licenses/mit-license.html "The MIT License"
   [3]: https://github.com/vinniefalco/LuaBridge "LuaBridge"
-  [4]: http://lua.org "The Lua Programming Language"
+  [4]: https://github.com/vinniefalco/LuaBridgeDemo "LuaBridge Demo"
+  [5]: http://lua.org "The Lua Programming Language"
+  [6]: http://www.rawmaterialsoftware.com/juce/api/classString.html "juce::String"
 */
 
 #include <cassert>
 #include <string>
 
-#define THROWSPEC throw()
-
 namespace luabridge
 {
 
+#if defined (__APPLE_CPP__) || defined(__APPLE_CC__)
+// Do not define THROWSPEC since the Xcode compilers do not distinguish
+// the throw specification in the function signature.
+#else
+#define THROWSPEC throw()
+#endif
+
 //==============================================================================
+/**
+  Templates for extracting type information.
+
+  These templates are used for extracting information about types used in
+  various ways
+*/
+
+/**
+  Since the throw specification is part of a function signature, the FuncTraits
+  family of templates needs to be specialized for both types. The THROWSPEC
+  macro controls whether we use the 'throw ()' form, or 'noexcept' (if C++11
+  is available) to distinguish the functions.
+*/
+//#define THROWSPEC throw ()
+
+//==============================================================================
+//
+// TypeList
+//
+//==============================================================================
+
+/**
+  nil type means void parameters or return value.
+*/
+typedef void nil;
+
+template <typename Head, typename Tail = nil>
+struct TypeList
+{
+};
+
+/**
+  A TypeList with actual values.
+*/
+template <typename List>
+struct TypeListValues
+{
+  static std::string const tostring (bool)
+  {
+    return "";
+  }
+};
+
+/**
+  TypeListValues recursive template definition.
+*/
+template <typename Head, typename Tail>
+struct TypeListValues <TypeList <Head, Tail> >
+{
+  Head hd;
+  TypeListValues <Tail> tl;
+
+  TypeListValues (Head hd_, TypeListValues <Tail> const& tl_)
+    : hd (hd_), tl (tl_)
+  {
+  }
+
+  static std::string const tostring (bool comma = false)
+  {
+    std::string s;
+
+    if (comma)
+      s = ", ";
+
+    s = s + typeid (Head).name ();
+
+    return s + TypeListValues <Tail>::tostring (true);
+  }
+};
+
+// Specializations of type/value list for head types that are references and
+// const-references.  We need to handle these specially since we can't count
+// on the referenced object hanging around for the lifetime of the list.
+
+template <typename Head, typename Tail>
+struct TypeListValues <TypeList <Head&, Tail> >
+{
+  Head hd;
+  TypeListValues <Tail> tl;
+
+  TypeListValues (Head& hd_, TypeListValues <Tail> const& tl_)
+    : hd (hd_), tl (tl_)
+  {
+  }
+
+  static std::string const tostring (bool comma = false)
+  {
+    std::string s;
+
+    if (comma)
+      s = ", ";
+
+    s = s + typeid (Head).name () + "&";
+
+    return s + TypeListValues <Tail>::tostring (true);
+  }
+};
+
+template <typename Head, typename Tail>
+struct TypeListValues <TypeList <Head const&, Tail> >
+{
+  Head hd;
+  TypeListValues <Tail> tl;
+
+  TypeListValues (Head const& hd_, const TypeListValues <Tail>& tl_)
+    : hd (hd_), tl (tl_)
+  {
+  }
+
+  static std::string const tostring (bool comma = false)
+  {
+    std::string s;
+
+    if (comma)
+      s = ", ";
+
+    s = s + typeid (Head).name () + " const&";
+
+    return s + TypeListValues <Tail>::tostring (true);
+  }
+};
+
+//==============================================================================
+/**
+  Traits for function pointers.
+
+  There are three types of functions: global, non-const member, and const member.
+  These templates determine the type of function, which class type it belongs to
+  if it is a class member, the const-ness if it is a member function, and the
+  type information for the return value and argument list.
+
+  Expansions are provided for functions with up to 8 parameters. This can be
+  manually extended, or expanded to an arbitrary amount using C++11 features.
+*/
+template <typename MemFn>
+struct FuncTraits
+{
+};
+
+/* Ordinary function pointers. */
+
+template <typename R>
+struct FuncTraits <R (*) ()>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef nil Params;
+  static R call (R (*fp) (), const TypeListValues<Params> &tvl)
+  {
+    (void)tvl;
+    return fp ();
+  }
+};
+
+template <typename R, typename P1>
+struct FuncTraits <R (*) (P1)>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1> Params;
+  static R call (R (*fp) (P1), const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2>
+struct FuncTraits <R (*) (P1, P2)>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2> > Params;
+  static R call (R (*fp) (P1, P2), const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3>
+struct FuncTraits <R (*) (P1, P2, P3)>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
+  static R call (R (*fp) (P1, P2, P3), const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3, typename P4>
+struct FuncTraits <R (*) (P1, P2, P3, P4)>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
+  static R call (R (*fp) (P1, P2, P3, P4),
+    const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3, typename P4,
+  typename P5>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5)>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
+    TypeList <P5> > > > > Params;
+  static R call (R (*fp) (P1, P2, P3, P4, P5),
+    const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3, typename P4,
+  typename P5, typename P6>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6)>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, 
+    TypeList <P6> > > > > > Params;
+  static R call (R (*fp) (P1, P2, P3, P4, P5, P6),
+    const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3, typename P4,
+  typename P5, typename P6, typename P7>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7)>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (R (*fp) (P1, P2, P3, P4, P5, P6, P7),
+    const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3, typename P4,
+  typename P5, typename P6, typename P7, typename P8>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7, P8)>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (R (*fp) (P1, P2, P3, P4, P5, P6, P7, P8),
+    const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+/* Non-const member function pointers. */
+
+template <class T, typename R>
+struct FuncTraits <R (T::*) ()>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef nil Params;
+  static R call (T *obj, R (T::*fp) (), const TypeListValues<Params> &tvl)
+  {
+    (void)tvl;
+    return (obj->*fp)();
+  }
+};
+
+template <class T, typename R, typename P1>
+struct FuncTraits <R (T::*) (P1)>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1> Params;
+  static R call (T *obj, R (T::*fp) (P1),
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2>
+struct FuncTraits <R (T::*) (P1, P2)>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2> > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2),
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3>
+struct FuncTraits <R (T::*) (P1, P2, P3)>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3),
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4)>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4),
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5)>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
+    TypeList <P5> > > > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5),
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6)>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6> > > > > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6),
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7)>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6, P7),
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7, typename P8>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8)>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8),
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+/* Const member function pointers. */
+
+template <class T, typename R>
+struct FuncTraits <R (T::*) () const>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef nil Params;
+  static R call (T const* const obj, R (T::*fp) () const,
+    const TypeListValues<Params> &tvl)
+  {
+    (void)tvl;
+    return (obj->*fp)();
+  }
+};
+
+template <class T, typename R, typename P1>
+struct FuncTraits <R (T::*) (P1) const>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1> Params;
+  static R call (T const* const obj, R (T::*fp) (P1) const,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2>
+struct FuncTraits <R (T::*) (P1, P2) const>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2> > Params;
+  static R call (T const* const obj, R (T::*fp) (P1, P2) const,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3>
+struct FuncTraits <R (T::*) (P1, P2, P3) const>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
+  static R call (T const* const obj, R (T::*fp) (P1, P2, P3) const,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4) const>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
+  static R call (T const* const obj, R (T::*fp) (P1, P2, P3, P4) const,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5) const>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
+    TypeList <P5> > > > > Params;
+  static R call (T const* const obj, R (T::*fp) (P1, P2, P3, P4, P5) const,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6) const>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6> > > > > > Params;
+  static R call (T const* const obj,
+    R (T::*fp) (P1, P2, P3, P4, P5, P6) const,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) const>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (T const* const obj,
+    R (T::*fp) (P1, P2, P3, P4, P5, P6, P7) const,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7, typename P8>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (T const* const obj,
+    R (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8) const,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+#if defined (THROWSPEC)
+
+/* Ordinary function pointers. */
+
+template <typename R>
+struct FuncTraits <R (*) () THROWSPEC>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef nil Params;
+  static R call (R (*fp) () THROWSPEC, const TypeListValues<Params> &tvl)
+  {
+    (void)tvl;
+    return fp ();
+  }
+};
+
+template <typename R, typename P1>
+struct FuncTraits <R (*) (P1) THROWSPEC>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1> Params;
+  static R call (R (*fp) (P1) THROWSPEC, const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2>
+struct FuncTraits <R (*) (P1, P2) THROWSPEC>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2> > Params;
+  static R call (R (*fp) (P1, P2) THROWSPEC, const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3>
+struct FuncTraits <R (*) (P1, P2, P3) THROWSPEC>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
+  static R call (R (*fp) (P1, P2, P3) THROWSPEC, const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3, typename P4>
+struct FuncTraits <R (*) (P1, P2, P3, P4) THROWSPEC>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
+  static R call (R (*fp) (P1, P2, P3, P4) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3, typename P4,
+  typename P5>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5) THROWSPEC>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
+    TypeList <P5> > > > > Params;
+  static R call (R (*fp) (P1, P2, P3, P4, P5) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3, typename P4,
+  typename P5, typename P6>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6) THROWSPEC>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, 
+    TypeList <P6> > > > > > Params;
+  static R call (R (*fp) (P1, P2, P3, P4, P5, P6) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3, typename P4,
+  typename P5, typename P6, typename P7>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (R (*fp) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <typename R, typename P1, typename P2, typename P3, typename P4,
+  typename P5, typename P6, typename P7, typename P8>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC>
+{
+  static bool const isMemberFunction = false;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (R (*fp) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+/* Non-const member function pointers. */
+
+template <class T, typename R>
+struct FuncTraits <R (T::*) () THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef nil Params;
+  static R call (T *obj, R (T::*fp) () THROWSPEC, const TypeListValues<Params> &tvl)
+  {
+    (void)tvl;
+    return (obj->*fp)();
+  }
+};
+
+template <class T, typename R, typename P1>
+struct FuncTraits <R (T::*) (P1) THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1> Params;
+  static R call (T *obj, R (T::*fp) (P1) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2>
+struct FuncTraits <R (T::*) (P1, P2) THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2> > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3>
+struct FuncTraits <R (T::*) (P1, P2, P3) THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4) THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5) THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
+    TypeList <P5> > > > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6) THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6> > > > > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7, typename P8>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = false;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+/* Const member function pointers. */
+
+template <class T, typename R>
+struct FuncTraits <R (T::*) () const THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef nil Params;
+  static R call (T const* const obj, R (T::*fp) () const THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    (void)tvl;
+    return (obj->*fp)();
+  }
+};
+
+template <class T, typename R, typename P1>
+struct FuncTraits <R (T::*) (P1) const THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1> Params;
+  static R call (T const* const obj, R (T::*fp) (P1) const THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2>
+struct FuncTraits <R (T::*) (P1, P2) const THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2> > Params;
+  static R call (T const* const obj, R (T::*fp) (P1, P2) const THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3>
+struct FuncTraits <R (T::*) (P1, P2, P3) const THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
+  static R call (T const* const obj, R (T::*fp) (P1, P2, P3) const THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4) const THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
+  static R call (T const* const obj, R (T::*fp) (P1, P2, P3, P4) const THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5) const THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
+    TypeList <P5> > > > > Params;
+  static R call (T const* const obj, R (T::*fp) (P1, P2, P3, P4, P5) const THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6) const THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6> > > > > > Params;
+  static R call (T const* const obj, R (T::*fp) (P1, P2, P3, P4, P5, P6) const THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) const THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (T const* const obj,
+    R (T::*fp) (P1, P2, P3, P4, P5, P6, P7) const THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, typename R, typename P1, typename P2, typename P3,
+  typename P4, typename P5, typename P6, typename P7, typename P8>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const THROWSPEC>
+{
+  static bool const isMemberFunction = true;
+  static bool const isConstMemberFunction = true;
+  typedef T ClassType;
+  typedef R ReturnType;
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
+    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (T const* const obj,
+    R (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8) const THROWSPEC,
+    const TypeListValues<Params> &tvl)
+  {
+    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+#endif
+
+/*
+* Constructor generators.  These templates allow you to call operator new and
+* pass the contents of a type/value list to the Constructor.  Like the
+* function pointer containers, these are only defined up to 8 parameters.
+*/
+
+/** Constructor generators.
+
+    These templates call operator new with the contents of a type/value
+    list passed to the Constructor with up to 8 parameters. Two versions
+    of call() are provided. One performs a regular new, the other performs
+    a placement new.
+*/
+template <class T, typename List>
+struct Constructor {};
+
+template <class T>
+struct Constructor <T, nil>
+{
+  static T* call (TypeListValues <nil> const&)
+  {
+    return new T;
+  }
+  static T* call (void* mem, TypeListValues <nil> const&)
+  {
+    return new (mem) T;
+  }
+};
+
+template <class T, class P1>
+struct Constructor <T, TypeList <P1> >
+{
+  static T* call (const TypeListValues<TypeList <P1> > &tvl)
+  {
+    return new T(tvl.hd);
+  }
+  static T* call (void* mem, const TypeListValues<TypeList <P1> > &tvl)
+  {
+    return new (mem) T(tvl.hd);
+  }
+};
+
+template <class T, class P1, class P2>
+struct Constructor <T, TypeList <P1, TypeList <P2> > >
+{
+  static T* call (const TypeListValues<TypeList <P1, TypeList <P2> > > &tvl)
+  {
+    return new T(tvl.hd, tvl.tl.hd);
+  }
+  static T* call (void* mem, const TypeListValues<TypeList <P1, TypeList <P2> > > &tvl)
+  {
+    return new (mem) T(tvl.hd, tvl.tl.hd);
+  }
+};
+
+template <class T, class P1, class P2, class P3>
+struct Constructor <T, TypeList <P1, TypeList <P2, TypeList <P3> > > >
+{
+  static T* call (const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3> > > > &tvl)
+  {
+    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
+  }
+  static T* call (void* mem, const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3> > > > &tvl)
+  {
+    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
+  }
+};
+
+template <class T, class P1, class P2, class P3, class P4>
+struct Constructor <T, TypeList <P1, TypeList <P2, TypeList <P3,
+  TypeList <P4> > > > >
+{
+  static T* call (const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3, TypeList <P4> > > > > &tvl)
+  {
+    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
+  }
+  static T* call (void* mem, const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3, TypeList <P4> > > > > &tvl)
+  {
+    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, class P1, class P2, class P3, class P4,
+  class P5>
+struct Constructor <T, TypeList <P1, TypeList <P2, TypeList <P3,
+  TypeList <P4, TypeList <P5> > > > > >
+{
+  static T* call (const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3, TypeList <P4, TypeList <P5> > > > > > &tvl)
+  {
+    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd);
+  }
+  static T* call (void* mem, const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3, TypeList <P4, TypeList <P5> > > > > > &tvl)
+  {
+    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, class P1, class P2, class P3, class P4,
+  class P5, class P6>
+struct Constructor <T, TypeList <P1, TypeList <P2, TypeList <P3,
+  TypeList <P4, TypeList <P5, TypeList <P6> > > > > > >
+{
+  static T* call (const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6> > > > > > > &tvl)
+  {
+    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
+  }
+  static T* call (void* mem, const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6> > > > > > > &tvl)
+  {
+    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, class P1, class P2, class P3, class P4,
+  class P5, class P6, class P7>
+struct Constructor <T, TypeList <P1, TypeList <P2, TypeList <P3,
+  TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7> > > > > > > >
+{
+  static T* call (const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6,
+    TypeList <P7> > > > > > > > &tvl)
+  {
+    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd);
+  }
+  static T* call (void* mem, const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6,
+    TypeList <P7> > > > > > > > &tvl)
+  {
+    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+template <class T, class P1, class P2, class P3, class P4,
+  class P5, class P6, class P7, class P8>
+struct Constructor <T, TypeList <P1, TypeList <P2, TypeList <P3,
+  TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7, 
+  TypeList <P8> > > > > > > > >
+{
+  static T* call (const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6,
+    TypeList <P7, TypeList <P8> > > > > > > > > &tvl)
+  {
+    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
+  }
+  static T* call (void* mem, const TypeListValues<TypeList <P1, TypeList <P2,
+    TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6,
+    TypeList <P7, TypeList <P8> > > > > > > > > &tvl)
+  {
+    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
+      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
+  }
+};
+
+//==============================================================================
+
+// Forward declaration required.
+template <class T>
+struct Stack;
+
+//------------------------------------------------------------------------------
 /**
   Container traits.
 
-  The default template supports any shared_ptr compatible interface.
-  
-  Specializations are provided for containers of type T, T*, T&, and T const&.
+  Unspecialized ContainerTraits has the isNotContainer typedef for SFINAE. All
+  user defined containers must supply an appropriate specialization for
+  ContinerTraits (without the typedef isNotContainer). The containers that come
+  with LuaBridge also come with the appropriate ContainerTraits specialization.
+  See the corresponding declaration for details.
 
-  If you need to use an incompatible container, specialize this
-  template for your type and provide the required fields.
+  A specialization of ContainerTraits for some generic type ContainerType
+  looks like this:
+
+  template <class T>
+  struct ContainerTraits <ContainerType <T> >
+  {
+    typedef typename T Type;
+
+    static T* get (ContainerType <T> const& c)
+    {
+      return c.get (); // Implementation-dependent on ContainerType
+    }
+  };
 */
 template <class T>
-struct ContainerInfo
+struct ContainerTraits
 {
-  /** Type of object this container holds.
-  */
-  typedef T Type;
-
-  /** Given a reference to the container, retrieve a pointer to the object.
-
-      The pointer is void and non-const as a consequence of Lua's weak typing.
-  */
-  static inline void* get (T& t)
-  {
-    return &t;
-  }
+  typedef bool isNotContainer;
 };
-
-template <class T>
-struct ContainerInfo <T*>
-{
-  typedef typename T Type;
-
-  static inline void* get (T* p)
-  {
-    return p;
-  }
-};
-
-template <class T>
-struct ContainerInfo <T const*>
-{
-  typedef typename T Type;
-
-  static inline void* get (T const* p)
-  {
-    return const_cast <T*> (p);
-  }
-};
-
-//------------------------------------------------------------------------------
-/**
-  Get a table value, bypassing metamethods.
-*/  
-inline void rawgetfield (lua_State* const L, int index, char const* const key)
-{
-  assert (lua_istable (L, index));
-  index = lua_absindex (L, index);
-  lua_pushstring (L, key);
-  lua_rawget (L, index);
-}
-
-//------------------------------------------------------------------------------
-/**
-  Set a table value, bypassing metamethods.
-*/  
-inline void rawsetfield (lua_State* const L, int index, char const* const key)
-{
-  assert (lua_istable (L, index));
-  index = lua_absindex (L, index);
-  lua_pushstring (L, key);
-  lua_insert (L, -2);
-  lua_rawset (L, index);
-}
 
 //==============================================================================
 
 struct Detail
 {
-protected:
-  //----------------------------------------------------------------------------
+  struct TypeTraits
+  {
+    //--------------------------------------------------------------------------
+    /**
+      Determine if type T is a container.
+
+      To be considered a container, there must be a specialization of
+      ContainerTraits with the required fields.
+    */
+    template <typename T>
+    class isContainer
+    {
+      typedef char yes[1]; // sizeof (yes) == 1
+      typedef char no [2]; // sizeof (no)  == 2
+
+      template <typename C>
+      static no& test (typename C::isNotContainer*);
+ 
+      template <typename>
+      static yes& test (...);
+ 
+    public:
+      static const bool value = sizeof (test <ContainerTraits <T> >(0)) == sizeof (yes);
+    };
+
+    //--------------------------------------------------------------------------
+    /**
+      Determine if T is const qualified.
+    */
+    template <class T>
+    struct isConst
+    {
+      static bool const value = false;
+    };
+
+    template <class T>
+    struct isConst <T const>
+    {
+      static bool const value = true;
+    };
+
+    //--------------------------------------------------------------------------
+    /**
+      Strip the const qualifier from T.
+    */
+    template <class T>
+    struct removeConst
+    {
+      typedef typename T Type;
+    };
+
+    template <class T>
+    struct removeConst <T const>
+    {
+      typedef typename T Type;
+    };
+  };
+
+  //============================================================================
   /**
     Return the identity pointer for our lightuserdata tokens.
 
@@ -406,7 +2128,7 @@ protected:
     metatable. The value is a boolean = true, although any value could have been
     used.
 
-    Because of Lua's weak typing and our improvised system of imposing C++
+    Because of Lua's dynamic typing and our improvised system of imposing C++
     class structure, there is the possibility that executing scripts may
     knowingly or unknowingly cause invalid data to get passed to the C functions
     created by LuaBridge. In particular, our security model addresses the
@@ -434,7 +2156,7 @@ protected:
 
       7. Our lightuserdata is unique.
 
-         This follows from #4.
+          This follows from #4.
 
     Lemma:
 
@@ -469,7 +2191,7 @@ protected:
       The static table holds the static data members, static properties, and
       static member functions for a class.
     */
-    static void* getStaticKey ()
+    static void const* const getStaticKey ()
     {
       static char value;
       return &value;
@@ -482,7 +2204,7 @@ protected:
       of a class. Read-only data and properties, and const member functions are
       also placed here (to save a lookup in the const table).
     */
-    static void* getClassKey ()
+    static void const* const getClassKey ()
     {
       static char value;
       return &value;
@@ -494,16 +2216,41 @@ protected:
       The const table holds read-only data members and properties, and const
       member functions of a class.
     */
-    static void* getConstKey ()
+    static void const* const getConstKey ()
     {
       static char value;
       return &value;
     }
   };
 
+  //----------------------------------------------------------------------------
+  /**
+    Get a table value, bypassing metamethods.
+  */  
+  static inline void rawgetfield (lua_State* const L, int index, char const* const key)
+  {
+    assert (lua_istable (L, index));
+    index = lua_absindex (L, index);
+    lua_pushstring (L, key);
+    lua_rawget (L, index);
+  }
+
+  //----------------------------------------------------------------------------
+  /**
+    Set a table value, bypassing metamethods.
+  */  
+  static inline void rawsetfield (lua_State* const L, int index, char const* const key)
+  {
+    assert (lua_istable (L, index));
+    index = lua_absindex (L, index);
+    lua_pushstring (L, key);
+    lua_insert (L, -2);
+    lua_rawset (L, index);
+  }
+
   //============================================================================
   /**
-    Class wrapped in a Lua userdata.
+    Interface to a class poiner retrievable from a userdata.
   */
   class Userdata
   {
@@ -731,7 +2478,7 @@ protected:
       If the class does not match, a Lua error is raised.
     */
     template <class T>
-    static Userdata* getExact (lua_State* L, int index)
+    static inline Userdata* getExact (lua_State* L, int index)
     {
       return getExactClass (L, index, ClassInfo <T>::getClassKey ());
     }
@@ -744,210 +2491,444 @@ protected:
       const-ness, a Lua error is raised.
     */
     template <class T>
-    static T* get (lua_State* L, int index, bool canBeConst)
+    static inline T* get (lua_State* L, int index, bool canBeConst)
     {
-      Userdata* const ud = getClass (L, index, ClassInfo <T>::getClassKey (), canBeConst);
-      return static_cast <T*> (ud->getPointer ());
+      return static_cast <T*> (getClass (L, index,
+        ClassInfo <T>::getClassKey (), canBeConst)->getPointer ());
     }
   };
 
   //----------------------------------------------------------------------------
   /**
-    A userdata wrapping a class container.
+    Wraps a class object stored in a Lua userdata.
 
-    The container type C controls the object lifetime.
+    The lifetime of the object is managed by Lua. The object is constructed
+    inside the userdata using placement new.
   */
-  template <class C>
-  class UserdataType : public Userdata
+  template <class T>
+  class UserdataValue : public Userdata
   {
   private:
-    UserdataType (UserdataType <C> const&);
-    UserdataType <C>& operator= (UserdataType <C> const&);
+    UserdataValue <T> (UserdataValue <T> const&);
+    UserdataValue <T> operator= (UserdataValue <T> const&);
 
-    typedef typename ContainerInfo <C>::Type T;
+    char m_storage [sizeof (T)];
+
+    inline T* getObject ()
+    {
+      // If this fails to compile it means you forgot to provide
+      // a Container specialization for your container!
+      //
+      return reinterpret_cast <T*> (&m_storage [0]);
+    }
+
+  private:
+    /**
+      Used for placement construction.
+    */
+    UserdataValue ()
+    {
+    }
+
+    ~UserdataValue ()
+    {
+      getObject ()->~T ();
+    }
+
+    void* getPointer ()
+    {
+      return &m_storage [0];
+    }
+
+  public:
+    /**
+      Push a T via placement new.
+
+      The caller is responsible for calling placement new using the
+      returned uninitialized storage.
+    */
+    static void* place (lua_State* const L)
+    {
+      UserdataValue <T>* const ud = new (
+        lua_newuserdata (L, sizeof (UserdataValue <T>))) UserdataValue <T> ();
+      lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getClassKey ());
+      // If this goes off it means you forgot to register the class!
+      assert (lua_istable (L, -1));
+      lua_setmetatable (L, -2);
+      return ud->getPointer ();
+    }
+
+    /**
+      Push T via copy construction from U.
+    */
+    template <class U>
+    static inline void push (lua_State* const L, U const& u)
+    {
+      new (place (L)) U (u);
+    }
+  };
+
+  //----------------------------------------------------------------------------
+  /**
+    Wraps a pointer to a class object inside a Lua userdata.
+
+    The lifetime of the object is managed by C++.
+  */
+  class UserdataPtr : public Userdata
+  {
+  private:
+    UserdataPtr (UserdataPtr const&);
+    UserdataPtr operator= (UserdataPtr const&);
+
+    void* const m_p;
+
+  private:
+    void* getPointer ()
+    {
+      return m_p;
+    }
+
+    /** Push non-const pointer to object using metatable key.
+    */
+    static void push (lua_State* L, void* const p, void const* const key)
+    {
+      if (p)
+      {
+        new (lua_newuserdata (L, sizeof (UserdataPtr))) UserdataPtr (p);
+        lua_rawgetp (L, LUA_REGISTRYINDEX, key);
+        // If this goes off it means you forgot to register the class!
+        assert (lua_istable (L, -1));
+        lua_setmetatable (L, -2);
+      }
+      else
+      {
+        lua_pushnil (L);
+      }
+    }
+
+    /** Push const pointer to object using metatable key.
+    */
+    static void push (lua_State* L, void const* const p, void const* const key)
+    {
+      if (p)
+      {
+        new (lua_newuserdata (L, sizeof (UserdataPtr)))
+          UserdataPtr (const_cast <void*> (p));
+        lua_rawgetp (L, LUA_REGISTRYINDEX, key);
+        // If this goes off it means you forgot to register the class!
+        assert (lua_istable (L, -1));
+        lua_setmetatable (L, -2);
+      }
+      else
+      {
+        lua_pushnil (L);
+      }
+    }
+
+    explicit UserdataPtr (void* const p) : m_p (p)
+    {
+      // Can't construct with a null pointer!
+      //
+      assert (m_p != 0);
+    }
+
+  public:
+    /** Push non-const pointer to object.
+    */
+    template <class T>
+    static inline void push (lua_State* const L, T* const p)
+    {
+      push (L, p, ClassInfo <T>::getClassKey ());
+    }
+
+    /** Push const pointer to object.
+    */
+    template <class T>
+    static inline void push (lua_State* const L, T const* const p)
+    {
+      push (L, p, ClassInfo <T>::getConstKey ());
+    }
+  };
+
+  //============================================================================
+  /**
+    Wraps a container thet references a class object.
+
+    The template argument C is the container type, ContainerTraits must be
+    specialized on C or else a compile error will result.
+  */
+  template <class C>
+  class UserdataShared : public Userdata
+  {
+  private:
+    UserdataShared (UserdataShared <C> const&);
+    UserdataShared <C>& operator= (UserdataShared <C> const&);
+
+    typedef typename TypeTraits::removeConst <
+      typename ContainerTraits <C>::Type>::Type T;
 
     C m_c;
 
   private:
-    ~UserdataType ()
+    ~UserdataShared ()
     {
     }
 
     void* getPointer ()
     {
-      return ContainerInfo <C>::get (m_c);
+      return const_cast <void*> (reinterpret_cast <void const*> (
+        (ContainerTraits <C>::get (m_c))));
     }
+
+    template <bool makeObjectConst>
+    struct Helper
+    {
+      static void push (lua_State* L, C const& c)
+      {
+        new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (c);
+        lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getClassKey ());
+        // If this goes off it means the class T is unregistered!
+        assert (lua_istable (L, -1));
+        lua_setmetatable (L, -2);
+      }
+
+      static void push (lua_State* L, T* const t)
+      {
+        new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (t);
+        lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getClassKey ());
+        // If this goes off it means the class T is unregistered!
+        assert (lua_istable (L, -1));
+        lua_setmetatable (L, -2);
+      }
+    };
+
+    template <>
+    struct Helper <true>
+    {
+      static void push (lua_State* L, C const& c)
+      {
+        new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (c);
+        lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getConstKey ());
+        // If this goes off it means the class T is unregistered!
+        assert (lua_istable (L, -1));
+        lua_setmetatable (L, -2);
+      }
+
+      static void push (lua_State* L, T* const t)
+      {
+        new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (t);
+        lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getConstKey ());
+        // If this goes off it means the class T is unregistered!
+        assert (lua_istable (L, -1));
+        lua_setmetatable (L, -2);
+      }
+    };
 
   public:
-    UserdataType ()
-    {
-    }
-
-    explicit UserdataType (T const& t) : m_c (t)
-    {
-    }
-
+    /**
+      Construct from a container to the class or a derived class.
+    */
     template <class U>
-    explicit UserdataType (U const& u) : m_c (u)
+    explicit UserdataShared (U const& u) : m_c (u)
     {
     }
 
     /**
-      Create the userdata on the stack and return the object storage.
-
-      The return value is the uninitialized storage area for the
-      UserdataType object. The caller will invoke placement new.
+      Construct from a pointer to the class or a derived class.
     */
-    static void* push (lua_State* L, bool makeObjectConst)
+    template <class U>
+    explicit UserdataShared (U* u) : m_c (u)
     {
-      void* const ud = lua_newuserdata (L, sizeof (UserdataType <C>));
-      if (makeObjectConst)
-        lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getConstKey ());
-      else
-        lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getClassKey ());
+    }
 
-      // If this goes off it means the class T is unregistered!
-      assert (lua_istable (L, -1));
+    static void push (lua_State* L, C const& c)
+    {
+      Helper <TypeTraits::isConst <typename ContainerTraits <C>::Type>::value>::push (L, c);
+    }
 
-      lua_setmetatable (L, -2);
-      return ud;
+    static void push (lua_State* L, T* const t)
+    {
+      Helper <TypeTraits::isConst <typename ContainerTraits <C>::Type>::value>::push (L, t);
     }
   };
 };
 
 //==============================================================================
-
 /**
-  Lua stack objects with value semantics.
-
-  Lifetime is managed by Lua. A C++ function which accesses a pointer or
-  reference to an object outside the activation record in which it was
-  retrieved may result in undefined behavior if Lua garbage collected it.
+  Lua stack conversions for class objects passed by value.
 */
 template <class T>
-struct Stack : Detail
+struct Stack
 {
-public:
-  static inline void push (lua_State* L, T const& t, bool makeObjectConst = false)
+private:
+  /**
+    Pass by pointer wrapped in a container.
+
+    The container controls the object lifetime. Typically this will be a
+    lifetime shared by C++ and Lua using a reference count. Because of type
+    erasure, containers like std::shared_ptr will not work. Containers must
+    either be of the intrusive variety, or in the style of the RefCountedPtr
+    type provided by LuaBridge (that uses a global hash table).
+  */
+  template <bool byContainer>
+  struct Helper
   {
-    new (UserdataType <T>::push (L, makeObjectConst)) UserdataType <T> (t);
+    static inline void push (lua_State* L, T const& t)
+    {
+      Detail::UserdataShared <T>::push (L, t);
+    }
+
+    static inline T get (lua_State* L, int index)
+    {
+      typedef typename ContainerTraits <T>::Type U;
+      return Detail::Userdata::get <U> (L, index, true);
+    }
+  };
+
+  /**
+    Pass by value.
+
+    Lifetime is managed by Lua. A C++ function which accesses a pointer or
+    reference to an object outside the activation record in which it was
+    retrieved may result in undefined behavior if Lua garbage collected it.
+  */
+  template <>
+  struct Helper <false>
+  {
+    static inline void push (lua_State* L, T const& t)
+    {
+      Detail::UserdataValue <T>::push (L, t);
+    }
+
+    static inline T const& get (lua_State* L, int index)
+    {
+      return *Detail::Userdata::get <T> (L, index, true);
+    }
+  };
+
+public:
+  static inline void push (lua_State* L, T const& t)
+  {
+    Helper <Detail::TypeTraits::isContainer <T>::value>::push (L, t);
   }
 
-  static inline T const& get (lua_State* L, int index)
+  static inline T get (lua_State* L, int index)
   {
-    return *Userdata::get <T> (L, index, true);
+    return Helper <Detail::TypeTraits::isContainer <T>::value>::get (L, index);
   }
 };
 
 //------------------------------------------------------------------------------
 /**
-  Lua stack objects with pointer semantics.
+  Lua stack conversions for pointers and references to class objects.
 
-  Lifetime is managed by C++. Lua code which remembers a reference to the value
-  may result in undefined behavior if C++ destroys the object.
+  Lifetime is managed by C++. Lua code which remembers a reference to the
+  value may result in undefined behavior if C++ destroys the object. The
+  handling of the const and volatile qualifiers happens in UserdataPtr.
 */
 template <class T>
-struct Stack <T*> : Detail
+struct Stack <T*>
 {
   static inline void push (lua_State* L, T* const p)
   {
-    new (UserdataType <T*>::push (L, false)) UserdataType <T*> (p);
-  }
-
-  template <class U>
-  static inline void push (lua_State* L, U* const p)
-  {
-    new (UserdataType <T*>::push (L, false)) UserdataType <T*> (p);
+    Detail::UserdataPtr::push (L, p);
   }
 
   static inline T* const get (lua_State* L, int index)
   {
-    return Userdata::get <T> (L, index, false);
+    return Detail::Userdata::get <T> (L, index, false);
   }
 };
 
-//------------------------------------------------------------------------------
-/**
-  Lua stack objects with const pointer semantics.
-
-  Lifetime is managed by C++. Lua code which remembers a reference to the value
-  may result in undefined behavior if C++ destroys the object.
-*/
+// Strips the const off the right side of *
 template <class T>
-struct Stack <T const*> : Detail
+struct Stack <T* const>
+{
+  static inline void push (lua_State* L, T* const p)
+  {
+    Detail::UserdataPtr::push (L, p);
+  }
+
+  static inline T* const get (lua_State* L, int index)
+  {
+    return Detail::Userdata::get <T> (L, index, false);
+  }
+};
+
+template <class T>
+struct Stack <T const*>
 {
   static inline void push (lua_State* L, T const* const p)
   {
-    new (UserdataType <T const*>::push (L, true)) UserdataType <T const*> (p);
-  }
-
-  template <class U>
-  static inline void push (lua_State* L, U const* const p)
-  {
-    new (UserdataType <T const*>::push (L, true)) UserdataType <T const*> (p);
+    Detail::UserdataPtr::push (L, p);
   }
 
   static inline T const* const get (lua_State* L, int index)
   {
-    return Userdata::get <T> (L, index, true);
+    return Detail::Userdata::get <T> (L, index, true);
   }
 };
 
-//------------------------------------------------------------------------------
-/**
-  Lua stack objects with reference semantics.
-
-  Lifetime is managed by C++. Lua code which remembers a reference to the value
-  may result in undefined behavior if C++ destroys the object.
-*/
+// Strips the const off the right side of *
 template <class T>
-struct Stack <T&> : Detail
+struct Stack <T const* const>
+{
+  static inline void push (lua_State* L, T const* const p)
+  {
+    Detail::UserdataPtr::push (L, p);
+  }
+
+  static inline T const* const get (lua_State* L, int index)
+  {
+    return Detail::Userdata::get <T> (L, index, true);
+  }
+};
+
+template <class T>
+struct Stack <T&>
 {
   static inline void push (lua_State* L, T& t)
   {
-    new (UserdataType <T*>::push (L, false)) UserdataType <T*> (&t);
-  }
-
-  template <class U>
-  static inline void push (lua_State* L, U& u)
-  {
-    new (UserdataType <T*>::push (L, false)) UserdataType <T*> (&u);
+    Detail::UserdataPtr::push (L, &t);
   }
 
   static T& get (lua_State* L, int index)
   {
-    return *Userdata::get <T> (L, index, false);
+    return *Detail::Userdata::get <T> (L, index, false);
+  }
+};
+
+template <class T>
+struct Stack <T const&>
+{
+  static inline void push (lua_State* L, T const& t)
+  {
+    Detail::UserdataPtr::push (L, &t);
+  }
+
+  static T const& get (lua_State* L, int index)
+  {
+    return *Detail::Userdata::get <T> (L, index, true);
   }
 };
 
 //------------------------------------------------------------------------------
 /**
-  Lua stack objects with const reference semantics.
-
-  Lifetime is managed by C++. Lua code which remembers a reference to the value
-  may result in undefined behavior if C++ destroys the object.
+  Receive the lua_State* as an argument.
 */
-template <class T>
-struct Stack <T const&> : Detail
+template <>
+struct Stack <lua_State*>
 {
-  static inline void push (lua_State* L, T const& t)
+  static lua_State* get (lua_State* L, int)
   {
-    new (UserdataType <T const*>::push (L, true)) UserdataType <T const*> (&t);
-  }
-
-  template <class U>
-  static inline void push (lua_State* L, U const& u)
-  {
-    new (UserdataType <T const*>::push (L, true)) UserdataType <T const*> (&u);
-  }
-
-  static T const& get (lua_State* L, int index)
-  {
-    return *Userdata::get <T> (L, index, true);
+    return L;
   }
 };
 
 //------------------------------------------------------------------------------
+/**
+  Lua stack conversions for basic types.
+*/
 
 // int
 template <> struct Stack <
@@ -1091,1219 +3072,40 @@ struct Stack <std::string const&>
 };
 
 //==============================================================================
-//
-// typelist
-//
-//==============================================================================
-/*
-  Implementation of C++ template type lists and related tools.
-  Type list and definition of nil type list, which is void.
+/**
+  Subclass of a TypeListValues constructable from the Lua stack.
 */
 
-typedef void nil;
-
-template <typename Head, typename Tail = nil>
-struct typelist
-{
-  /*
-  static std::string const tostring ()
-  {
-    std::string s = ", " + typeid (Head).name ();
-    return s;
-  }
-  */
-};
-
-/*
-* Type/value list.
-*/
-
-template <typename Typelist>
-struct typevallist
-{
-  static std::string const tostring (bool)
-  {
-    return "";
-  }
-};
-
-template <typename Head, typename Tail>
-struct typevallist <typelist <Head, Tail> >
-{
-  Head hd;
-  typevallist <Tail> tl;
-
-  typevallist (Head hd_, typevallist <Tail> const& tl_)
-    : hd (hd_), tl (tl_)
-  {
-  }
-
-  static std::string const tostring (bool comma = false)
-  {
-    std::string s;
-
-    if (comma)
-      s = ", ";
-
-    s = s + typeid (Head).name ();
-
-    return s + typevallist <Tail>::tostring (true);
-  }
-};
-
-// Specializations of type/value list for head types that are references and
-// const-references.  We need to handle these specially since we can't count
-// on the referenced object hanging around for the lifetime of the list.
-
-template <typename Head, typename Tail>
-struct typevallist <typelist <Head&, Tail> >
-{
-  Head hd;
-  typevallist <Tail> tl;
-
-  typevallist (Head& hd_, typevallist <Tail> const& tl_)
-    : hd (hd_), tl (tl_)
-  {
-  }
-
-  static std::string const tostring (bool comma = false)
-  {
-    std::string s;
-
-    if (comma)
-      s = ", ";
-
-    s = s + typeid (Head).name () + "&";
-
-    return s + typevallist <Tail>::tostring (true);
-  }
-};
-
-template <typename Head, typename Tail>
-struct typevallist <typelist <Head const&, Tail> >
-{
-  Head hd;
-  typevallist <Tail> tl;
-
-  typevallist (Head const& hd_, const typevallist <Tail>& tl_)
-    : hd (hd_), tl (tl_)
-  {
-  }
-
-  static std::string const tostring (bool comma = false)
-  {
-    std::string s;
-
-    if (comma)
-      s = ", ";
-
-    s = s + typeid (Head).name () + " const&";
-
-    return s + typevallist <Tail>::tostring (true);
-  }
-};
-
-//==============================================================================
-/*
-* Containers for function pointer types.  We have three kinds of containers:
-* one for global functions, one for non-const member functions, and one for
-* const member functions.  These containers allow the function pointer types
-* to be broken down into their components.
-*
-* Of course, because of the limitations of C++ templates, we can only define
-* this for up to a constant number of function parameters.  We give the
-* definitions for up to 8 parameters here, though this can be easily
-* increased if necessary.
-*/
-
-template <typename MemFn>
-struct FunctionPointer {};
-
-/* Ordinary function pointers. */
-
-template <typename Ret>
-struct FunctionPointer <Ret (*) ()>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef nil params;
-  static Ret call (Ret (*fp) (), const typevallist<params> &tvl)
-  {
-    (void)tvl;
-    return fp();
-  }
-};
-
-template <typename Ret, typename P1>
-struct FunctionPointer <Ret (*) (P1)>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1> params;
-  static Ret call (Ret (*fp) (P1), const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2>
-struct FunctionPointer <Ret (*) (P1, P2)>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2> > params;
-  static Ret call (Ret (*fp) (P1, P2), const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3>
-struct FunctionPointer <Ret (*) (P1, P2, P3)>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3> > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3), const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3, typename P4>
-struct FunctionPointer <Ret (*) (P1, P2, P3, P4)>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4> > > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3, P4),
-    const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3, typename P4,
-  typename P5>
-struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5)>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4,
-    typelist<P5> > > > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5),
-    const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6>
-struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5, P6)>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5, 
-    typelist<P6> > > > > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5, P6),
-    const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6, typename P7>
-struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5, P6, P7)>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7> > > > > > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5, P6, P7),
-    const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6, typename P7, typename P8>
-struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5, P6, P7, P8)>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7, typelist<P8> > > > > > > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5, P6, P7, P8),
-    const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-/* Non-const member function pointers. */
-
-template <class T, typename Ret>
-struct FunctionPointer <Ret (T::*) ()>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef nil params;
-  static Ret call (T *obj, Ret (T::*fp) (), const typevallist<params> &tvl)
-  {
-    (void)tvl;
-    return (obj->*fp)();
-  }
-};
-
-template <class T, typename Ret, typename P1>
-struct FunctionPointer <Ret (T::*) (P1)>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1> params;
-  static Ret call (T *obj, Ret (T::*fp) (P1),
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2>
-struct FunctionPointer <Ret (T::*) (P1, P2)>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2> > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2),
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3)>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3> > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3),
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4)>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4> > > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4),
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5)>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4,
-    typelist<P5> > > > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5),
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6)>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6> > > > > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5, P6),
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7)>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7> > > > > > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7),
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7, typename P8>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7, P8)>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7, typelist <P8> > > > > > > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8),
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-/* Const member function pointers. */
-
-template <class T, typename Ret>
-struct FunctionPointer <Ret (T::*) () const>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef nil params;
-  static Ret call (T const* const obj, Ret (T::*fp) () const,
-    const typevallist<params> &tvl)
-  {
-    (void)tvl;
-    return (obj->*fp)();
-  }
-};
-
-template <class T, typename Ret, typename P1>
-struct FunctionPointer <Ret (T::*) (P1) const>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1> params;
-  static Ret call (T const* const obj, Ret (T::*fp) (P1) const,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2>
-struct FunctionPointer <Ret (T::*) (P1, P2) const>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2> > params;
-  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2) const,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3) const>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3> > > params;
-  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2, P3) const,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4) const>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4> > > > params;
-  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2, P3, P4) const,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5) const>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4,
-    typelist<P5> > > > > params;
-  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2, P3, P4, P5) const,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6) const>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6> > > > > > params;
-  static Ret call (T const* const obj,
-    Ret (T::*fp) (P1, P2, P3, P4, P5, P6) const,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7) const>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7> > > > > > > params;
-  static Ret call (T const* const obj,
-    Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7) const,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7, typename P8>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7, typelist<P8> > > > > > > > params;
-  static Ret call (T const* const obj,
-    Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8) const,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-#ifdef THROWSPEC
-
-/* Ordinary function pointers. */
-
-template <typename Ret>
-struct FunctionPointer <Ret (*) () THROWSPEC>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef nil params;
-  static Ret call (Ret (*fp) () THROWSPEC, const typevallist<params> &tvl)
-  {
-    (void)tvl;
-    return fp();
-  }
-};
-
-template <typename Ret, typename P1>
-struct FunctionPointer <Ret (*) (P1) THROWSPEC>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1> params;
-  static Ret call (Ret (*fp) (P1) THROWSPEC, const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2>
-struct FunctionPointer <Ret (*) (P1, P2) THROWSPEC>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2> > params;
-  static Ret call (Ret (*fp) (P1, P2) THROWSPEC, const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3>
-struct FunctionPointer <Ret (*) (P1, P2, P3) THROWSPEC>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3> > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3) THROWSPEC, const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3, typename P4>
-struct FunctionPointer <Ret (*) (P1, P2, P3, P4) THROWSPEC>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4> > > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3, P4) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3, typename P4,
-  typename P5>
-struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5) THROWSPEC>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4,
-    typelist<P5> > > > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6>
-struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5, P6) THROWSPEC>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5, 
-    typelist<P6> > > > > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5, P6) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6, typename P7>
-struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7> > > > > > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <typename Ret, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6, typename P7, typename P8>
-struct FunctionPointer <Ret (*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC>
-{
-  static const bool mfp = false;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7, typelist<P8> > > > > > > > params;
-  static Ret call (Ret (*fp) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return fp(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-/* Non-const member function pointers. */
-
-template <class T, typename Ret>
-struct FunctionPointer <Ret (T::*) () THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef nil params;
-  static Ret call (T *obj, Ret (T::*fp) () THROWSPEC, const typevallist<params> &tvl)
-  {
-    (void)tvl;
-    return (obj->*fp)();
-  }
-};
-
-template <class T, typename Ret, typename P1>
-struct FunctionPointer <Ret (T::*) (P1) THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1> params;
-  static Ret call (T *obj, Ret (T::*fp) (P1) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2>
-struct FunctionPointer <Ret (T::*) (P1, P2) THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2> > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3) THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3> > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4) THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4> > > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5) THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4,
-    typelist<P5> > > > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6) THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6> > > > > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5, P6) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7> > > > > > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7, typename P8>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = false;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7, typelist <P8> > > > > > > > params;
-  static Ret call (T *obj, Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-/* Const member function pointers. */
-
-template <class T, typename Ret>
-struct FunctionPointer <Ret (T::*) () const THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef nil params;
-  static Ret call (T const* const obj, Ret (T::*fp) () const THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    (void)tvl;
-    return (obj->*fp)();
-  }
-};
-
-template <class T, typename Ret, typename P1>
-struct FunctionPointer <Ret (T::*) (P1) const THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1> params;
-  static Ret call (T const* const obj, Ret (T::*fp) (P1) const THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2>
-struct FunctionPointer <Ret (T::*) (P1, P2) const THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2> > params;
-  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2) const THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3) const THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3> > > params;
-  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2, P3) const THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4) const THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4> > > > params;
-  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2, P3, P4) const THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5) const THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4,
-    typelist<P5> > > > > params;
-  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2, P3, P4, P5) const THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6) const THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6> > > > > > params;
-  static Ret call (T const* const obj, Ret (T::*fp) (P1, P2, P3, P4, P5, P6) const THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7) const THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7> > > > > > > params;
-  static Ret call (T const* const obj,
-    Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7) const THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, typename Ret, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7, typename P8>
-struct FunctionPointer <Ret (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const THROWSPEC>
-{
-  static const bool mfp = true;
-  static const bool const_mfp = true;
-  typedef T classtype;
-  typedef Ret resulttype;
-  typedef typelist<P1, typelist<P2, typelist<P3, typelist<P4, typelist<P5,
-    typelist<P6, typelist<P7, typelist<P8> > > > > > > > params;
-  static Ret call (T const* const obj,
-    Ret (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8) const THROWSPEC,
-    const typevallist<params> &tvl)
-  {
-    return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-#endif
-
-/*
-* Constructor generators.  These templates allow you to call operator new and
-* pass the contents of a type/value list to the Constructor.  Like the
-* function pointer containers, these are only defined up to 8 parameters.
-*/
-
-/** Constructor generators.
-
-    These templates call operator new with the contents of a type/value
-    list passed to the Constructor with up to 8 parameters. Two versions
-    of call() are provided. One performs a regular new, the other performs
-    a placement new.
-*/
-template <class T, typename Typelist>
-struct Constructor {};
-
-template <class T>
-struct Constructor <T, nil>
-{
-  static T* call (typevallist <nil> const&)
-  {
-    return new T;
-  }
-  static T* call (void* mem, typevallist <nil> const&)
-  {
-    return new (mem) T;
-  }
-};
-
-template <class T, class P1>
-struct Constructor <T, typelist<P1> >
-{
-  static T* call (const typevallist<typelist<P1> > &tvl)
-  {
-    return new T(tvl.hd);
-  }
-  static T* call (void* mem, const typevallist<typelist<P1> > &tvl)
-  {
-    return new (mem) T(tvl.hd);
-  }
-};
-
-template <class T, class P1, class P2>
-struct Constructor <T, typelist<P1, typelist<P2> > >
+template <typename List, int Start = 1>
+struct ArgList
 {
-  static T* call (const typevallist<typelist<P1, typelist<P2> > > &tvl)
-  {
-    return new T(tvl.hd, tvl.tl.hd);
-  }
-  static T* call (void* mem, const typevallist<typelist<P1, typelist<P2> > > &tvl)
-  {
-    return new (mem) T(tvl.hd, tvl.tl.hd);
-  }
-};
-
-template <class T, class P1, class P2, class P3>
-struct Constructor <T, typelist<P1, typelist<P2, typelist<P3> > > >
-{
-  static T* call (const typevallist<typelist<P1, typelist<P2,
-    typelist<P3> > > > &tvl)
-  {
-    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
-  }
-  static T* call (void* mem, const typevallist<typelist<P1, typelist<P2,
-    typelist<P3> > > > &tvl)
-  {
-    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
-  }
-};
-
-template <class T, class P1, class P2, class P3, class P4>
-struct Constructor <T, typelist<P1, typelist<P2, typelist<P3,
-  typelist<P4> > > > >
-{
-  static T* call (const typevallist<typelist<P1, typelist<P2,
-    typelist<P3, typelist<P4> > > > > &tvl)
-  {
-    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
-  }
-  static T* call (void* mem, const typevallist<typelist<P1, typelist<P2,
-    typelist<P3, typelist<P4> > > > > &tvl)
-  {
-    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, class P1, class P2, class P3, class P4,
-  class P5>
-struct Constructor <T, typelist<P1, typelist<P2, typelist<P3,
-  typelist<P4, typelist<P5> > > > > >
-{
-  static T* call (const typevallist<typelist<P1, typelist<P2,
-    typelist<P3, typelist<P4, typelist<P5> > > > > > &tvl)
-  {
-    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd);
-  }
-  static T* call (void* mem, const typevallist<typelist<P1, typelist<P2,
-    typelist<P3, typelist<P4, typelist<P5> > > > > > &tvl)
-  {
-    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd);
-  }
 };
 
-template <class T, class P1, class P2, class P3, class P4,
-  class P5, class P6>
-struct Constructor <T, typelist<P1, typelist<P2, typelist<P3,
-  typelist<P4, typelist<P5, typelist<P6> > > > > > >
+template <int Start>
+struct ArgList <nil, Start> : public TypeListValues <nil>
 {
-  static T* call (const typevallist<typelist<P1, typelist<P2,
-    typelist<P3, typelist<P4, typelist<P5, typelist<P6> > > > > > > &tvl)
+  ArgList (lua_State*)
   {
-    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
   }
-  static T* call (void* mem, const typevallist<typelist<P1, typelist<P2,
-    typelist<P3, typelist<P4, typelist<P5, typelist<P6> > > > > > > &tvl)
-  {
-    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, class P1, class P2, class P3, class P4,
-  class P5, class P6, class P7>
-struct Constructor <T, typelist<P1, typelist<P2, typelist<P3,
-  typelist<P4, typelist<P5, typelist<P6, typelist<P7> > > > > > > >
-{
-  static T* call (const typevallist<typelist<P1, typelist<P2,
-    typelist<P3, typelist<P4, typelist<P5, typelist<P6,
-    typelist<P7> > > > > > > > &tvl)
-  {
-    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd);
-  }
-  static T* call (void* mem, const typevallist<typelist<P1, typelist<P2,
-    typelist<P3, typelist<P4, typelist<P5, typelist<P6,
-    typelist<P7> > > > > > > > &tvl)
-  {
-    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-template <class T, class P1, class P2, class P3, class P4,
-  class P5, class P6, class P7, class P8>
-struct Constructor <T, typelist<P1, typelist<P2, typelist<P3,
-  typelist<P4, typelist<P5, typelist<P6, typelist<P7, 
-  typelist<P8> > > > > > > > >
-{
-  static T* call (const typevallist<typelist<P1, typelist<P2,
-    typelist<P3, typelist<P4, typelist<P5, typelist<P6,
-    typelist<P7, typelist<P8> > > > > > > > > &tvl)
-  {
-    return new T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
-  }
-  static T* call (void* mem, const typevallist<typelist<P1, typelist<P2,
-    typelist<P3, typelist<P4, typelist<P5, typelist<P6,
-    typelist<P7, typelist<P8> > > > > > > > > &tvl)
-  {
-    return new (mem) T(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
-      tvl.tl.tl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.tl.tl.hd);
-  }
-};
-
-//==============================================================================
-
-/*
-* Subclass of a type/value list, constructable from the Lua stack.
-*/
-
-template <typename Typelist, int start = 1>
-struct arglist
-{
 };
 
-template <int start>
-struct arglist <nil, start> : public typevallist <nil>
+template <typename Head, typename Tail, int Start>
+struct ArgList <TypeList <Head, Tail>, Start>
+  : public TypeListValues <TypeList <Head, Tail> >
 {
-  arglist (lua_State*)
+  ArgList (lua_State* L)
+    : TypeListValues <TypeList <Head, Tail> > (Stack <Head>::get (L, Start),
+                                            ArgList <Tail, Start + 1> (L))
   {
   }
 };
 
-template <typename Head, typename Tail, int start>
-struct arglist <typelist <Head, Tail>, start>
-  : public typevallist <typelist <Head, Tail> >
-{
-  arglist (lua_State* L)
-    : typevallist <typelist <Head, Tail> > (Stack <Head>::get (L, start),
-                                            arglist <Tail, start + 1> (L))
-  {
-  }
-};
+//=============================================================================
 
-//==============================================================================
 /**
   Provides a namespace registration in a lua_State.
 */
-class Namespace : private Detail
+class Namespace : protected Detail
 {
 private:
   Namespace& operator= (Namespace const& other);
@@ -2471,7 +3273,7 @@ private:
   static int vargetProxy (lua_State* L)
   {
     assert (lua_islightuserdata (L, lua_upvalueindex (1)));
-    T* const data = static_cast <T*> (lua_touserdata (L, lua_upvalueindex (1)));
+    T const* const data = static_cast <T const*> (lua_touserdata (L, lua_upvalueindex (1)));
     assert (data != 0);
     Stack <T>::push (L, *data);
     return 1;
@@ -2483,7 +3285,6 @@ private:
 
     This is used for global variables or class static data members.
   */
-
   template <class T>
   static int varsetProxy (lua_State* L)
   {
@@ -2501,18 +3302,18 @@ private:
     This is used for global functions, global properties, class static methods,
     and class static properties.
   */
-  template <class Function,
-            class ReturnType = typename FunctionPointer <Function>::resulttype>
+  template <class Func,
+            class ReturnType = typename FuncTraits <Func>::ReturnType>
   struct functionProxy
   {
-    typedef typename FunctionPointer <Function>::params params;
+    typedef typename FuncTraits <Func>::Params Params;
     static int f (lua_State* L)
     {
-      assert (lua_islightuserdata (L, lua_upvalueindex (1)));
-      Function fp = reinterpret_cast <Function> (lua_touserdata (L, lua_upvalueindex (1)));
+      assert (lua_isuserdata (L, lua_upvalueindex (1)));
+      Func const& fp = *static_cast <Func const*> (lua_touserdata (L, lua_upvalueindex (1)));
       assert (fp != 0);
-      arglist <params> args (L);
-      Stack <ReturnType>::push (L, FunctionPointer <Function>::call (fp, args));
+      ArgList <Params> args (L);
+      push (L, FuncTraits <Func>::call (fp, args));
       return 1;
     }
   };
@@ -2524,17 +3325,17 @@ private:
     This is used for global functions, global properties, class static methods,
     and class static properties.
   */
-  template <class Function>
-  struct functionProxy <Function, void>
+  template <class Func>
+  struct functionProxy <Func, void>
   {
-    typedef typename FunctionPointer <Function>::params params;
+    typedef typename FuncTraits <Func>::Params Params;
     static int f (lua_State* L)
     {
-      assert (lua_islightuserdata (L, lua_upvalueindex (1)));
-      Function fp = reinterpret_cast <Function> (lua_touserdata (L, lua_upvalueindex (1)));
+      assert (lua_isuserdata (L, lua_upvalueindex (1)));
+      Func const& fp = *static_cast <Func const*> (lua_touserdata (L, lua_upvalueindex (1)));
       assert (fp != 0);
-      arglist <params> args (L);
-      FunctionPointer <Function>::call (fp, args);
+      ArgList <Params> args (L);
+      FuncTraits <Func>::call (fp, args);
       return 0;
     }
   };
@@ -2550,27 +3351,30 @@ private:
           pointer is in upvalue 2.
   */
   template <class MemFn,
-            class ReturnType = typename FunctionPointer <MemFn>::resulttype>
+            class ReturnType = typename FuncTraits <MemFn>::ReturnType>
   struct methodProxy
   {
-    typedef typename ContainerInfo <typename FunctionPointer <MemFn>::classtype>::Type T;
-    typedef typename FunctionPointer <MemFn>::params params;
+    //typedef typename Container <typename FuncTraits <MemFn>::ClassType>::Type T;
+    typedef typename FuncTraits <MemFn>::ClassType T;
+    typedef typename FuncTraits <MemFn>::Params Params;
 
     static int callMethod (lua_State* L)
     {
+      assert (lua_isuserdata (L, lua_upvalueindex (1)));
       T* const t = Userdata::get <T> (L, 1, false);
       MemFn fp = *static_cast <MemFn*> (lua_touserdata (L, lua_upvalueindex (1)));
-      arglist <params, 2> args (L);
-      Stack <ReturnType>::push (L, FunctionPointer <MemFn>::call (t, fp, args));
+      ArgList <Params, 2> args (L);
+      Stack <ReturnType>::push (L, FuncTraits <MemFn>::call (t, fp, args));
       return 1;
     }
 
     static int callConstMethod (lua_State* L)
     {
+      assert (lua_isuserdata (L, lua_upvalueindex (1)));
       T const* const t = Userdata::get <T> (L, 1, true);
       MemFn fp = *static_cast <MemFn*> (lua_touserdata (L, lua_upvalueindex (1)));
-      arglist <params, 2> args(L);
-      Stack <ReturnType>::push (L, FunctionPointer <MemFn>::call (t, fp, args));
+      ArgList <Params, 2> args(L);
+      Stack <ReturnType>::push (L, FuncTraits <MemFn>::call (t, fp, args));
       return 1;
     }
   };
@@ -2588,24 +3392,25 @@ private:
   template <class MemFn>
   struct methodProxy <MemFn, void>
   {
-    typedef typename ContainerInfo <typename FunctionPointer <MemFn>::classtype>::Type T;
-    typedef typename FunctionPointer <MemFn>::params params;
+    //typedef typename Container <typename FuncTraits <MemFn>::ClassType>::Type T;
+    typedef typename FuncTraits <MemFn>::ClassType T;
+    typedef typename FuncTraits <MemFn>::Params Params;
 
     static int callMethod (lua_State* L)
     {
       T* const t = Userdata::get <T> (L, 1, false);
-      MemFn fp = *static_cast <MemFn*> (lua_touserdata (L, lua_upvalueindex (1)));
-      arglist <params, 2> args (L);
-      FunctionPointer <MemFn>::call (t, fp, args);
+      MemFn const fp = *static_cast <MemFn*> (lua_touserdata (L, lua_upvalueindex (1)));
+      ArgList <Params, 2> args (L);
+      FuncTraits <MemFn>::call (t, fp, args);
       return 0;
     }
 
     static int callConstMethod (lua_State* L)
     {
       T const* const t = Userdata::get <T> (L, 1, true);
-      MemFn fp = *static_cast <MemFn*> (lua_touserdata (L, lua_upvalueindex (1)));
-      arglist <params, 2> args (L);
-      FunctionPointer <MemFn>::call (t, fp, args);
+      MemFn const fp = *static_cast <MemFn*> (lua_touserdata (L, lua_upvalueindex (1)));
+      ArgList <Params, 2> args (L);
+      FuncTraits <MemFn>::call (t, fp, args);
       return 0;
     }
   };
@@ -2917,6 +3722,32 @@ private:
       rawsetfield (L, -2, "__class"); // point to class table
     }
 
+    //==========================================================================
+    /**
+      lua_CFunction to construct a class object wrapped in a container.
+    */
+    template <class Params, class C>
+    static int ctorContainerProxy (lua_State* L)
+    {
+      typedef typename ContainerTraits <C>::Type T;
+      ArgList <Params, 2> args (L);
+      T* const p = Constructor <T, Params>::call (args);
+      UserdataShared <C>::push (L, p);
+      return 1;
+    }
+
+    //--------------------------------------------------------------------------
+    /**
+      lua_CFunction to construct a class object in-place in the userdata.
+    */
+    template <class Params, class T>
+    static int ctorPlacementProxy (lua_State* L)
+    {
+      ArgList <Params, 2> args (L);
+      Constructor <T, Params>::call (UserdataValue <T>::place (L), args);
+      return 1;
+    }
+
     //--------------------------------------------------------------------------
     /**
       Pop the Lua stack.
@@ -3004,25 +3835,10 @@ private:
       return 0;
     }
 
-    //==========================================================================
-    /**
-      lua_CFunction to construct a class object.
-    */
-    template <class Params, class C>
-    static int ctorProxy (lua_State* L)
-    {
-      typedef typename ContainerInfo <C>::Type T;
-      arglist <Params, 2> args (L);
-      T* const p = Constructor <T, Params>::call (args);
-      new (UserdataType <C>::push (L, false)) UserdataType <C> (p);
-      return 1;
-    }
-
     //--------------------------------------------------------------------------
     /**
       __gc metamethod for a class.
     */
-    template <class T>
     static int gcMetaMethod (lua_State* L)
     {
       Userdata::getExact <T> (L, 1)->~Userdata ();
@@ -3047,11 +3863,11 @@ private:
         lua_pop (L, 1);
 
         createConstTable (name);
-        lua_pushcfunction (L, &gcMetaMethod <T>);
+        lua_pushcfunction (L, &gcMetaMethod);
         rawsetfield (L, -2, "__gc");
 
         createClassTable (name);
-        lua_pushcfunction (L, &gcMetaMethod <T>);
+        lua_pushcfunction (L, &gcMetaMethod);
         rawsetfield (L, -2, "__gc");
 
         createStaticTable (name);
@@ -3079,7 +3895,7 @@ private:
     /**
       Derive a new class.
     */
-    Class (char const* name, Namespace const* parent, void* staticKey)
+    Class (char const* name, Namespace const* parent, void const* const staticKey)
       : ClassBase (parent->L)
     {
       m_stackSize = parent->m_stackSize + 3;
@@ -3088,11 +3904,11 @@ private:
       assert (lua_istable (L, -1));
 
       createConstTable (name);
-      lua_pushcfunction (L, &gcMetaMethod <T>);
+      lua_pushcfunction (L, &gcMetaMethod);
       rawsetfield (L, -2, "__gc");
 
       createClassTable (name);
-      lua_pushcfunction (L, &gcMetaMethod <T>);
+      lua_pushcfunction (L, &gcMetaMethod);
       rawsetfield (L, -2, "__gc");
 
       createStaticTable (name);
@@ -3168,11 +3984,14 @@ private:
     template <class U>
     Class <T>& addStaticProperty (char const* name, U (*get)(), void (*set)(U) = 0)
     {
+      typedef U (*get_t)();
+      typedef void (*set_t)(U);
+      
       assert (lua_istable (L, -1));
 
       rawgetfield (L, -1, "__propget");
       assert (lua_istable (L, -1));
-      lua_pushlightuserdata (L, get);
+      new (lua_newuserdata (L, sizeof (get))) get_t (get);
       lua_pushcclosure (L, &functionProxy <U (*) (void)>::f, 1);
       rawsetfield (L, -2, name);
       lua_pop (L, 1);
@@ -3181,7 +4000,7 @@ private:
       assert (lua_istable (L, -1));
       if (set != 0)
       {
-        lua_pushlightuserdata (L, set);
+        new (lua_newuserdata (L, sizeof (set))) set_t (set);
         lua_pushcclosure (L, &functionProxy <void (*) (U)>::f, 1);
       }
       else
@@ -3202,7 +4021,7 @@ private:
     template <class FP>
     Class <T>& addStaticMethod (char const* name, FP const fp)
     {
-      lua_pushlightuserdata (L, fp);
+      new (lua_newuserdata (L, sizeof (fp))) FP (fp);
       lua_pushcclosure (L, &functionProxy <FP>::f, 1);
       rawsetfield (L, -2, name);
 
@@ -3245,36 +4064,111 @@ private:
     //--------------------------------------------------------------------------
     /**
       Add or replace a property member.
-
-      If the set function is null, the property is read-only.
     */
-    template <class U>
-    Class <T>& addProperty (char const* name, U (T::* get) () const, void (T::* set) (U) = 0)
+    template <class GT, class ST>
+    Class <T>& addProperty (char const* name, GT (T::* get) () const, void (T::* set) (ST))
+    {
+      // Add to __propget in class and const tables.
+      {
+        rawgetfield (L, -2, "__propget");
+        rawgetfield (L, -4, "__propget");
+        typedef GT (T::*get_t) () const;
+        new (lua_newuserdata (L, sizeof (get_t))) get_t (get);
+        lua_pushcclosure (L, &methodProxy <get_t>::callConstMethod, 1);
+        lua_pushvalue (L, -1);
+        rawsetfield (L, -4, name);
+        rawsetfield (L, -2, name);
+        lua_pop (L, 2);
+      }
+
+      {
+        // Add to __propset in class table.
+        rawgetfield (L, -2, "__propset");
+        assert (lua_istable (L, -1));
+        typedef void (T::* set_t) (ST);
+        new (lua_newuserdata (L, sizeof (set_t))) set_t (set);
+        lua_pushcclosure (L, &methodProxy <set_t>::callMethod, 1);
+        rawsetfield (L, -2, name);
+        lua_pop (L, 1);
+      }
+
+      return *this;
+    }
+
+    // read-only
+    template <class GT>
+    Class <T>& addProperty (char const* name, GT (T::* get) () const)
     {
       // Add to __propget in class and const tables.
       rawgetfield (L, -2, "__propget");
       rawgetfield (L, -4, "__propget");
-      typedef U (T::*MemFn) () const;
-      void* const v = lua_newuserdata (L, sizeof (MemFn));
-      memcpy (v, &get, sizeof (MemFn));
-      lua_pushcclosure (L, &methodProxy <MemFn>::callConstMethod, 1);
+      typedef GT (T::*get_t) () const;
+      new (lua_newuserdata (L, sizeof (get_t))) get_t (get);
+      lua_pushcclosure (L, &methodProxy <get_t>::callConstMethod, 1);
       lua_pushvalue (L, -1);
       rawsetfield (L, -4, name);
       rawsetfield (L, -2, name);
       lua_pop (L, 2);
+
+      return *this;
+    }
+
+    //--------------------------------------------------------------------------
+    /**
+      Add or replace a property member, by proxy.
+
+      When a class is closed for modification and does not provide (or cannot
+      provide) the function signatures necessary to implement get or set for
+      a property, this will allow non-member functions act as proxies.
+
+      Both the get and the set functions require a T const* and T* in the first
+      argument respectively.
+    */
+    template <class GT, class ST>
+    Class <T>& addProperty (char const* name, GT (*get) (T const*), void (*set) (T*, ST))
+    {
+      // Add to __propget in class and const tables.
+      {
+        rawgetfield (L, -2, "__propget");
+        rawgetfield (L, -4, "__propget");
+        typedef GT (*get_t) (T const*);
+        new (lua_newuserdata (L, sizeof (get_t))) get_t (get);
+        lua_pushcclosure (L, &functionProxy <get_t>::f, 1);
+        lua_pushvalue (L, -1);
+        rawsetfield (L, -4, name);
+        rawsetfield (L, -2, name);
+        lua_pop (L, 2);
+      }
 
       if (set != 0)
       {
         // Add to __propset in class table.
         rawgetfield (L, -2, "__propset");
         assert (lua_istable (L, -1));
-        typedef void (T::* MemFn) (U);
-        void* const v = lua_newuserdata (L, sizeof (MemFn));
-        memcpy (v, &set, sizeof (MemFn));
-        lua_pushcclosure (L, &methodProxy <MemFn>::callMethod, 1);
+        typedef void (*set_t) (T*, ST);
+        new (lua_newuserdata (L, sizeof (set_t))) set_t (set);
+        lua_pushcclosure (L, &functionProxy <set_t>::f, 1);
         rawsetfield (L, -2, name);
         lua_pop (L, 1);
       }
+
+      return *this;
+    }
+
+    // read-only
+    template <class GT, class ST>
+    Class <T>& addProperty (char const* name, GT (*get) (T const*))
+    {
+      // Add to __propget in class and const tables.
+      rawgetfield (L, -2, "__propget");
+      rawgetfield (L, -4, "__propget");
+      typedef GT (*get_t) (T const*);
+      new (lua_newuserdata (L, sizeof (get_t))) get_t (get);
+      lua_pushcclosure (L, &functionProxy <get_t>::f, 1);
+      lua_pushvalue (L, -1);
+      rawsetfield (L, -4, name);
+      rawsetfield (L, -2, name);
+      lua_pop (L, 2);
 
       return *this;
     }
@@ -3286,7 +4180,7 @@ private:
     template <class MemFn>
     Class <T>& addMethod (char const* name, MemFn mf)
     {
-      methodHelper <MemFn, FunctionPointer <MemFn>::const_mfp>::add (L, name, mf);
+      methodHelper <MemFn, FuncTraits <MemFn>::isConstMemberFunction>::add (L, name, mf);
       return *this;
     }
 
@@ -3304,83 +4198,21 @@ private:
     template <class MemFn, class C>
     Class <T>& addConstructor ()
     {
-      lua_pushcclosure (L, &ctorProxy <typename FunctionPointer <MemFn>::params, C>, 0);
+      lua_pushcclosure (L,
+        &ctorContainerProxy <typename FuncTraits <MemFn>::Params, C>, 0);
       rawsetfield(L, -2, "__call");
 
       return *this;
-    }
-
-    //--------------------------------------------------------------------------
-    /**
-      Backward compatibility.
-    */
-    template <typename U>
-    inline Class <T>& static_property_rw (char const *name, U *data)
-    {
-      return addStaticData (name, data, true);
-    }
-
-    template <typename U>
-    inline Class <T>& static_property_rw (char const *name, U (*get) (), void (*set) (U))
-    {
-      return addStaticProperty (name, get, set);
-    }
-
-    template <typename U>
-    inline Class <T>& static_property_ro (char const *name, U const* data)
-    {
-      return addStaticData (name, data, false);
-    }
-
-    template <typename U>
-    inline Class <T>& static_property_ro (char const *name, U (*get) ())
-    {
-      return addStaticProperty (name, get, 0);
-    }
-
-    template <typename MemFn>
-    inline Class <T>& static_method (char const *name, MemFn fp)
-    {
-      return addStaticMethod (name, fp);
-    }
- 
-    template <class MemFn, class C>
-    inline Class <T>& constructor ()
-    {
-      lua_pushcclosure (L, &ctorProxy <typename FunctionPointer <MemFn>::params, C>, 0);
-      rawsetfield(L, -2, "__call");
-
-      return *this;
-    }
-
-    template <class U>
-    inline Class <T>& property_rw (char const *name, U T::* mp)
-    {
-      return addData (name, mp, true);
-    }
-
-    template <class U>
-    inline Class <T>& property_rw (char const* name, U (T::* get) () const, void (T::* set) (U))
-    {
-      return addProperty (name, get, set);
-    }
-
-    template <class U>
-    inline Class <T>& property_ro (char const *name, U const T::* mp)
-    {
-      return addData (name, mp, false);
-    }
-
-    template <class U>
-    inline Class <T>& property_ro (char const* name, U (T::* get) () const)
-    {
-      return addProperty (name, get);
     }
 
     template <class MemFn>
-    inline Class <T>& method (char const* name, MemFn mf)
+    Class <T>& addConstructor ()
     {
-      return addMethod (name, mf);
+      lua_pushcclosure (L,
+        &ctorPlacementProxy <typename FuncTraits <MemFn>::Params, T>, 0);
+      rawsetfield(L, -2, "__call");
+
+      return *this;
     }
   };
 
@@ -3408,6 +4240,11 @@ protected:
     m_stackSize = child->m_stackSize - 1;
     child->m_stackSize = 1;
     child->pop (1);
+
+    // It is not necessary or valid to call
+    // endNamespace() for the global namespace!
+    //
+    assert (m_stackSize != 0);
   }
 
   //----------------------------------------------------------------------------
@@ -3563,15 +4400,15 @@ public:
 
     If the set function is omitted or null, the property is read-only.
   */
-  template <class T>
-  Namespace& addProperty (char const* name, T (*get) (), void (*set)(T) = 0)
+  template <class GT, class ST>
+  Namespace& addProperty (char const* name, GT (*get) (), void (*set)(ST) = 0)
   {
     assert (lua_istable (L, -1));
 
     rawgetfield (L, -1, "__propget");
     assert (lua_istable (L, -1));
     lua_pushlightuserdata (L, get);
-    lua_pushcclosure (L, &functionProxy <T (*) (void)>::f, 1);
+    lua_pushcclosure (L, &functionProxy <GT (*) (void)>::f, 1);
     rawsetfield (L, -2, name);
     lua_pop (L, 1);
 
@@ -3580,7 +4417,7 @@ public:
     if (set != 0)
     {
       lua_pushlightuserdata (L, set);
-      lua_pushcclosure (L, &functionProxy <void (*) (T)>::f, 1);
+      lua_pushcclosure (L, &functionProxy <void (*) (ST)>::f, 1);
     }
     else
     {
@@ -3601,7 +4438,7 @@ public:
   Namespace& addFunction (char const* name, FP const fp)
   {
     assert (lua_istable (L, -1));
-    lua_pushlightuserdata (L, fp);
+    new (lua_newuserdata (L, sizeof (fp))) FP (fp);
     lua_pushcclosure (L, &functionProxy <FP>::f, 1);
     rawsetfield (L, -2, name);
 
@@ -3630,65 +4467,27 @@ public:
   {
     return Class <T> (name, this, ClassInfo <U>::getStaticKey ());
   }
-
-  //============================================================================
-  /**
-    Backward compatibility.
-
-    These are here for backward compatibility with the original names.
-  */
-  template <class FP>
-  inline Namespace& function (char const* name, FP const fp)
-  {
-    return addFunction (name, fp);
-  }
-
-  template <class T>
-  inline Namespace& variable_rw (char const* const name, T* const pt)
-  {
-    return addVariable (name, pt, true);
-  }
-
-  template <class T>
-  inline Namespace& variable_rw (char const* name, T (*get) (), void (*set)(T))
-  {
-    return addProperty (name, get, set);
-  }
-
-  template <class T>
-  inline Namespace& variable_ro (char const* const name, T const* const pt)
-  {
-    return addVariable (name, pt, false);
-  }
-
-  template <class T>
-  inline Namespace& variable_ro (char const* name, T (*get) ())
-  {
-    return addProperty (name, get, 0);
-  }
-
-  template <class T>
-  inline Class <T> class_ (char const* name)
-  {
-    return Class <T> (name, this);
-  }
-
-  template <class T, class U>
-  Class <T> subclass (char const* name)
-  {
-    return deriveClass <T, U> (name);
-  }
 };
 
-/** Backward compatibility */
-class scope : public Namespace
+//==============================================================================
+/**
+  Push objects onto the Lua stack.
+*/
+template <class T>
+inline void push (lua_State* L, T t)
 {
-public:
-  explicit scope (lua_State* L) : Namespace (L)
-  {
-  }
-};
+  Stack <T>::push (L, t);
+}
 
+/**
+  Set a global value in the lua_State.
+*/
+template <class T>
+inline void setglobal (lua_State* L, T t, char const* name)
+{
+  push (L, t);
+  lua_setglobal (L, name);
+}
 
 //==============================================================================
 /**
