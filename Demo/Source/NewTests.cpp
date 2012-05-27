@@ -58,16 +58,16 @@ typedef float Vec [3];
 
 #endif
 
-struct VecHelper : public Vec
+struct VecHelper
 {
   template <unsigned index>
-  static float get (Vec* vec)
+  static float get (Vec const* vec)
   {
     return vec->coord [index];
   }
 
   template <unsigned index>
-  static void set (Vec const* vec, float value)
+  static void set (Vec* vec, float value)
   {
     vec->coord [index] = value;
   }
@@ -87,6 +87,8 @@ struct C
 };
 
 void addToState (lua_State* L) {
+  getGlobalNamespace (L).endNamespace ();
+
   getGlobalNamespace (L)
     .beginNamespace ("test")
       .beginClass <A> ("A")
