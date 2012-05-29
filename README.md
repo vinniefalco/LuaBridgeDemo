@@ -2,7 +2,7 @@
 <img src="http://vinniefalco.github.com/LuaBridgeDemo/powered-by-lua.png">
 </a><br>
 
-# LuaBridge
+# LuaBridge 1.0
 
 [LuaBridge][3] is a lightweight, dependency-free library for making C++ data,
 functions, and classes available to Lua. It works with Lua revisions starting
@@ -37,6 +37,16 @@ structure is not rigid. The API is based on C++ template metaprogramming.
 It contains template code to automatically generate at compile-time the
 various Lua C API calls necessary to export your program's classes and
 functions to the Lua environment.
+
+### Version
+
+LuaBridge repository branches are as follows:
+
+- **[master][7]**: Tagged, stable release versions.
+
+- **[release][8]**: Tagged candidates for imminent release.
+
+- **[develop][9]**: Work in progress.
 
 ## LuaBridge Demo and Tests
 
@@ -179,9 +189,8 @@ These are registered with:
 
 Variables can be marked _read-only_ by passing `false` in the second optional
 parameter. If the parameter is omitted, `true` is used making the variable
-read/write. Properties are marked read-only by omitting the set function or
-passing it as 0 (or `nullptr`). After the registrations above, the following
-Lua identifiers are valid:
+read/write. Properties are marked read-only by omitting the set function.
+After the registrations above, the following Lua identifiers are valid:
 
     test        -- a namespace
     test.var1   -- a lua_Number variable
@@ -338,19 +347,17 @@ our class like this:
 A single constructor may be added for a class using `addConstructor`.
 LuaBridge cannot automatically determine the number and types of constructor
 parameters like it can for functions and methods, so you must provide them.
-This is done by providing the signature of the desired constructor function
+This is done by specifying the signature of the desired constructor function
 as the first template parameter to `addConstructor`. The parameter types will
 be extracted from this (the return type is ignored).  For example, these
 statements register constructors for the given classes:
 
-    struct A
-    {
-      A () { }
+    struct A {
+      A ();
     };
 
-    struct B
-    {
-      explicit B (char const* s, int nChars) { }
+    struct B {
+      explicit B (char const* s, int nChars);
     };
 
     getGlobalNamespace (L)
@@ -367,9 +374,9 @@ Constructors added in this fashion are called from Lua using the fully
 qualified name of the class. This Lua code will create instances of `A` and
 `B`
 
-  a = test.A ()           -- Create a new A.
-  b = test.B ("hello", 5) -- Create a new B.
-  b = test.B ()           -- Error: expected string in argument 1
+    a = test.A ()           -- Create a new A.
+    b = test.B ("hello", 5) -- Create a new B.
+    b = test.B ()           -- Error: expected string in argument 1
 
 ## The Lua Stack
 
@@ -412,10 +419,10 @@ For example, here is a specialization for a [juce::String][6]:
       }
     };
 
-### The `lua_State`
+### The `lua_State*`
 
 Sometimes it is convenient from within a bound function or member function
-to gain access to the `lua_State` normally available to a `lua_CFunction`.
+to gain access to the `lua_State*` normally available to a `lua_CFunction`.
 With LuaBridge, all you need to do is add a `lua_State*` parameter at any
 position in your bound function:
 
@@ -429,8 +436,8 @@ You can still include regular arguments while receiving the state:
 
     getGlobalNamespace (L).addFunction ("useStateAndArgs", &useStateAndArgs);
 
-When a script calls `useStateandArgs`, it passes only the integer and string
-parameters. LuaBridge takes care of inserting the `lua_State` into the
+When a script calls `useStateAndArgs`, it passes only the integer and string
+parameters. LuaBridge takes care of inserting the `lua_State*` into the
 argument list for the corresponding C++ function. This will work correctly
 even for the state created by coroutines.
 
@@ -442,13 +449,16 @@ An object of a registered class `T` may be passed to Lua as:
 - `T const*` or `T const&`: Passed by const reference, with _C++ lifetime_.
 - `T` or `T const`: Passed by value (a copy), with _Lua lifetime_.
 
+When a pointer or pointer to const is passed to Lua and the pointer is null
+(zero), LuaBridge will pass Lua a `nil` instead.
+
 ### C++ Lifetime
 
 The creation and deletion of objects with _C++ lifetime_ is controlled by
-the C++ code. Lua does nothing when it garbge collects a reference to such an
+the C++ code. Lua does nothing when it garbage collects a reference to such an
 object. Specifically, the object's destructor is not called (since C++ owns
 it). Care must be taken to ensure that objects with C++ lifetime are not
-deleted while still being referenced by a `lua_State`, or else undefined
+deleted while still being referenced by a `lua_State*`, or else undefined
 behavior results. In the previous examples, an instance of `A` can be passed
 to Lua with C++ lifetime, like this:
 
@@ -630,7 +640,7 @@ to class objects with the container instead:
 ### Custom Containers
 
 If you have your own container, you must provide a specialization of
-`ContainerTraits` in the `luabridge` namespace for yor type before it will be
+`ContainerTraits` in the `luabridge` namespace for your type before it will be
 recognized by LuaBridge (or else the code will not compile):
 
     template <class T>
@@ -694,16 +704,37 @@ a pointer. These conversion work seamlessly.
 
 ## Security
 
-The metatables and userdata that LuaBridge creates in the `lua_State` are
+The metatables and userdata that LuaBridge creates in the `lua_State*` are
 protected using a security system, to eliminate the possibility of undefined
-behavior resulting from scripted manipulation of the environment. This
-security system can be bypassed if scripts are given access to the debug
-library.
+behavior resulting from scripted manipulation of the environment. The
+security system has these components:
+
+- Class and const class tables use the 'table proxy' technique. The
+  corresponding metatables have `__index` and `__newindex` metamethods,
+  so these class tables are immutable from Lua.
+
+- Metatables have `__metatable` set to a boolean value. Scripts cannot
+  obtain the metatable from a LuaBridge object.
+
+- Classes are mapped to metatables through the registry, which Lua scripts
+  cannot access. The global environment does not expose metatables
+
+- Metatables created by LuaBridge are tagged with a lightuserdata key which
+  is unique in the process. Other libraries cannot forge a Luabridge
+  metatable.
+
+This security system can be easily bypassed if scripts are given access to
+the debug library (or functionality similar to it, i.e. a raw `getmetatable`).
+The security system can also be defeated by C code in the host, either by
+revealing the unique lightuserdata key to another module or by putting a
+LuaBridge metatable in a place that can be accessed by scripts.
 
 When a class member function is called, or class property member accessed,
 the `this` pointer is type-checked. This is because member functions exposed
 to Lua are just plain functions that usually get called with the Lua colon
-notation, which passes the object in question as the first parameter.
+notation, which passes the object in question as the first parameter. Lua's
+dynamic typing makes this type-checking mandatory to prevent undefined
+behavior resulting from improper use.
 
 If a type check error occurs, LuaBridge uses the `lua_error` mechanism to
 trigger a failure. A host program can always recover from an error through
@@ -721,18 +752,21 @@ LuaBridge does not support:
 - Global variables (variables must be wrapped in a named scope).
 - Automatic conversion between STL container types and Lua tables.
 - Inheriting Lua classes from C++ classes.
+- Passing nil to a C++ function that expects a pointer or reference.
+- Standard containers like `std::shared_ptr`.
 
 ## Development
 
 [Github][3] is the new official home for LuaBridge. The old SVN repository is
 deprecated since it is no longer used, or maintained. The original author has
 graciously passed the reins to Vinnie Falco for maintaining and improving the
-project. To obtain the older official releases, checkout the tags from 2.1
+project. To obtain the older official releases, checkout the tags from 0.2.1
 and earlier.
 
-We welcome contributions to LuaBridge. Feel free to fork the repository and
-issue a Pull Request. All questions, comments, suggestions, and/or proposed
-changes will be handled by the new maintainer.
+If you are an existing LuaBridge user, a new LuaBridge user, or a potential
+LuaBridge user, we welcome your input, feedback, and contributions. Feel
+free to open Issues, or fork the repository. All questions, comments,
+suggestions, and/or proposed changes will be handled by the new maintainer.
 
 ## License
 
@@ -755,3 +789,6 @@ for more details.
 [4]: https://github.com/vinniefalco/LuaBridgeDemo "LuaBridge Demo"
 [5]: http://lua.org "The Lua Programming Language"
 [6]: http://www.rawmaterialsoftware.com/juce/api/classString.html "juce::String"
+[7]: https://github.com/vinniefalco/LuaBridge "LuaBridge master branch"
+[8]: https://github.com/vinniefalco/LuaBridge/tree/release "LuaBridge release branch"
+[9]: https://github.com/vinniefalco/LuaBridge/tree/develop "LuaBridge develop branch"

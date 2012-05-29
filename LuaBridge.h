@@ -61,7 +61,7 @@
   <img src="http://vinniefalco.github.com/LuaBridgeDemo/powered-by-lua.png">
   </a><br>
 
-  # LuaBridge
+  # LuaBridge 1.0
 
   [LuaBridge][3] is a lightweight, dependency-free library for making C++ data,
   functions, and classes available to Lua. It works with Lua revisions starting
@@ -96,6 +96,16 @@
   It contains template code to automatically generate at compile-time the
   various Lua C API calls necessary to export your program's classes and
   functions to the Lua environment.
+
+  ### Version
+
+  LuaBridge repository branches are as follows:
+
+  - **[master][7]**: Tagged, stable release versions.
+
+  - **[release][8]**: Tagged candidates for imminent release.
+
+  - **[develop][9]**: Work in progress.
 
   ## LuaBridge Demo and Tests
 
@@ -396,19 +406,17 @@
   A single constructor may be added for a class using `addConstructor`.
   LuaBridge cannot automatically determine the number and types of constructor
   parameters like it can for functions and methods, so you must provide them.
-  This is done by providing the signature of the desired constructor function
+  This is done by specifying the signature of the desired constructor function
   as the first template parameter to `addConstructor`. The parameter types will
   be extracted from this (the return type is ignored).  For example, these
   statements register constructors for the given classes:
 
-      struct A
-      {
-        A () { }
+      struct A {
+        A ();
       };
 
-      struct B
-      {
-        explicit B (char const* s, int nChars) { }
+      struct B {
+        explicit B (char const* s, int nChars);
       };
 
       getGlobalNamespace (L)
@@ -425,9 +433,9 @@
   qualified name of the class. This Lua code will create instances of `A` and
   `B`
 
-    a = test.A ()           -- Create a new A.
-    b = test.B ("hello", 5) -- Create a new B.
-    b = test.B ()           -- Error: expected string in argument 1
+      a = test.A ()           -- Create a new A.
+      b = test.B ("hello", 5) -- Create a new B.
+      b = test.B ()           -- Error: expected string in argument 1
 
   ## The Lua Stack
 
@@ -470,10 +478,10 @@
         }
       };
 
-  ### The `lua_State`
+  ### The `lua_State*`
 
   Sometimes it is convenient from within a bound function or member function
-  to gain access to the `lua_State` normally available to a `lua_CFunction`.
+  to gain access to the `lua_State*` normally available to a `lua_CFunction`.
   With LuaBridge, all you need to do is add a `lua_State*` parameter at any
   position in your bound function:
 
@@ -487,8 +495,8 @@
 
       getGlobalNamespace (L).addFunction ("useStateAndArgs", &useStateAndArgs);
 
-  When a script calls `useStateandArgs`, it passes only the integer and string
-  parameters. LuaBridge takes care of inserting the `lua_State` into the
+  When a script calls `useStateAndArgs`, it passes only the integer and string
+  parameters. LuaBridge takes care of inserting the `lua_State*` into the
   argument list for the corresponding C++ function. This will work correctly
   even for the state created by coroutines.
 
@@ -506,10 +514,10 @@
   ### C++ Lifetime
 
   The creation and deletion of objects with _C++ lifetime_ is controlled by
-  the C++ code. Lua does nothing when it garbge collects a reference to such an
+  the C++ code. Lua does nothing when it garbage collects a reference to such an
   object. Specifically, the object's destructor is not called (since C++ owns
   it). Care must be taken to ensure that objects with C++ lifetime are not
-  deleted while still being referenced by a `lua_State`, or else undefined
+  deleted while still being referenced by a `lua_State*`, or else undefined
   behavior results. In the previous examples, an instance of `A` can be passed
   to Lua with C++ lifetime, like this:
 
@@ -691,7 +699,7 @@
   ### Custom Containers
 
   If you have your own container, you must provide a specialization of
-  `ContainerTraits` in the `luabridge` namespace for yor type before it will be
+  `ContainerTraits` in the `luabridge` namespace for your type before it will be
   recognized by LuaBridge (or else the code will not compile):
 
       template <class T>
@@ -755,16 +763,37 @@
 
   ## Security
 
-  The metatables and userdata that LuaBridge creates in the `lua_State` are
+  The metatables and userdata that LuaBridge creates in the `lua_State*` are
   protected using a security system, to eliminate the possibility of undefined
-  behavior resulting from scripted manipulation of the environment. This
-  security system can be bypassed if scripts are given access to the debug
-  library.
+  behavior resulting from scripted manipulation of the environment. The
+  security system has these components:
+
+  - Class and const class tables use the 'table proxy' technique. The
+    corresponding metatables have `__index` and `__newindex` metamethods,
+    so these class tables are immutable from Lua.
+
+  - Metatables have `__metatable` set to a boolean value. Scripts cannot
+    obtain the metatable from a LuaBridge object.
+
+  - Classes are mapped to metatables through the registry, which Lua scripts
+    cannot access. The global environment does not expose metatables
+
+  - Metatables created by LuaBridge are tagged with a lightuserdata key which
+    is unique in the process. Other libraries cannot forge a Luabridge
+    metatable.
+
+  This security system can be easily bypassed if scripts are given access to
+  the debug library (or functionality similar to it, i.e. a raw `getmetatable`).
+  The security system can also be defeated by C code in the host, either by
+  revealing the unique lightuserdata key to another module or by putting a
+  LuaBridge metatable in a place that can be accessed by scripts.
 
   When a class member function is called, or class property member accessed,
   the `this` pointer is type-checked. This is because member functions exposed
   to Lua are just plain functions that usually get called with the Lua colon
-  notation, which passes the object in question as the first parameter.
+  notation, which passes the object in question as the first parameter. Lua's
+  dynamic typing makes this type-checking mandatory to prevent undefined
+  behavior resulting from improper use.
 
   If a type check error occurs, LuaBridge uses the `lua_error` mechanism to
   trigger a failure. A host program can always recover from an error through
@@ -783,18 +812,20 @@
   - Automatic conversion between STL container types and Lua tables.
   - Inheriting Lua classes from C++ classes.
   - Passing nil to a C++ function that expects a pointer or reference.
+  - Standard containers like `std::shared_ptr`.
 
   ## Development
 
   [Github][3] is the new official home for LuaBridge. The old SVN repository is
   deprecated since it is no longer used, or maintained. The original author has
   graciously passed the reins to Vinnie Falco for maintaining and improving the
-  project. To obtain the older official releases, checkout the tags from 2.1
+  project. To obtain the older official releases, checkout the tags from 0.2.1
   and earlier.
 
-  We welcome contributions to LuaBridge. Feel free to fork the repository and
-  issue a Pull Request. All questions, comments, suggestions, and/or proposed
-  changes will be handled by the new maintainer.
+  If you are an existing LuaBridge user, a new LuaBridge user, or a potential
+  LuaBridge user, we welcome your input, feedback, and contributions. Feel
+  free to open Issues, or fork the repository. All questions, comments,
+  suggestions, and/or proposed changes will be handled by the new maintainer.
 
   ## License
 
@@ -817,6 +848,9 @@
   [4]: https://github.com/vinniefalco/LuaBridgeDemo "LuaBridge Demo"
   [5]: http://lua.org "The Lua Programming Language"
   [6]: http://www.rawmaterialsoftware.com/juce/api/classString.html "juce::String"
+  [7]: https://github.com/vinniefalco/LuaBridge "LuaBridge master branch"
+  [8]: https://github.com/vinniefalco/LuaBridge/tree/release "LuaBridge release branch"
+  [9]: https://github.com/vinniefalco/LuaBridge/tree/develop "LuaBridge develop branch"
 */
 
 #include <cassert>
@@ -855,11 +889,11 @@ namespace luabridge
 //==============================================================================
 
 /**
-  nil type means void parameters or return value.
+  None type means void parameters or return value.
 */
-typedef void nil;
+typedef void None;
 
-template <typename Head, typename Tail = nil>
+template <typename Head, typename Tail = None>
 struct TypeList
 {
 };
@@ -967,117 +1001,114 @@ struct TypeListValues <TypeList <Head const&, Tail> >
   Expansions are provided for functions with up to 8 parameters. This can be
   manually extended, or expanded to an arbitrary amount using C++11 features.
 */
-template <typename MemFn>
+template <typename MemFn, typename D = MemFn>
 struct FuncTraits
 {
 };
 
 /* Ordinary function pointers. */
 
-template <typename R>
-struct FuncTraits <R (*) ()>
+template <typename R, typename D>
+struct FuncTraits <R (*) (), D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
-  typedef nil Params;
-  static R call (R (*fp) (), const TypeListValues<Params> &tvl)
+  typedef None Params;
+  static R call (DeclType fp, TypeListValues <Params> const&)
   {
-    (void)tvl;
     return fp ();
   }
 };
 
-template <typename R, typename P1>
-struct FuncTraits <R (*) (P1)>
+template <typename R, typename P1, typename D>
+struct FuncTraits <R (*) (P1), D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
   typedef TypeList <P1> Params;
-  static R call (R (*fp) (P1), const TypeListValues<Params> &tvl)
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2>
-struct FuncTraits <R (*) (P1, P2)>
+template <typename R, typename P1, typename P2, typename D>
+struct FuncTraits <R (*) (P1, P2), D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2> > Params;
-  static R call (R (*fp) (P1, P2), const TypeListValues<Params> &tvl)
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3>
-struct FuncTraits <R (*) (P1, P2, P3)>
+template <typename R, typename P1, typename P2, typename P3, typename D>
+struct FuncTraits <R (*) (P1, P2, P3), D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
-  static R call (R (*fp) (P1, P2, P3), const TypeListValues<Params> &tvl)
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3, typename P4>
-struct FuncTraits <R (*) (P1, P2, P3, P4)>
+template <typename R, typename P1, typename P2, typename P3, typename P4, typename D>
+struct FuncTraits <R (*) (P1, P2, P3, P4), D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
-  static R call (R (*fp) (P1, P2, P3, P4),
-    const TypeListValues<Params> &tvl)
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3, typename P4,
-  typename P5>
-struct FuncTraits <R (*) (P1, P2, P3, P4, P5)>
+template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename D>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5), D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
-    TypeList <P5> > > > > Params;
-  static R call (R (*fp) (P1, P2, P3, P4, P5),
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5> > > > > Params;
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6>
-struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6)>
+template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename D>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6), D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, 
-    TypeList <P6> > > > > > Params;
-  static R call (R (*fp) (P1, P2, P3, P4, P5, P6),
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,  TypeList <P6> > > > > > Params;
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6, typename P7>
-struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7)>
+template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename D>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7), D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7> > > > > > > Params;
-  static R call (R (*fp) (P1, P2, P3, P4, P5, P6, P7),
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1085,16 +1116,14 @@ struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7)>
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6, typename P7, typename P8>
-struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7, P8)>
+template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename D>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7, P8), D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
-  static R call (R (*fp) (P1, P2, P3, P4, P5, P6, P7, P8),
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1104,130 +1133,123 @@ struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7, P8)>
 
 /* Non-const member function pointers. */
 
-template <class T, typename R>
-struct FuncTraits <R (T::*) ()>
+template <class T, typename R, typename D>
+struct FuncTraits <R (T::*) (), D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef nil Params;
-  static R call (T *obj, R (T::*fp) (), const TypeListValues<Params> &tvl)
+  typedef None Params;
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const&)
   {
-    (void)tvl;
     return (obj->*fp)();
   }
 };
 
-template <class T, typename R, typename P1>
-struct FuncTraits <R (T::*) (P1)>
+template <class T, typename R, typename P1, typename D>
+struct FuncTraits <R (T::*) (P1), D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1> Params;
-  static R call (T *obj, R (T::*fp) (P1),
-    const TypeListValues<Params> &tvl)
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2>
-struct FuncTraits <R (T::*) (P1, P2)>
+template <class T, typename R, typename P1, typename P2, typename D>
+struct FuncTraits <R (T::*) (P1, P2), D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2> > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2),
-    const TypeListValues<Params> &tvl)
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3>
-struct FuncTraits <R (T::*) (P1, P2, P3)>
+template <class T, typename R, typename P1, typename P2, typename P3, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3), D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3),
-    const TypeListValues<Params> &tvl)
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4)>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4), D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4),
-    const TypeListValues<Params> &tvl)
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5)>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5), D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
-    TypeList <P5> > > > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5),
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5> > > > > Params;
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6)>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6), D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6> > > > > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6),
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6> > > > > > Params;
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7)>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7), D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7> > > > > > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6, P7),
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1235,18 +1257,16 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7)>
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7, typename P8>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8)>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8), D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8),
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1256,133 +1276,124 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8)>
 
 /* Const member function pointers. */
 
-template <class T, typename R>
-struct FuncTraits <R (T::*) () const>
+template <class T, typename R, typename D>
+struct FuncTraits <R (T::*) () const, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef nil Params;
-  static R call (T const* const obj, R (T::*fp) () const,
-    const TypeListValues<Params> &tvl)
+  typedef None Params;
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const&)
   {
-    (void)tvl;
     return (obj->*fp)();
   }
 };
 
-template <class T, typename R, typename P1>
-struct FuncTraits <R (T::*) (P1) const>
+template <class T, typename R, typename P1, typename D>
+struct FuncTraits <R (T::*) (P1) const, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1> Params;
-  static R call (T const* const obj, R (T::*fp) (P1) const,
-    const TypeListValues<Params> &tvl)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2>
-struct FuncTraits <R (T::*) (P1, P2) const>
+template <class T, typename R, typename P1, typename P2, typename D>
+struct FuncTraits <R (T::*) (P1, P2) const, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2> > Params;
   static R call (T const* const obj, R (T::*fp) (P1, P2) const,
-    const TypeListValues<Params> &tvl)
+    TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3>
-struct FuncTraits <R (T::*) (P1, P2, P3) const>
+template <class T, typename R, typename P1, typename P2, typename P3, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3) const, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
-  static R call (T const* const obj, R (T::*fp) (P1, P2, P3) const,
-    const TypeListValues<Params> &tvl)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4) const>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4) const, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
-  static R call (T const* const obj, R (T::*fp) (P1, P2, P3, P4) const,
-    const TypeListValues<Params> &tvl)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5) const>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5) const, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
-    TypeList <P5> > > > > Params;
-  static R call (T const* const obj, R (T::*fp) (P1, P2, P3, P4, P5) const,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5> > > > > Params;
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6) const>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6) const, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6> > > > > > Params;
-  static R call (T const* const obj,
-    R (T::*fp) (P1, P2, P3, P4, P5, P6) const,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6> > > > > > Params;
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) const>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) const, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7> > > > > > > Params;
-  static R call (T const* const obj,
-    R (T::*fp) (P1, P2, P3, P4, P5, P6, P7) const,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1390,19 +1401,16 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) const>
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7, typename P8>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
-  static R call (T const* const obj,
-    R (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8) const,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1414,110 +1422,107 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const>
 
 /* Ordinary function pointers. */
 
-template <typename R>
-struct FuncTraits <R (*) () THROWSPEC>
+template <typename R, typename D>
+struct FuncTraits <R (*) () THROWSPEC, D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
-  typedef nil Params;
-  static R call (R (*fp) () THROWSPEC, const TypeListValues<Params> &tvl)
+  typedef None Params;
+  static R call (DeclType fp, TypeListValues <Params> const&)
   {
-    (void)tvl;
     return fp ();
   }
 };
 
-template <typename R, typename P1>
-struct FuncTraits <R (*) (P1) THROWSPEC>
+template <typename R, typename P1, typename D>
+struct FuncTraits <R (*) (P1) THROWSPEC, D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
   typedef TypeList <P1> Params;
-  static R call (R (*fp) (P1) THROWSPEC, const TypeListValues<Params> &tvl)
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2>
-struct FuncTraits <R (*) (P1, P2) THROWSPEC>
+template <typename R, typename P1, typename P2, typename D>
+struct FuncTraits <R (*) (P1, P2) THROWSPEC, D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2> > Params;
-  static R call (R (*fp) (P1, P2) THROWSPEC, const TypeListValues<Params> &tvl)
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3>
-struct FuncTraits <R (*) (P1, P2, P3) THROWSPEC>
+template <typename R, typename P1, typename P2, typename P3, typename D>
+struct FuncTraits <R (*) (P1, P2, P3) THROWSPEC, D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
-  static R call (R (*fp) (P1, P2, P3) THROWSPEC, const TypeListValues<Params> &tvl)
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3, typename P4>
-struct FuncTraits <R (*) (P1, P2, P3, P4) THROWSPEC>
+template <typename R, typename P1, typename P2, typename P3, typename P4, typename D>
+struct FuncTraits <R (*) (P1, P2, P3, P4) THROWSPEC, D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
-  static R call (R (*fp) (P1, P2, P3, P4) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3, typename P4,
-  typename P5>
-struct FuncTraits <R (*) (P1, P2, P3, P4, P5) THROWSPEC>
+template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename D>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5) THROWSPEC, D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
-    TypeList <P5> > > > > Params;
-  static R call (R (*fp) (P1, P2, P3, P4, P5) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5> > > > > Params;
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6>
-struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6) THROWSPEC>
+template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename D>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6) THROWSPEC, D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, 
-    TypeList <P6> > > > > > Params;
-  static R call (R (*fp) (P1, P2, P3, P4, P5, P6) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,  TypeList <P6> > > > > > Params;
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6, typename P7>
-struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC>
+template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename D>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC, D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7> > > > > > > Params;
-  static R call (R (*fp) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1525,16 +1530,14 @@ struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC>
   }
 };
 
-template <typename R, typename P1, typename P2, typename P3, typename P4,
-  typename P5, typename P6, typename P7, typename P8>
-struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC>
+template <typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename D>
+struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC, D>
 {
   static bool const isMemberFunction = false;
+  typedef D DeclType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
-  static R call (R (*fp) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (DeclType fp, TypeListValues <Params> const& tvl)
   {
     return fp (tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1544,130 +1547,123 @@ struct FuncTraits <R (*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC>
 
 /* Non-const member function pointers. */
 
-template <class T, typename R>
-struct FuncTraits <R (T::*) () THROWSPEC>
+template <class T, typename R, typename D>
+struct FuncTraits <R (T::*) () THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef nil Params;
-  static R call (T *obj, R (T::*fp) () THROWSPEC, const TypeListValues<Params> &tvl)
+  typedef None Params;
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const&)
   {
-    (void)tvl;
     return (obj->*fp)();
   }
 };
 
-template <class T, typename R, typename P1>
-struct FuncTraits <R (T::*) (P1) THROWSPEC>
+template <class T, typename R, typename P1, typename D>
+struct FuncTraits <R (T::*) (P1) THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1> Params;
-  static R call (T *obj, R (T::*fp) (P1) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2>
-struct FuncTraits <R (T::*) (P1, P2) THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename D>
+struct FuncTraits <R (T::*) (P1, P2) THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2> > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3>
-struct FuncTraits <R (T::*) (P1, P2, P3) THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3) THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4) THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4) THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5) THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5) THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
-    TypeList <P5> > > > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5> > > > > Params;
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6) THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6) THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6> > > > > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6> > > > > > Params;
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7> > > > > > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1675,18 +1671,16 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) THROWSPEC>
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7, typename P8>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = false;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
-  static R call (T *obj, R (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (T* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1696,132 +1690,124 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) THROWSPEC>
 
 /* Const member function pointers. */
 
-template <class T, typename R>
-struct FuncTraits <R (T::*) () const THROWSPEC>
+template <class T, typename R, typename D>
+struct FuncTraits <R (T::*) () const THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef nil Params;
-  static R call (T const* const obj, R (T::*fp) () const THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef None Params;
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const&)
   {
     (void)tvl;
     return (obj->*fp)();
   }
 };
 
-template <class T, typename R, typename P1>
-struct FuncTraits <R (T::*) (P1) const THROWSPEC>
+template <class T, typename R, typename P1, typename D>
+struct FuncTraits <R (T::*) (P1) const THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1> Params;
-  static R call (T const* const obj, R (T::*fp) (P1) const THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2>
-struct FuncTraits <R (T::*) (P1, P2) const THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename D>
+struct FuncTraits <R (T::*) (P1, P2) const THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2> > Params;
-  static R call (T const* const obj, R (T::*fp) (P1, P2) const THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3>
-struct FuncTraits <R (T::*) (P1, P2, P3) const THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3) const THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
-  static R call (T const* const obj, R (T::*fp) (P1, P2, P3) const THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4) const THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4) const THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
-  static R call (T const* const obj, R (T::*fp) (P1, P2, P3, P4) const THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5) const THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5) const THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4,
-    TypeList <P5> > > > > Params;
-  static R call (T const* const obj, R (T::*fp) (P1, P2, P3, P4, P5) const THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5> > > > > Params;
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6) const THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6) const THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6> > > > > > Params;
-  static R call (T const* const obj, R (T::*fp) (P1, P2, P3, P4, P5, P6) const THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6> > > > > > Params;
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) const THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) const THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7> > > > > > > Params;
-  static R call (T const* const obj,
-    R (T::*fp) (P1, P2, P3, P4, P5, P6, P7) const THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7> > > > > > > Params;
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1829,19 +1815,16 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) const THROWSPEC>
   }
 };
 
-template <class T, typename R, typename P1, typename P2, typename P3,
-  typename P4, typename P5, typename P6, typename P7, typename P8>
-struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const THROWSPEC>
+template <class T, typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6, typename P7, typename P8, typename D>
+struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const THROWSPEC, D>
 {
   static bool const isMemberFunction = true;
   static bool const isConstMemberFunction = true;
+  typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5,
-    TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
-  static R call (T const* const obj,
-    R (T::*fp) (P1, P2, P3, P4, P5, P6, P7, P8) const THROWSPEC,
-    const TypeListValues<Params> &tvl)
+  typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1868,13 +1851,13 @@ template <class T, typename List>
 struct Constructor {};
 
 template <class T>
-struct Constructor <T, nil>
+struct Constructor <T, None>
 {
-  static T* call (TypeListValues <nil> const&)
+  static T* call (TypeListValues <None> const&)
   {
     return new T;
   }
-  static T* call (void* mem, TypeListValues <nil> const&)
+  static T* call (void* mem, TypeListValues <None> const&)
   {
     return new (mem) T;
   }
@@ -3097,7 +3080,7 @@ struct ArgList
 };
 
 template <int Start>
-struct ArgList <nil, Start> : public TypeListValues <nil>
+struct ArgList <None, Start> : public TypeListValues <None>
 {
   ArgList (lua_State*)
   {
@@ -3371,7 +3354,6 @@ private:
             class ReturnType = typename FuncTraits <MemFn>::ReturnType>
   struct methodProxy
   {
-    //typedef typename Container <typename FuncTraits <MemFn>::ClassType>::Type T;
     typedef typename FuncTraits <MemFn>::ClassType T;
     typedef typename FuncTraits <MemFn>::Params Params;
 
@@ -3409,7 +3391,6 @@ private:
   template <class MemFn>
   struct methodProxy <MemFn, void>
   {
-    //typedef typename Container <typename FuncTraits <MemFn>::ClassType>::Type T;
     typedef typename FuncTraits <MemFn>::ClassType T;
     typedef typename FuncTraits <MemFn>::Params Params;
 
@@ -3433,11 +3414,12 @@ private:
   };
 
   //----------------------------------------------------------------------------
+
   /**
     Create a proxy for a const member function.
   */
   template <class MemFn, bool isConst>
-  struct methodHelper
+  struct MethodHelper
   {
     static void add (lua_State* L, char const* name, MemFn mf)
     {
@@ -3453,7 +3435,7 @@ private:
     Create a proxy for a non-const member function.
   */
   template <class MemFn>
-  struct methodHelper <MemFn, false>
+  struct MethodHelper <MemFn, false>
   {
     static void add (lua_State* L, char const* name, MemFn mf)
     {
@@ -3825,8 +3807,8 @@ private:
     static int propgetProxy (lua_State* L)
     {
       T const* const t = Detail::Userdata::get <T> (L, 1, true);
-      U T::* mp = *static_cast <U T::**> (lua_touserdata (L, lua_upvalueindex (1)));
-      Stack <U>::push (L, t->*mp);
+      U T::** mp = static_cast <U T::**> (lua_touserdata (L, lua_upvalueindex (1)));
+      Stack <U>::push (L, t->**mp);
       return 1;
     }
 
@@ -3841,8 +3823,8 @@ private:
     static int propsetProxy (lua_State* L)
     {
       T* const t = Detail::Userdata::get <T> (L, 1, false);
-      U T::* mp = *static_cast <U T::**> (lua_touserdata (L, lua_upvalueindex (1)));
-      t->*mp = Stack <U>::get (L, 2);
+      U T::** mp = static_cast <U T::**> (lua_touserdata (L, lua_upvalueindex (1)));
+      t->**mp = Stack <U>::get (L, 2);
       return 0;
     }
 
@@ -3852,7 +3834,8 @@ private:
     */
     static int gcMetaMethod (lua_State* L)
     {
-      Detail::Userdata::getExact <T> (L, 1)->~Userdata ();
+      Detail::Userdata* ud = Detail::Userdata::getExact <T> (L, 1);
+      ud->~Userdata ();
       return 0;
     }
 
@@ -4046,24 +4029,26 @@ private:
     template <class U>
     Class <T>& addData (char const* name, const U T::* mp, bool isWritable = true)
     {
+      typedef const U T::*mp_t;
+
       // Add to __propget in class and const tables.
-      rawgetfield (L, -2, "__propget");
-      rawgetfield (L, -4, "__propget");
-      void* const v = lua_newuserdata (L, sizeof (U T::*));
-      memcpy (v, &mp, sizeof (U T::*));
-      lua_pushcclosure (L, &propgetProxy <U>, 1);
-      lua_pushvalue (L, -1);
-      rawsetfield (L, -4, name);
-      rawsetfield (L, -2, name);
-      lua_pop (L, 2);
+      {
+        rawgetfield (L, -2, "__propget");
+        rawgetfield (L, -4, "__propget");
+        new (lua_newuserdata (L, sizeof (mp_t))) mp_t (mp);
+        lua_pushcclosure (L, &propgetProxy <U>, 1);
+        lua_pushvalue (L, -1);
+        rawsetfield (L, -4, name);
+        rawsetfield (L, -2, name);
+        lua_pop (L, 2);
+      }
 
       if (isWritable)
       {
         // Add to __propset in class table.
         rawgetfield (L, -2, "__propset");
         assert (lua_istable (L, -1));
-        void* const v = lua_newuserdata (L, sizeof (U T::*));
-        memcpy (v, &mp, sizeof (U T::*));
+        new (lua_newuserdata (L, sizeof (mp_t))) mp_t (mp);
         lua_pushcclosure (L, &propsetProxy <U>, 1);
         rawsetfield (L, -2, name);
         lua_pop (L, 1);
@@ -4191,7 +4176,7 @@ private:
     template <class MemFn>
     Class <T>& addMethod (char const* name, MemFn mf)
     {
-      methodHelper <MemFn, FuncTraits <MemFn>::isConstMemberFunction>::add (L, name, mf);
+      MethodHelper <MemFn, FuncTraits <MemFn>::isConstMemberFunction>::add (L, name, mf);
       return *this;
     }
 
