@@ -61,7 +61,7 @@
   <img src="http://vinniefalco.github.com/LuaBridgeDemo/powered-by-lua.png">
   </a><br>
 
-  # LuaBridge
+  # LuaBridge 1.0
 
   [LuaBridge][3] is a lightweight, dependency-free library for making C++ data,
   functions, and classes available to Lua. It works with Lua revisions starting
@@ -96,6 +96,16 @@
   It contains template code to automatically generate at compile-time the
   various Lua C API calls necessary to export your program's classes and
   functions to the Lua environment.
+
+  ### Version
+
+  LuaBridge repository branches are as follows:
+
+  - **[master][7]**: Tagged, stable release versions.
+
+  - **[release][8]**: Tagged candidates for imminent release.
+
+  - **[develop][9]**: Work in progress.
 
   ## LuaBridge Demo and Tests
 
@@ -838,6 +848,9 @@
   [4]: https://github.com/vinniefalco/LuaBridgeDemo "LuaBridge Demo"
   [5]: http://lua.org "The Lua Programming Language"
   [6]: http://www.rawmaterialsoftware.com/juce/api/classString.html "juce::String"
+  [7]: https://github.com/vinniefalco/LuaBridge "LuaBridge master branch"
+  [8]: https://github.com/vinniefalco/LuaBridge/tree/release "LuaBridge release branch"
+  [9]: https://github.com/vinniefalco/LuaBridge/tree/develop "LuaBridge develop branch"
 */
 
 #include <cassert>
@@ -876,11 +889,11 @@ namespace luabridge
 //==============================================================================
 
 /**
-  nil type means void parameters or return value.
+  None type means void parameters or return value.
 */
-typedef void nil;
+typedef void None;
 
-template <typename Head, typename Tail = nil>
+template <typename Head, typename Tail = None>
 struct TypeList
 {
 };
@@ -1001,7 +1014,7 @@ struct FuncTraits <R (*) (), D>
   static bool const isMemberFunction = false;
   typedef D DeclType;
   typedef R ReturnType;
-  typedef nil Params;
+  typedef None Params;
   static R call (DeclType fp, TypeListValues <Params> const&)
   {
     return fp ();
@@ -1128,7 +1141,7 @@ struct FuncTraits <R (T::*) (), D>
   typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef nil Params;
+  typedef None Params;
   static R call (T* const obj, DeclType fp, TypeListValues <Params> const&)
   {
     return (obj->*fp)();
@@ -1271,7 +1284,7 @@ struct FuncTraits <R (T::*) () const, D>
   typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef nil Params;
+  typedef None Params;
   static R call (T const* const obj, DeclType fp, TypeListValues <Params> const&)
   {
     return (obj->*fp)();
@@ -1287,7 +1300,7 @@ struct FuncTraits <R (T::*) (P1) const, D>
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1> Params;
-  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const&)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd);
   }
@@ -1318,7 +1331,7 @@ struct FuncTraits <R (T::*) (P1, P2, P3) const, D>
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3> > > Params;
-  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const&)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd);
   }
@@ -1333,7 +1346,7 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4) const, D>
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4> > > > Params;
-  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const&)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd);
   }
@@ -1348,7 +1361,7 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5) const, D>
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5> > > > > Params;
-  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const&)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd);
@@ -1364,7 +1377,7 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6) const, D>
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6> > > > > > Params;
-  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const&)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd);
@@ -1380,7 +1393,7 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7) const, D>
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7> > > > > > > Params;
-  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const&)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1397,7 +1410,7 @@ struct FuncTraits <R (T::*) (P1, P2, P3, P4, P5, P6, P7, P8) const, D>
   typedef T ClassType;
   typedef R ReturnType;
   typedef TypeList <P1, TypeList <P2, TypeList <P3, TypeList <P4, TypeList <P5, TypeList <P6, TypeList <P7, TypeList <P8> > > > > > > > Params;
-  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const&)
+  static R call (T const* const obj, DeclType fp, TypeListValues <Params> const& tvl)
   {
     return (obj->*fp)(tvl.hd, tvl.tl.hd, tvl.tl.tl.hd, tvl.tl.tl.tl.hd,
       tvl.tl.tl.tl.tl.hd, tvl.tl.tl.tl.tl.tl.hd,
@@ -1415,7 +1428,7 @@ struct FuncTraits <R (*) () THROWSPEC, D>
   static bool const isMemberFunction = false;
   typedef D DeclType;
   typedef R ReturnType;
-  typedef nil Params;
+  typedef None Params;
   static R call (DeclType fp, TypeListValues <Params> const&)
   {
     return fp ();
@@ -1542,7 +1555,7 @@ struct FuncTraits <R (T::*) () THROWSPEC, D>
   typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef nil Params;
+  typedef None Params;
   static R call (T* const obj, DeclType fp, TypeListValues <Params> const&)
   {
     return (obj->*fp)();
@@ -1685,7 +1698,7 @@ struct FuncTraits <R (T::*) () const THROWSPEC, D>
   typedef D DeclType;
   typedef T ClassType;
   typedef R ReturnType;
-  typedef nil Params;
+  typedef None Params;
   static R call (T const* const obj, DeclType fp, TypeListValues <Params> const&)
   {
     (void)tvl;
@@ -1838,13 +1851,13 @@ template <class T, typename List>
 struct Constructor {};
 
 template <class T>
-struct Constructor <T, nil>
+struct Constructor <T, None>
 {
-  static T* call (TypeListValues <nil> const&)
+  static T* call (TypeListValues <None> const&)
   {
     return new T;
   }
-  static T* call (void* mem, TypeListValues <nil> const&)
+  static T* call (void* mem, TypeListValues <None> const&)
   {
     return new (mem) T;
   }
@@ -3067,7 +3080,7 @@ struct ArgList
 };
 
 template <int Start>
-struct ArgList <nil, Start> : public TypeListValues <nil>
+struct ArgList <None, Start> : public TypeListValues <None>
 {
   ArgList (lua_State*)
   {
@@ -3821,7 +3834,8 @@ private:
     */
     static int gcMetaMethod (lua_State* L)
     {
-      Detail::Userdata::getExact <T> (L, 1)->~Userdata ();
+      Detail::Userdata* ud = Detail::Userdata::getExact <T> (L, 1);
+      ud->~Userdata ();
       return 0;
     }
 
