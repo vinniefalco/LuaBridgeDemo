@@ -30,7 +30,6 @@
 #include "Lua/LuaLibrary.h"
 
 #include "LuaBridge/LuaBridge.h"
-#include "LuaBridge/LuaBridgeExtras.h"
 #include "LuaBridge/RefCountedPtr.h"
 #include "LuaBridge/RefCountedObject.h"
 

@@ -4,9 +4,15 @@
 
 # LuaBridgeDemo
 
+[LuaBridge][3] is a lightweight, dependency-free library for making C++ data,
+functions, and classes available to Lua. It works with Lua revisions starting
+from 5.1.2. [Lua][4] is a powerful, fast, lightweight, embeddable scripting
+language.
+
 The LuaBridgeDemo is a stand-alone graphical program for compiling and running
-the test suite with an included interactive window where you can enter execute
-Lua statements in a persistent environment. The demo has these features:
+the LuaBridge  test suite with an included interactive window where you can enter
+and execute Lua statements in a persistent environment. The demo has these
+features:
 
 - Cross platform: Compiles on Mac OS, Windows, iOS, Android, and GNU/Linux
 
@@ -18,11 +24,6 @@ Also included is a separate project for building a command line version of
 the test suite, suitable as a starting point for building an automated
 testing suite.
 
-[LuaBridge][3] is a lightweight, dependency-free library for making C++ data,
-functions, and classes available to Lua. It works with Lua revisions starting
-from 5.1.2. [Lua][4] is a powerful, fast, lightweight, embeddable scripting
-language.
-
 This is the LuaBridge Demo application, and the corresponding registration code
 to export classes `A` and `B` to Lua.
 
@@ -33,6 +34,14 @@ to export classes `A` and `B` to Lua.
 <a href="https://github.com/vinniefalco/LuaBridgeDemo/downloads">
 <img src="http://vinniefalco.github.com/images/ThreeOSDownloadNow.png">
 </a><br>
+
+### Version
+
+LuaBridgeDemo repository tracks the LuaBridge branches:
+
+- **[master][6]**: Tagged, stable release versions.
+
+- **[develop][7]**: Work in progress.
 
 ## JUCE
 
@@ -55,3 +64,5 @@ License: The [MIT License][2]
 [3]: https://github.com/vinniefalco/LuaBridge "LuaBridge"
 [4]: http://lua.org "The Lua Programming Language"
 [5]: http://www.rawmaterialsoftware.com "The JUCE Library"
+[6]: https://github.com/vinniefalco/LuaBridgeDemo "LuaBridgeDemo master branch"
+[7]: https://github.com/vinniefalco/LuaBridgeDemo/tree/develop "LuaBridgeDemo develop branch"
