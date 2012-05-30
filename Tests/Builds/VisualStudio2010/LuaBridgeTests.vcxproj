@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -14,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FCE7759B-A150-5B3D-4F34-7CDFD3F94209}</ProjectGuid>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
@@ -26,13 +25,12 @@
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props"/>
-  <ImportGroup Label="ExtensionSettings"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
   <ImportGroup Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')"
-            Label="LocalAppDataPlatform"/>
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <PropertyGroup Label="UserMacros"/>
+  <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</OutDir>
@@ -50,7 +48,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <HeaderFileName/>
+      <HeaderFileName />
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -59,7 +57,7 @@
       <PreprocessorDefinitions>_CONSOLE;WIN32;_WINDOWS;DEBUG;_DEBUG;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader/>
+      <PrecompiledHeader />
       <AssemblerListingLocation>$(IntDir)\</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)\</ObjectFileName>
       <ProgramDataBaseFileName>$(IntDir)\</ProgramDataBaseFileName>
@@ -90,7 +88,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <HeaderFileName/>
+      <HeaderFileName />
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
@@ -98,7 +96,7 @@
       <PreprocessorDefinitions>_CONSOLE;WIN32;_WINDOWS;NDEBUG;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader/>
+      <PrecompiledHeader />
       <AssemblerListingLocation>$(IntDir)\</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)\</ObjectFileName>
       <ProgramDataBaseFileName>$(IntDir)\</ProgramDataBaseFileName>
@@ -113,7 +111,7 @@
       <OutputFile>$(OutDir)\LuaBridgeTests.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(IntDir)\LuaBridgeTests.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -126,30 +124,30 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Lua\LuaLibrary5.1.5.cpp"/>
-    <ClCompile Include="..\..\..\Lua\LuaLibrary5.2.0.cpp"/>
-    <ClCompile Include="..\..\Source\TestsMain.cpp"/>
+    <ClCompile Include="..\..\..\Lua\LuaLibrary5.1.5.cpp" />
+    <ClCompile Include="..\..\..\Lua\LuaLibrary5.2.0.cpp" />
+    <ClCompile Include="..\..\Source\TestsMain.cpp" />
     <ClCompile Include="..\..\Source\Tests.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp"/>
+    <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Lua\LuaLibrary.h"/>
-    <ClInclude Include="..\..\..\LuaBridge\LuaBridge.h"/>
-    <ClInclude Include="..\..\..\LuaBridge\RefCountedObject.h"/>
-    <ClInclude Include="..\..\..\LuaBridge\RefCountedPtr.h"/>
-    <ClInclude Include="..\..\Source\Tests.h"/>
-    <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h"/>
-    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h"/>
-    <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
+    <ClInclude Include="..\..\..\Lua\LuaLibrary.h" />
+    <ClInclude Include="..\..\..\LuaBridge\LuaBridge.h" />
+    <ClInclude Include="..\..\..\LuaBridge\RefCountedObject.h" />
+    <ClInclude Include="..\..\..\LuaBridge\RefCountedPtr.h" />
+    <ClInclude Include="..\..\Source\Tests.h" />
+    <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h" />
+    <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h" />
+    <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Source\Tests.lua"/>
+    <None Include="..\..\Source\Tests.lua" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include=".\resources.rc"/>
+    <ResourceCompile Include=".\resources.rc" />
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
-  <ImportGroup Label="ExtensionTargets"/>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

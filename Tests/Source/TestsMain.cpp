@@ -49,23 +49,63 @@
 
 using namespace std;
 
-int traceback (lua_State *L);
-void registerTestObjects (lua_State *L);
+int print (lua_State*)
+{
+  return 0;
+}
+
+void callBase (lua_State* L, int count)
+{
+  int result = luaL_loadstring (L, "a:testSucceeded()");
+
+  while (count--)
+  {
+    lua_pushvalue (L, -1);
+    result = lua_pcall (L, 0, 0, 0);
+    assert (result == 0);
+    if (result != 0)
+    {
+      std::string s = lua_tostring (L, -1);
+      cerr << s;
+      break;
+    }
+  }
+}
+
+void runPerformanceTests ()
+{
+  lua_State* L = luaL_newstate ();
+
+  luaL_openlibs (L);
+
+  LuaBridgeTests::addToState (L);
+
+  // disable print
+  lua_pushcfunction (L, &print);
+  lua_setglobal (L, "print");
+
+  int result;
+
+  // create 'a'
+  result = luaL_dostring (L, "a = A(\"A\")");
+  assert (result == 0);
+
+  // create 'b'
+  result = luaL_dostring (L, "b = B(\"A\")");
+  assert (result == 0);
+
+  int const N = 10000000;
+
+  callBase (L, N);
+
+  lua_close (L);
+}
 
 int main (int, char **)
 {
   lua_State* L = luaL_newstate ();
 
-  // Provide the base libraries
-#if 0
   luaL_openlibs (L);
-#else
-  luaopen_base(L);
-  luaopen_table(L);
-  luaopen_string(L);
-  luaopen_math(L);
-  luaopen_debug(L);
-#endif
 
   int errorFunctionRef = LuaBridgeTests::addTraceback (L);
 
@@ -86,6 +126,8 @@ int main (int, char **)
     lua_close(L);
     return 1;
   }
+
+  //runPerformanceTests ();
 
   lua_close(L);
   return 0;

@@ -345,4 +345,10 @@ void addToState (lua_State *L)
   ;
 }
 
+void resetTests ()
+{
+  g_success = true;
+  A::testStaticProp = 47;
+}
+
 }
