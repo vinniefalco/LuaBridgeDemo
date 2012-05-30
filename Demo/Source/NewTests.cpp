@@ -119,12 +119,12 @@ void performTest (TestHost& host, std::string script)
 
   int result = luaL_loadstring (L, script.c_str ());
 
-  if (result == LUA_OK)
+  if (result == 0)
   {
     result = lua_pcall (L, 0, 0, 0);
   }
 
-  if (result == LUA_OK )
+  if (result == 0)
   {
     host.print (std::string ("PASS: ") + script);
   }

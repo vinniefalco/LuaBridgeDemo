@@ -67,7 +67,10 @@
             file="JUCEAmalgam/include/juce_gui_basics_amalgam.mm"/>
     </GROUP>
     <GROUP id="{B260E974-4098-CE7E-07A9-D6A5F5AB84A8}" name="Lua">
-      <FILE id="uvSSZR" name="LuaLibrary.cpp" compile="1" resource="0" file="../Lua/LuaLibrary.cpp"/>
+      <FILE id="H1mPUK" name="LuaLibrary5.1.5.cpp" compile="1" resource="0"
+            file="../Lua/LuaLibrary5.1.5.cpp"/>
+      <FILE id="sz29eM" name="LuaLibrary5.2.0.cpp" compile="1" resource="0"
+            file="../Lua/LuaLibrary5.2.0.cpp"/>
       <FILE id="RkeW5x" name="LuaLibrary.h" compile="0" resource="0" file="../Lua/LuaLibrary.h"/>
     </GROUP>
     <GROUP id="{57691745-83BC-D2F2-FC34-5F751803C298}" name="LuaBridge">

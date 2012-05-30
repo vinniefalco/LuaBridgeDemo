@@ -54,7 +54,7 @@ public:
       // compile-time error
       m_luaState->print (lua_tostring (L, -1));
     }
-    else if (LuaState::pcall (L, 0, 0) != LUA_OK)
+    else if (LuaState::pcall (L, 0, 0) != 0)
     {
       m_luaState->print (lua_tostring (L, -1));
     }

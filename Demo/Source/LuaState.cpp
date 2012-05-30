@@ -128,7 +128,8 @@ public:
 
     // Install the traceback
     lua_pushcfunction (L_, tracebackFunction);
-    lua_rawsetp (L_, LUA_REGISTRYINDEX, getTracebackKey ());
+    lua_pushlightuserdata (L_, getTracebackKey ());
+    lua_rawset (L_, LUA_REGISTRYINDEX);
 
     return L_;
   }
@@ -202,14 +203,15 @@ LuaState* LuaState::New ()
 int LuaState::pcall (lua_State* L, int numberOfArguments, int numberOfReturnValues)
 {
   // push msgh
-  lua_rawgetp (L, LUA_REGISTRYINDEX, LuaStateImp::getTracebackKey ());
+  lua_pushlightuserdata (L, LuaStateImp::getTracebackKey ());
+  lua_rawget (L, LUA_REGISTRYINDEX);
   int msgh = -(numberOfArguments+2);
   lua_insert (L, msgh);
 
   int result = lua_pcall (L, numberOfArguments, numberOfReturnValues, msgh);
 
   // remove msgh
-  if (result == LUA_OK)
+  if (result == 0)
     lua_remove (L, -(numberOfReturnValues+1));
   else
     lua_remove (L, -2);
