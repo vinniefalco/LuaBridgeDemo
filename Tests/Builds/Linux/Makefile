@@ -43,7 +43,8 @@ ifeq ($(CONFIG),Release)
 endif
 
 OBJECTS := \
-  $(OBJDIR)/LuaLibrary_449d2d1e.o \
+  $(OBJDIR)/LuaLibrary5.1.5_2cc1eeeb.o \
+  $(OBJDIR)/LuaLibrary5.2.0_6161b4a7.o \
   $(OBJDIR)/TestsMain_d88417db.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
 
@@ -62,9 +63,14 @@ clean:
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
 
-$(OBJDIR)/LuaLibrary_449d2d1e.o: ../../../Lua/LuaLibrary.cpp
+$(OBJDIR)/LuaLibrary5.1.5_2cc1eeeb.o: ../../../Lua/LuaLibrary5.1.5.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling LuaLibrary.cpp"
+	@echo "Compiling LuaLibrary5.1.5.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/LuaLibrary5.2.0_6161b4a7.o: ../../../Lua/LuaLibrary5.2.0.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling LuaLibrary5.2.0.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/TestsMain_d88417db.o: ../../Source/TestsMain.cpp
