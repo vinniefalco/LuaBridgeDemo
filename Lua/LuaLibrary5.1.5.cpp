@@ -50,15 +50,11 @@ extern "C"
    from certain source files. We define all the relevant macros
    and include luaconf.h once so we get all the declarations.
 */
-#define lobject_c
-#define lvm_c
 #define LUA_CORE
-#define LUA_LIB
-#include "Lua.5.2.0/src/luaconf.h"
-#undef lobject_c
-#undef lvm_c
+#define loslib_c
+#include "Lua.5.1.5/src/luaconf.h"
 #undef LUA_CORE
-#undef LUA_LIB
+#undef loslib_c
 
 #if _MSC_VER
 #pragma warning (push)
@@ -69,45 +65,40 @@ extern "C"
 /* Include this early to prevent the conflict with luai_hashnum
    and supress the warning caused by #define lua_assert
 */
-#include "Lua.5.2.0/src/ltable.c"
-
-#include "Lua.5.2.0/src/lauxlib.c"
-#include "Lua.5.2.0/src/lbaselib.c"
-
-#include "Lua.5.2.0/src/lbitlib.c"
-#include "Lua.5.2.0/src/lcorolib.c"
-#include "Lua.5.2.0/src/ldblib.c"
-#include "Lua.5.2.0/src/linit.c"
-#include "Lua.5.2.0/src/liolib.c"
-#include "Lua.5.2.0/src/lmathlib.c"
-#include "Lua.5.2.0/src/loslib.c"
-#include "Lua.5.2.0/src/lstrlib.c"
-#include "Lua.5.2.0/src/ltablib.c"
-
-#include "Lua.5.2.0/src/lapi.c"
-#include "Lua.5.2.0/src/lcode.c"
-#include "Lua.5.2.0/src/lctype.c"
-#include "Lua.5.2.0/src/ldebug.c"
-#include "Lua.5.2.0/src/ldo.c"
-#include "Lua.5.2.0/src/ldump.c"
-#include "Lua.5.2.0/src/lfunc.c"
-#include "Lua.5.2.0/src/lgc.c"
-#include "Lua.5.2.0/src/llex.c"
-#include "Lua.5.2.0/src/lmem.c"
-#include "Lua.5.2.0/src/lobject.c"
-#include "Lua.5.2.0/src/lopcodes.c"
-#include "Lua.5.2.0/src/lparser.c"
-#include "Lua.5.2.0/src/lstate.c"
-#include "Lua.5.2.0/src/lstring.c"
-#include "Lua.5.2.0/src/ltm.c"
-#include "Lua.5.2.0/src/lundump.c"
-#include "Lua.5.2.0/src/lvm.c"
-#include "Lua.5.2.0/src/lzio.c"
+#include "Lua.5.1.5/src/lapi.c"
+#include "Lua.5.1.5/src/lauxlib.c"
+#include "Lua.5.1.5/src/lbaselib.c"
+#include "Lua.5.1.5/src/lcode.c"
+#include "Lua.5.1.5/src/ldblib.c"
+#include "Lua.5.1.5/src/ldebug.c"
+#include "Lua.5.1.5/src/ldo.c"
+#include "Lua.5.1.5/src/ldump.c"
+#include "Lua.5.1.5/src/lfunc.c"
+#include "Lua.5.1.5/src/lgc.c"
+#include "Lua.5.1.5/src/linit.c"
+#include "Lua.5.1.5/src/liolib.c"
+#include "Lua.5.1.5/src/llex.c"
+#include "Lua.5.1.5/src/lmathlib.c"
+#include "Lua.5.1.5/src/lmem.c"
+#include "Lua.5.1.5/src/lobject.c"
+#include "Lua.5.1.5/src/lopcodes.c"
+#include "Lua.5.1.5/src/loslib.c"
+#include "Lua.5.1.5/src/lparser.c"
+#include "Lua.5.1.5/src/lstate.c"
+#include "Lua.5.1.5/src/lstring.c"
+#include "Lua.5.1.5/src/lstrlib.c"
+#include "Lua.5.1.5/src/ltable.c"
+#include "Lua.5.1.5/src/ltablib.c"
+#include "Lua.5.1.5/src/ltm.c"
+#include "Lua.5.1.5/src/lundump.c"
+#include "Lua.5.1.5/src/lvm.c"
+#include "Lua.5.1.5/src/lzio.c"
+//#include "Lua.5.1.5/src/print.c"
 
 /* loadlib.c includes Windows.h, which defines the LoadString macro,
    so include it last to prevent errors.
 */
-#include "Lua.5.2.0/src/loadlib.c"
+#include "Lua.5.1.5/src/loadlib.c"
 
 #if _MSC_VER
 #pragma warning (pop)

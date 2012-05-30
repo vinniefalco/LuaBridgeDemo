@@ -37,7 +37,7 @@
 // The value is the same as LUA_VERSION_NUM in lua.h
 
 #ifndef LUABRIDGEDEMO_LUA_VERSION
-#if 0
+#if 1
   #define LUABRIDGEDEMO_LUA_VERSION 502   // use 5.2.0
 #else
   #define LUABRIDGEDEMO_LUA_VERSION 501   // use 5.1.0 (really 5.1.5)
