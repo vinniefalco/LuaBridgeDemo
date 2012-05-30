@@ -131,12 +131,13 @@
     <Filter Name="LuaBridgeTests">
       <Filter Name="Lua">
         <File RelativePath="..\..\..\Lua\LuaLibrary.h"/>
-        <File RelativePath="..\..\..\Lua\LuaLibrary.cpp"/>
+        <File RelativePath="..\..\..\Lua\LuaLibrary5.1.5.cpp"/>
+        <File RelativePath="..\..\..\Lua\LuaLibrary5.2.0.cpp"/>
       </Filter>
       <Filter Name="LuaBridge">
         <File RelativePath="..\..\..\LuaBridge\LuaBridge.h"/>
-        <File RelativePath="..\..\..\LuaBridge\LuaBridgeExtras.h"/>
-        <File RelativePath="..\..\..\LuaBridge\shared_ptr.h"/>
+        <File RelativePath="..\..\..\LuaBridge\RefCountedObject.h"/>
+        <File RelativePath="..\..\..\LuaBridge\RefCountedPtr.h"/>
       </Filter>
       <Filter Name="Source">
         <File RelativePath="..\..\Source\TestsMain.cpp"/>

@@ -9,5 +9,5 @@ namespace BinaryData
 {
     extern const char*   Tests_lua;
     const int            Tests_luaSize = 3877;
-}
 
+}

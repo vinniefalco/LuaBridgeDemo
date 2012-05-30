@@ -19,7 +19,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Lua\LuaLibrary.cpp">
+    <ClCompile Include="..\..\..\Lua\LuaLibrary5.1.5.cpp">
+      <Filter>LuaBridgeTests\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Lua\LuaLibrary5.2.0.cpp">
       <Filter>LuaBridgeTests\Lua</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\TestsMain.cpp">
@@ -39,10 +42,10 @@
     <ClInclude Include="..\..\..\LuaBridge\LuaBridge.h">
       <Filter>LuaBridgeTests\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\LuaBridge\LuaBridgeExtras.h">
+    <ClInclude Include="..\..\..\LuaBridge\RefCountedObject.h">
       <Filter>LuaBridgeTests\LuaBridge</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\LuaBridge\shared_ptr.h">
+    <ClInclude Include="..\..\..\LuaBridge\RefCountedPtr.h">
       <Filter>LuaBridgeTests\LuaBridge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Tests.h">
