@@ -48,7 +48,8 @@ OBJECTS := \
   $(OBJDIR)/juce_events_amalgam_7d753996.o \
   $(OBJDIR)/juce_graphics_amalgam_f3add948.o \
   $(OBJDIR)/juce_gui_basics_amalgam_dc5a1886.o \
-  $(OBJDIR)/LuaLibrary_449d2d1e.o \
+  $(OBJDIR)/LuaLibrary5.1.5_2cc1eeeb.o \
+  $(OBJDIR)/LuaLibrary5.2.0_6161b4a7.o \
   $(OBJDIR)/Main_90ebc5c2.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
 
@@ -92,9 +93,14 @@ $(OBJDIR)/juce_gui_basics_amalgam_dc5a1886.o: ../../JUCEAmalgam/include/juce_gui
 	@echo "Compiling juce_gui_basics_amalgam.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/LuaLibrary_449d2d1e.o: ../../../Lua/LuaLibrary.cpp
+$(OBJDIR)/LuaLibrary5.1.5_2cc1eeeb.o: ../../../Lua/LuaLibrary5.1.5.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling LuaLibrary.cpp"
+	@echo "Compiling LuaLibrary5.1.5.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/LuaLibrary5.2.0_6161b4a7.o: ../../../Lua/LuaLibrary5.2.0.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling LuaLibrary5.2.0.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp

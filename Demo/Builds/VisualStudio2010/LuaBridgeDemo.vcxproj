@@ -133,7 +133,8 @@
     <ClCompile Include="..\..\JUCEAmalgam\include\juce_events_amalgam.cpp"/>
     <ClCompile Include="..\..\JUCEAmalgam\include\juce_graphics_amalgam.cpp"/>
     <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.cpp"/>
-    <ClCompile Include="..\..\..\Lua\LuaLibrary.cpp"/>
+    <ClCompile Include="..\..\..\Lua\LuaLibrary5.1.5.cpp"/>
+    <ClCompile Include="..\..\..\Lua\LuaLibrary5.2.0.cpp"/>
     <ClCompile Include="..\..\Source\App.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>

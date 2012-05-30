@@ -29,6 +29,11 @@
 
 #include "AppConfig.h"
 
+#define LUALIBRARY_SOURCE
+#include "LuaLibrary.h"
+
+#if LUABRIDGEDEMO_LUA_VERSION == 502
+
 #if _MSC_VER
 #pragma push_macro("_CRT_SECURE_NO_WARNINGS")
 #ifndef _CRT_SECURE_NO_WARNINGS
@@ -114,4 +119,6 @@ extern "C"
 
 #if _MSC_VER
 #pragma pop_macro("_CRT_SECURE_NO_WARNINGS")
+#endif
+
 #endif

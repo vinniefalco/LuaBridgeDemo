@@ -55,7 +55,10 @@
     <ClCompile Include="..\..\JUCEAmalgam\include\juce_gui_basics_amalgam.mm">
       <Filter>LuaBridgeDemo\JUCEAmalgam</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Lua\LuaLibrary.cpp">
+    <ClCompile Include="..\..\..\Lua\LuaLibrary5.1.5.cpp">
+      <Filter>LuaBridgeDemo\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Lua\LuaLibrary5.2.0.cpp">
       <Filter>LuaBridgeDemo\Lua</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\App.cpp">
