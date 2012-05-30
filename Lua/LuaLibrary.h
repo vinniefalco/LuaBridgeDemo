@@ -33,6 +33,6 @@
 #ifndef LUALIBRARY_HEADER
 #define LUALIBRARY_HEADER
 
-#include "Lua_5_2/lua.hpp"
+#include "LUa.5.2.0/src/lua.hpp"
 
 #endif
