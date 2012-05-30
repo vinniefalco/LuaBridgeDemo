@@ -70,7 +70,7 @@ for registering the two classes:
 
 There are four types of objects that LuaBridge can register:
 
-- **Data**: Global varaibles, static class data members, and class data
+- **Data**: Global variables, static class data members, and class data
             members.
 
 - **Functions**: Regular functions, static class members, and class member
@@ -423,8 +423,8 @@ For example, here is a specialization for a [juce::String][6]:
 
 Sometimes it is convenient from within a bound function or member function
 to gain access to the `lua_State*` normally available to a `lua_CFunction`.
-With LuaBridge, all you need to do is add a `lua_State*` parameter at any
-position in your bound function:
+With LuaBridge, all you need to do is add a `lua_State*` as the last
+parameter of your bound function:
 
     void useState (lua_State* L);
 
@@ -432,14 +432,15 @@ position in your bound function:
 
 You can still include regular arguments while receiving the state:
 
-    void useStateAndArgs (int i, lua_State* L, std::string s);
+    void useStateAndArgs (int i, std::string s, lua_State* L);
 
     getGlobalNamespace (L).addFunction ("useStateAndArgs", &useStateAndArgs);
 
 When a script calls `useStateAndArgs`, it passes only the integer and string
 parameters. LuaBridge takes care of inserting the `lua_State*` into the
 argument list for the corresponding C++ function. This will work correctly
-even for the state created by coroutines.
+even for the state created by coroutines. Undefined behavior results if
+the `lua_State*` is not the last parameter.
 
 ### Class Object Types
 
