@@ -75,6 +75,8 @@ struct VecHelper
 
 struct C
 {
+  C () { }
+
   Vec v;
   Vec const& get () const
   {
@@ -127,6 +129,7 @@ void addToState (lua_State* L) {
         .addProperty ("z", &VecHelper::get <2>, &VecHelper::set <2>)
       .endClass ()
       .beginClass <C> ("C")
+        .addConstructor <void (*)(void)> ()
         .addProperty ("v", &C::get, &C::set)
         .addStaticCFunction ("static_cfunc", &C::static_cfunc)
         .addCFunction ("cfunc", &C::cfunc)
