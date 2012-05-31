@@ -84,7 +84,22 @@ struct C
   {
     v = v_;
   }
+
+  static int static_cfunc (lua_State*)
+  {
+    return 0;
+  }
+
+  int cfunc (lua_State*)
+  {
+    return 0;
+  }
 };
+
+int cfunc (lua_State*)
+{
+  return 0;
+}
 
 void byptr (A*)
 {
@@ -113,7 +128,10 @@ void addToState (lua_State* L) {
       .endClass ()
       .beginClass <C> ("C")
         .addProperty ("v", &C::get, &C::set)
+        .addStaticCFunction ("static_cfunc", &C::static_cfunc)
+        .addCFunction ("cfunc", &C::cfunc)
       .endClass ()
+      .addCFunction ("cfunc", &cfunc)
       .addFunction ("byptr", &byptr)
       .addFunction ("byref", &byref)
     .endNamespace ();
