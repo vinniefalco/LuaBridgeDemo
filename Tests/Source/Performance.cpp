@@ -1,4 +1,4 @@
-//==============================================================================
+//==========v====================================================================
 /*
   https://github.com/vinniefalco/LuaBridge
   https://github.com/vinniefalco/LuaBridgeDemo
@@ -37,6 +37,7 @@
 #include <iomanip>
 #include <string>
 #include <vector>
+#include <ctime>
 
 #include "LuaLibrary.h"
 
@@ -46,60 +47,141 @@
 #include "BinaryData.h"
 #include "Performance.h"
 
-#if 0
-int print (lua_State*)
+namespace PerformanceTests
 {
-  return 0;
+
+using namespace std;
+using namespace luabridge;
+
+//------------------------------------------------------------------------------
+/**
+  Simple stopwatch for measuring elapsed time.
+*/
+class Stopwatch
+{
+private:
+  clock_t m_start;
+
+public:
+  Stopwatch ()
+  {
+    start ();
+  }
+
+  void start ()
+  {
+    m_start = clock ();
+  }
+
+  double getElapsedSeconds ()
+  {
+    clock_t now;
+    
+    now = clock ();
+
+    return (double (now - m_start)) / CLOCKS_PER_SEC;
+  }
+};
+
+//------------------------------------------------------------------------------
+/**
+  Classes used for performance tests.
+*/
+
+struct A
+{
+  A () : data (0), prop (0)
+  {
+  }
+
+  void mf1 ()
+  {
+  }
+
+  void mf2 (A*)
+  {
+  }
+
+  void mf3 (A&)
+  {
+  }
+
+  virtual void vf1 ()
+  {
+  }
+
+  int data;
+
+  int prop;
+  int getprop () const
+  {
+    return prop;
+  }
+  void setprop (int v)
+  {
+    prop = v;
+  }
+};
+
+//------------------------------------------------------------------------------
+
+void addToState (lua_State* L)
+{
+  getGlobalNamespace (L)
+    .beginClass <A> ("A")
+      .addConstructor <void (*)(void)> ()
+      .addMethod ("mf1", &A::mf1)
+      .addMethod ("mf2", &A::mf2)
+      .addMethod ("mf3", &A::mf3)
+      .addMethod ("vf1", &A::vf1)
+      .addData ("data",  &A::data)
+      .addProperty ("prop", &A::getprop, &A::setprop)
+    .endClass ()
+    ;
 }
 
-void callBase (lua_State* L, int count)
+void runTests (lua_State* L)
 {
-  int result = luaL_loadstring (L, "a:testSucceeded()");
+  cout.precision (4);
 
-  while (count--)
+  int result;
+
+  luaL_dostring (L, "a = A()");
+
+  int const trials = 5;
+
+  for (int trial = 0; trial < trials; ++trial)
   {
-    lua_pushvalue (L, -1);
-    result = lua_pcall (L, 0, 0, 0);
-    assert (result == 0);
+    result = luaL_loadstring (L, "a:mf1 ()");
     if (result != 0)
+      lua_error (L);
+
+    int const N = 10000000;
+
+    Stopwatch sw;
+
+    sw.start ();
+    for (int i = 0; i < N; ++i)
     {
-      std::string s = lua_tostring (L, -1);
-      cerr << s;
-      break;
+      lua_pushvalue (L, -1);
+      lua_call (L, 0, 0);
     }
+
+    double const seconds = sw.getElapsedSeconds ();
+
+    cout << "Elapsed time: " << seconds << endl;
   }
+}
+
 }
 
 void runPerformanceTests ()
 {
   lua_State* L = luaL_newstate ();
-
   luaL_openlibs (L);
 
-  LuaBridgeTests::addToState (L);
-
-  // disable print
-  lua_pushcfunction (L, &print);
-  lua_setglobal (L, "print");
-
-  int result;
-
-  // create 'a'
-  result = luaL_dostring (L, "a = A(\"A\")");
-  assert (result == 0);
-
-  // create 'b'
-  result = luaL_dostring (L, "b = B(\"A\")");
-  assert (result == 0);
-
-  int const N = 10000000;
-
-  callBase (L, N);
+  PerformanceTests::addToState (L);
+  PerformanceTests::runTests (L);
 
   lua_close (L);
-}
-#endif
-
-void runPerformanceTests ()
-{
 }
