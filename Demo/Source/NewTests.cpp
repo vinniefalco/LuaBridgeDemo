@@ -111,8 +111,10 @@ void byref (A&)
 {
 }
 
-void addToState (lua_State* L) {
+void addToState (lua_State* L)
+{
   setHideMetatables (false);
+
   getGlobalNamespace (L)
     .beginNamespace ("test")
       .beginClass <A> ("A")
@@ -120,8 +122,7 @@ void addToState (lua_State* L) {
         .addFunction ("print", &A::print)
       .endClass ()
       .deriveClass <B, A> ("B")
-        .addConstructor <void (*)(void),
-                         RefCountedObjectPtr <B> > ()
+        .addConstructor <void (*)(void), RefCountedObjectPtr <B> > ()
       .endClass ()
       .beginClass <Vec> ("Vec")
         .addConstructor <void (*)(void)> ()
