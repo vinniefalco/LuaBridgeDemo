@@ -112,6 +112,7 @@ void byref (A&)
 }
 
 void addToState (lua_State* L) {
+  setHideMetatables (false);
   getGlobalNamespace (L)
     .beginNamespace ("test")
       .beginClass <A> ("A")
