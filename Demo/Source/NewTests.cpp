@@ -116,7 +116,7 @@ void addToState (lua_State* L) {
     .beginNamespace ("test")
       .beginClass <A> ("A")
         .addConstructor <void (*)(void), RefCountedObjectPtr <A> > ()
-        .addMethod ("print", &A::print)
+        .addFunction ("print", &A::print)
       .endClass ()
       .deriveClass <B, A> ("B")
         .addConstructor <void (*)(void),
