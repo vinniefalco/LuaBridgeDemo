@@ -45,39 +45,61 @@
 
 #include "BinaryData.h"
 #include "Performance.h"
-#include "Tests.h"
-#include "Tests.cpp"
 
-using namespace std;
+#if 0
+int print (lua_State*)
+{
+  return 0;
+}
 
-int main (int, char **)
+void callBase (lua_State* L, int count)
+{
+  int result = luaL_loadstring (L, "a:testSucceeded()");
+
+  while (count--)
+  {
+    lua_pushvalue (L, -1);
+    result = lua_pcall (L, 0, 0, 0);
+    assert (result == 0);
+    if (result != 0)
+    {
+      std::string s = lua_tostring (L, -1);
+      cerr << s;
+      break;
+    }
+  }
+}
+
+void runPerformanceTests ()
 {
   lua_State* L = luaL_newstate ();
 
   luaL_openlibs (L);
 
-  int errorFunctionRef = LuaBridgeTests::addTraceback (L);
-
   LuaBridgeTests::addToState (L);
 
-  // Execute lua files in order
-  if (luaL_loadstring (L, BinaryData::Tests_lua) != 0)
-  {
-    // compile-time error
-    cerr << lua_tostring(L, -1) << endl;
-    lua_close(L);
-    return 1;
-  }
-  else if (lua_pcall(L, 0, 0, errorFunctionRef) != 0)
-  {
-    // runtime error
-    cerr << lua_tostring(L, -1) << endl;
-    lua_close(L);
-    return 1;
-  }
+  // disable print
+  lua_pushcfunction (L, &print);
+  lua_setglobal (L, "print");
 
-  runPerformanceTests ();
+  int result;
 
-  lua_close(L);
-  return 0;
+  // create 'a'
+  result = luaL_dostring (L, "a = A(\"A\")");
+  assert (result == 0);
+
+  // create 'b'
+  result = luaL_dostring (L, "b = B(\"A\")");
+  assert (result == 0);
+
+  int const N = 10000000;
+
+  callBase (L, N);
+
+  lua_close (L);
+}
+#endif
+
+void runPerformanceTests ()
+{
 }
