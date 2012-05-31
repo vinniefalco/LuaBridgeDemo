@@ -34,7 +34,10 @@ typedef RefCountedObjectType <int> RefCountedObject;
 namespace newtests
 {
 
+using namespace std;
 using namespace luabridge;
+
+//------------------------------------------------------------------------------
 
 struct A : RefCountedObject {
   virtual void print (lua_State* L) {
@@ -48,15 +51,19 @@ struct B : A {
   }
 };
 
-#if 1
+//------------------------------------------------------------------------------
+
 struct Vec
 {
+  Vec ()
+  {
+    coord [0] = 0;
+    coord [1] = 0;
+    coord [2] = 0;
+  }
+
   float coord [3];
 };
-#else
-typedef float Vec [3];
-
-#endif
 
 struct VecHelper
 {
@@ -73,12 +80,14 @@ struct VecHelper
   }
 };
 
+//------------------------------------------------------------------------------
+
 struct C
 {
   C () { }
 
   Vec v;
-  Vec const& get () const
+  Vec& get ()
   {
     return v;
   }
@@ -98,6 +107,8 @@ struct C
   }
 };
 
+//------------------------------------------------------------------------------
+
 int cfunc (lua_State*)
 {
   return 0;
@@ -110,6 +121,8 @@ void byptr (A*)
 void byref (A&)
 {
 }
+
+//------------------------------------------------------------------------------
 
 void addToState (lua_State* L)
 {
@@ -132,7 +145,8 @@ void addToState (lua_State* L)
       .endClass ()
       .beginClass <C> ("C")
         .addConstructor <void (*)(void)> ()
-        .addProperty ("v", &C::get)//, &C::set)
+        //.addProperty ("v", &C::get, &C::set)
+        .addData ("v", &C::v)
         .addStaticCFunction ("static_cfunc", &C::static_cfunc)
         .addCFunction ("cfunc", &C::cfunc)
       .endClass ()
