@@ -86,6 +86,14 @@ struct C
   }
 };
 
+void byptr (A*)
+{
+}
+
+void byref (A&)
+{
+}
+
 void addToState (lua_State* L) {
   getGlobalNamespace (L)
     .beginNamespace ("test")
@@ -106,7 +114,11 @@ void addToState (lua_State* L) {
       .beginClass <C> ("C")
         .addProperty ("v", &C::get, &C::set)
       .endClass ()
+      .addFunction ("byptr", &byptr)
+      .addFunction ("byref", &byref)
     .endNamespace ();
+
+  //luaL_dostring (L, "function shouldFail");
 }
 
 //------------------------------------------------------------------------------
@@ -201,6 +213,7 @@ void runTests (TestHost& host)
 {
   host.print ("Running newtests.");
 
+  // In-place construction
   performTest (host, "a = test.A (); a = nil; collectgarbage ()");
 
   {
