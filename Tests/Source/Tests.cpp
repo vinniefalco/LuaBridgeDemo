@@ -322,19 +322,19 @@ void addToState (lua_State *L)
     .addFunction ("testParamStdStringRef", &testParamStdStringRef)
     .beginClass <A> ("A")
       .addConstructor <void (*) (const string &), RefCountedPtr <A> > ()
-      .addMethod ("testVirtual", &A::testVirtual)
-      .addMethod ("getName", &A::getName)
-      .addMethod ("testSucceeded", &A::testSucceeded)
-      .addMethod ("__add", &A::operator+)
+      .addFunction ("testVirtual", &A::testVirtual)
+      .addFunction ("getName", &A::getName)
+      .addFunction ("testSucceeded", &A::testSucceeded)
+      .addFunction ("__add", &A::operator+)
       .addData ("testProp", &A::testProp)
       .addProperty ("testProp2", &A::testPropGet, &A::testPropSet)
-      .addStaticMethod ("testStatic", &A::testStatic)
+      .addStaticFunction ("testStatic", &A::testStatic)
       .addStaticData ("testStaticProp", &A::testStaticProp)
       .addStaticProperty ("testStaticProp2", &A::testStaticPropGet, &A::testStaticPropSet)
     .endClass ()
     .deriveClass <B, A> ("B")
       .addConstructor <void (*) (const string &), RefCountedPtr <B> > ()
-      .addStaticMethod ("testStatic2", &B::testStatic2)
+      .addStaticFunction ("testStatic2", &B::testStatic2)
     .endClass ()
     .addFunction ("testParamAPtr", &testParamAPtr)
     .addFunction ("testParamAPtrConst", &testParamAPtrConst)
@@ -343,6 +343,12 @@ void addToState (lua_State *L)
     .addFunction ("testRetSharedPtrA", &testRetSharedPtrA)
     .addFunction ("testRetSharedPtrConstA", &testRetSharedPtrConstA)
   ;
+}
+
+void resetTests ()
+{
+  g_success = true;
+  A::testStaticProp = 47;
 }
 
 }

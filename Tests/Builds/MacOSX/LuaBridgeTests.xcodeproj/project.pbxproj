@@ -8,9 +8,12 @@
 
 		A0ACA914AFEB74E0F30EE92D = { isa = PBXBuildFile; fileRef = 3CD695FC1EA411C79D8A3822; };
 		8794BA16C837A5045183C005 = { isa = PBXBuildFile; fileRef = B44CED0F54C09437BAFF05F6; };
+		C7252ACA3AAA1AD55F961ECF = { isa = PBXBuildFile; fileRef = 0E025440B63FF03770A431F3; };
 		2D53A860C8503B9099D86638 = { isa = PBXBuildFile; fileRef = 8E98EAC4EED11C09DF81D61B; };
 		A7D875ED66D9D392B1E4C580 = { isa = PBXBuildFile; fileRef = 0F10A0D192ED1FFADE474ED6; };
+		0E025440B63FF03770A431F3 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Performance.cpp; path = ../../Source/Performance.cpp; sourceTree = "SOURCE_ROOT"; };
 		0F10A0D192ED1FFADE474ED6 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = BinaryData.cpp; path = ../../JuceLibraryCode/BinaryData.cpp; sourceTree = "SOURCE_ROOT"; };
+		2ABBC5393F7FD44B5FC21AB4 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Performance.h; path = ../../Source/Performance.h; sourceTree = "SOURCE_ROOT"; };
 		3CD695FC1EA411C79D8A3822 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LuaLibrary5.1.5.cpp; path = ../../../Lua/LuaLibrary5.1.5.cpp; sourceTree = "SOURCE_ROOT"; };
 		6E3662BA68B28D1E023B25A8 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Tests.cpp; path = ../../Source/Tests.cpp; sourceTree = "SOURCE_ROOT"; };
 		6F8D79CED0DF9D46F38BEC46 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Tests.h; path = ../../Source/Tests.h; sourceTree = "SOURCE_ROOT"; };
@@ -34,10 +37,12 @@
 				EC0248AD79AA3DDD34F8A314,
 				CDD25E3AC842BA1687C4A9DF ); name = LuaBridge; sourceTree = "<group>"; };
 		04FB78EC00312A0C7E10BFB6 = { isa = PBXGroup; children = (
-				8E98EAC4EED11C09DF81D61B,
+				0E025440B63FF03770A431F3,
+				2ABBC5393F7FD44B5FC21AB4,
 				6E3662BA68B28D1E023B25A8,
 				6F8D79CED0DF9D46F38BEC46,
-				DC6F50125D7B8E869068B0FF ); name = Source; sourceTree = "<group>"; };
+				DC6F50125D7B8E869068B0FF,
+				8E98EAC4EED11C09DF81D61B ); name = Source; sourceTree = "<group>"; };
 		0AF3D56120E37925A2643742 = { isa = PBXGroup; children = (
 				C22CF00FC587FBB0CD289B63,
 				2E282CF26CD43BF5BE7017A1,
@@ -132,6 +137,7 @@
 		A88003C7AE8F63BE247D3DA2 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
 				A0ACA914AFEB74E0F30EE92D,
 				8794BA16C837A5045183C005,
+				C7252ACA3AAA1AD55F961ECF,
 				2D53A860C8503B9099D86638,
 				A7D875ED66D9D392B1E4C580 ); runOnlyForDeploymentPostprocessing = 0; };
 		289631D475B12A56F31BEA21 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (  ); runOnlyForDeploymentPostprocessing = 0; };

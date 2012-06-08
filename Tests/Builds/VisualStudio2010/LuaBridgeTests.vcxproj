@@ -128,10 +128,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Lua\LuaLibrary5.1.5.cpp"/>
     <ClCompile Include="..\..\..\Lua\LuaLibrary5.2.0.cpp"/>
-    <ClCompile Include="..\..\Source\TestsMain.cpp"/>
+    <ClCompile Include="..\..\Source\Performance.cpp"/>
     <ClCompile Include="..\..\Source\Tests.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\Source\TestsMain.cpp"/>
     <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp"/>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +140,7 @@
     <ClInclude Include="..\..\..\LuaBridge\LuaBridge.h"/>
     <ClInclude Include="..\..\..\LuaBridge\RefCountedObject.h"/>
     <ClInclude Include="..\..\..\LuaBridge\RefCountedPtr.h"/>
+    <ClInclude Include="..\..\Source\Performance.h"/>
     <ClInclude Include="..\..\Source\Tests.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\AppConfig.h"/>
     <ClInclude Include="..\..\JuceLibraryCode\BinaryData.h"/>

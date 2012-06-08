@@ -63,10 +63,12 @@
       <FILE id="elDjma" name="RefCountedPtr.h" compile="0" resource="0" file="../LuaBridge/RefCountedPtr.h"/>
     </GROUP>
     <GROUP id="{077A9A84-32D7-C467-DD50-0CC70DE4B5EE}" name="Source">
-      <FILE id="yhQDiV" name="TestsMain.cpp" compile="1" resource="0" file="Source/TestsMain.cpp"/>
+      <FILE id="pzeo5J" name="Performance.cpp" compile="1" resource="0" file="Source/Performance.cpp"/>
+      <FILE id="F47jBG" name="Performance.h" compile="0" resource="0" file="Source/Performance.h"/>
       <FILE id="B21XbB" name="Tests.cpp" compile="0" resource="0" file="Source/Tests.cpp"/>
       <FILE id="tT3RVM" name="Tests.h" compile="0" resource="0" file="Source/Tests.h"/>
       <FILE id="PlJyT6" name="Tests.lua" compile="0" resource="1" file="Source/Tests.lua"/>
+      <FILE id="yhQDiV" name="TestsMain.cpp" compile="1" resource="0" file="Source/TestsMain.cpp"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

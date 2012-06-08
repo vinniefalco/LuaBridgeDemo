@@ -25,10 +25,13 @@
     <ClCompile Include="..\..\..\Lua\LuaLibrary5.2.0.cpp">
       <Filter>LuaBridgeTests\Lua</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\TestsMain.cpp">
+    <ClCompile Include="..\..\Source\Performance.cpp">
       <Filter>LuaBridgeTests\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\Tests.cpp">
+      <Filter>LuaBridgeTests\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\TestsMain.cpp">
       <Filter>LuaBridgeTests\Source</Filter>
     </ClCompile>
     <ClCompile Include="..\..\JuceLibraryCode\BinaryData.cpp">
@@ -47,6 +50,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\LuaBridge\RefCountedPtr.h">
       <Filter>LuaBridgeTests\LuaBridge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Performance.h">
+      <Filter>LuaBridgeTests\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Tests.h">
       <Filter>LuaBridgeTests\Source</Filter>

@@ -28,56 +28,9 @@
 */
 //==============================================================================
 
-/**
-  Command line version of LuaBridge test suite.
-*/
+#ifndef LUABRIDGE_PERFORMANCE_HEADER
+#define LUABRIDGE_PERFORMANCE_HEADER
 
-#include <cstdio>
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <vector>
+extern void runPerformanceTests ();
 
-#include "LuaLibrary.h"
-
-#include "../../LuaBridge/LuaBridge.h"
-#include "../../LuaBridge/RefCountedPtr.h"
-
-#include "BinaryData.h"
-#include "Performance.h"
-#include "Tests.h"
-#include "Tests.cpp"
-
-using namespace std;
-
-int main (int, char **)
-{
-  lua_State* L = luaL_newstate ();
-
-  luaL_openlibs (L);
-
-  int errorFunctionRef = LuaBridgeTests::addTraceback (L);
-
-  LuaBridgeTests::addToState (L);
-
-  // Execute lua files in order
-  if (luaL_loadstring (L, BinaryData::Tests_lua) != 0)
-  {
-    // compile-time error
-    cerr << lua_tostring(L, -1) << endl;
-    lua_close(L);
-    return 1;
-  }
-  else if (lua_pcall(L, 0, 0, errorFunctionRef) != 0)
-  {
-    // runtime error
-    cerr << lua_tostring(L, -1) << endl;
-    lua_close(L);
-    return 1;
-  }
-
-  runPerformanceTests ();
-
-  lua_close(L);
-  return 0;
-}
+#endif

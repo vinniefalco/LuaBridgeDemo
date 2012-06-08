@@ -45,6 +45,7 @@ endif
 OBJECTS := \
   $(OBJDIR)/LuaLibrary5.1.5_2cc1eeeb.o \
   $(OBJDIR)/LuaLibrary5.2.0_6161b4a7.o \
+  $(OBJDIR)/Performance_fdb1291.o \
   $(OBJDIR)/TestsMain_d88417db.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
 
@@ -71,6 +72,11 @@ $(OBJDIR)/LuaLibrary5.1.5_2cc1eeeb.o: ../../../Lua/LuaLibrary5.1.5.cpp
 $(OBJDIR)/LuaLibrary5.2.0_6161b4a7.o: ../../../Lua/LuaLibrary5.2.0.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling LuaLibrary5.2.0.cpp"
+	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
+$(OBJDIR)/Performance_fdb1291.o: ../../Source/Performance.cpp
+	-@mkdir -p $(OBJDIR)
+	@echo "Compiling Performance.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/TestsMain_d88417db.o: ../../Source/TestsMain.cpp

@@ -42,6 +42,8 @@ extern void addToState (lua_State* L);
 */
 extern int addTraceback (lua_State* L);
 
+extern void resetTests ();
+
 }
 
 #endif
