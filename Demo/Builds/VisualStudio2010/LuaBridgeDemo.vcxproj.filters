@@ -146,6 +146,12 @@
     <None Include="..\..\..\README.md">
       <Filter>LuaBridgeDemo</Filter>
     </None>
+    <None Include="..\..\..\LuaBridge\CHANGES">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </None>
+    <None Include="..\..\..\LuaBridge\README.md">
+      <Filter>LuaBridgeDemo\LuaBridge</Filter>
+    </None>
     <None Include="..\..\..\Tests\Source\Tests.lua">
       <Filter>LuaBridgeDemo\Tests</Filter>
     </None>

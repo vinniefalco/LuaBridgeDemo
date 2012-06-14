@@ -9,17 +9,18 @@ namespace BinaryData
 {
 
 //================== README.md ==================
-static const unsigned char temp_1bef008b[] =
+static const unsigned char temp_e53339e8[] =
 "<a href=\"http://lua.org\">\r\n"
 "<img src=\"http://vinniefalco.github.com/LuaBridgeDemo/powered-by-lua.png\">\r\n"
 "</a><br>\r\n"
 "\r\n"
-"# LuaBridgeDemo 1.0\r\n"
+"# LuaBridgeDemo 1.0.3\r\n"
 "\r\n"
 "[LuaBridge][3] is a lightweight, dependency-free library for making C++ data,\r\n"
-"functions, and classes available to Lua. It works with Lua revisions starting\r\n"
-"from 5.1.2. [Lua][4] is a powerful, fast, lightweight, embeddable scripting\r\n"
-"language.\r\n"
+"functions, and classes available to [Lua][4]: A powerful, fast, lightweight,\r\n"
+"embeddable scripting language. LuaBridge has been tested and works with Lua\r\n"
+"revisions starting from 5.1.5., although it should work in any version of Lua\r\n"
+"from 5.1.0 and later.\r\n"
 "\r\n"
 "The LuaBridgeDemo is a stand-alone graphical program for compiling and running\r\n"
 "the LuaBridge  test suite with an included interactive window where you can enter\r\n"
@@ -40,7 +41,7 @@ static const unsigned char temp_1bef008b[] =
 "to export classes `A` and `B` to Lua.\r\n"
 "\r\n"
 "<a href=\"https://github.com/vinniefalco/LuaBridgeDemo\">\r\n"
-"<img src=\"http://vinniefalco.github.com/LuaBridgeDemo/LuaBridgeDemoScreenshot.png\">\r\n"
+"<img src=\"http://vinniefalco.github.com/LuaBridgeDemo/LuaBridgeDemoScreenshot1.0.2.png\">\r\n"
 "</a><br>\r\n"
 "\r\n"
 "<a href=\"https://github.com/vinniefalco/LuaBridgeDemo/downloads\">\r\n"
@@ -79,10 +80,10 @@ static const unsigned char temp_1bef008b[] =
 "[6]: https://github.com/vinniefalco/LuaBridgeDemo \"LuaBridgeDemo master branch\"\r\n"
 "[7]: https://github.com/vinniefalco/LuaBridgeDemo/tree/develop \"LuaBridgeDemo develop branch\"\r\n";
 
-const char* README_md = (const char*) temp_1bef008b;
+const char* README_md = (const char*) temp_e53339e8;
 
 //================== Tests.lua ==================
-static const unsigned char temp_b6c6a671[] =
+static const unsigned char temp_8b794c34[] =
 "-- test lua script to be run with the luabridge test program\r\n"
 "\r\n"
 "print(\"Running LuaBridge tests:\");\r\n"
@@ -191,7 +192,7 @@ static const unsigned char temp_b6c6a671[] =
 "\r\n"
 "print(\"All tests succeeded.\");\r\n";
 
-const char* Tests_lua = (const char*) temp_b6c6a671;
+const char* Tests_lua = (const char*) temp_8b794c34;
 
 
 const char* getNamedResource (const char*, int&) throw();
@@ -205,7 +206,7 @@ const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw
     switch (hash)
     {
         case 0x64791dc8:
-        case 0xee58bcf8:  numBytes = 2500; return README_md;
+        case 0xee58bcf8:  numBytes = 2597; return README_md;
         case 0x322b48ba:
         case 0x2a41f024:  numBytes = 3877; return Tests_lua;
         default: break;
