@@ -61,7 +61,7 @@
   <img src="http://vinniefalco.github.com/LuaBridgeDemo/powered-by-lua.png">
   </a><br>
 
-  # LuaBridge 1.0.2
+  # LuaBridge 1.0.3
 
   [LuaBridge][3] is a lightweight, dependency-free library for making C++ data,
   functions, and classes available to [Lua][5]: A powerful, fast, lightweight,
@@ -123,7 +123,7 @@
   for registering the two classes:
   
   <a href="https://github.com/vinniefalco/LuaBridgeDemo">
-  <img src="http://vinniefalco.github.com/LuaBridgeDemo/LuaBridgeDemoScreenshot.png">
+  <img src="http://vinniefalco.github.com/LuaBridgeDemo/LuaBridgeDemoScreenshot1.0.2.png">
   </a><br>
 
   ## Registration
@@ -880,7 +880,7 @@ namespace luabridge
   macro controls whether we use the 'throw ()' form, or 'noexcept' (if C++11
   is available) to distinguish the functions.
 */
-#if defined (__APPLE_CPP__) || defined(__APPLE_CC__) || defined (__GNUC__)
+#if defined (__APPLE_CPP__) || defined(__APPLE_CC__) || defined(__clang__) || defined(__GNUC__)
 // Do not define THROWSPEC since the Xcode and gcc  compilers do not
 // distinguish the throw specification in the function signature.
 #else
@@ -2313,7 +2313,7 @@ namespace Detail
     has a metatable, and the metatable has a value for a lightuserdata key
     with this identity pointer address, that LuaBridge created the userdata.
   */
-  static inline void* const getIdentityKey ()
+  static inline void* getIdentityKey ()
   {
     static char value;
     return &value;
@@ -2337,7 +2337,7 @@ namespace Detail
       The static table holds the static data members, static properties, and
       static member functions for a class.
     */
-    static void const* const getStaticKey ()
+    static void const* getStaticKey ()
     {
       static char value;
       return &value;
@@ -2350,7 +2350,7 @@ namespace Detail
       of a class. Read-only data and properties, and const member functions are
       also placed here (to save a lookup in the const table).
     */
-    static void const* const getClassKey ()
+    static void const* getClassKey ()
     {
       static char value;
       return &value;
@@ -2362,7 +2362,7 @@ namespace Detail
       The const table holds read-only data members and properties, and const
       member functions of a class.
     */
-    static void const* const getConstKey ()
+    static void const* getConstKey ()
     {
       static char value;
       return &value;
@@ -2396,7 +2396,7 @@ namespace Detail
       const table, or else a Lua error is raised. This is used for the
       __gc metamethod.
     */
-    static Userdata* const getExactClass (lua_State* L, int narg, void const* const classKey)
+    static Userdata* getExactClass (lua_State* L, int narg, void const* const classKey)
     {
       Userdata* ud = 0;
       int const index = lua_absindex (L, narg);
@@ -2486,7 +2486,7 @@ namespace Detail
       the resulting Userdata represents to a const object. We do the type check
       first so that the error message is informative.
     */
-    static Userdata* const getClass (
+    static Userdata* getClass (
       lua_State* L, int const index, void const* const baseClassKey, bool const canBeConst)
     {
       assert (index > 0);
@@ -2829,20 +2829,34 @@ namespace Detail
 
     static void push (lua_State* L, C const& c)
     {
-      new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (c);
-      lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getClassKey ());
-      // If this goes off it means the class T is unregistered!
-      assert (lua_istable (L, -1));
-      lua_setmetatable (L, -2);
+      if (ContainerTraits <C>::get (c) != 0)
+      {
+        new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (c);
+        lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getClassKey ());
+        // If this goes off it means the class T is unregistered!
+        assert (lua_istable (L, -1));
+        lua_setmetatable (L, -2);
+      }
+      else
+      {
+        lua_pushnil (L);
+      }
     }
 
     static void push (lua_State* L, T* const t)
     {
-      new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (t);
-      lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getClassKey ());
-      // If this goes off it means the class T is unregistered!
-      assert (lua_istable (L, -1));
-      lua_setmetatable (L, -2);
+      if (t)
+      {
+        new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (t);
+        lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getClassKey ());
+        // If this goes off it means the class T is unregistered!
+        assert (lua_istable (L, -1));
+        lua_setmetatable (L, -2);
+      }
+      else
+      {
+        lua_pushnil (L);
+      }
     }
   };
 
@@ -2855,20 +2869,34 @@ namespace Detail
 
     static void push (lua_State* L, C const& c)
     {
-      new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (c);
-      lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getConstKey ());
-      // If this goes off it means the class T is unregistered!
-      assert (lua_istable (L, -1));
-      lua_setmetatable (L, -2);
+      if (ContainerTraits <C>::get (c) != 0)
+      {
+        new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (c);
+        lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getConstKey ());
+        // If this goes off it means the class T is unregistered!
+        assert (lua_istable (L, -1));
+        lua_setmetatable (L, -2);
+      }
+      else
+      {
+        lua_pushnil (L);
+      }
     }
 
     static void push (lua_State* L, T* const t)
     {
-      new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (t);
-      lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getConstKey ());
-      // If this goes off it means the class T is unregistered!
-      assert (lua_istable (L, -1));
-      lua_setmetatable (L, -2);
+      if (t)
+      {
+        new (lua_newuserdata (L, sizeof (UserdataShared <C>))) UserdataShared <C> (t);
+        lua_rawgetp (L, LUA_REGISTRYINDEX, ClassInfo <T>::getConstKey ());
+        // If this goes off it means the class T is unregistered!
+        assert (lua_istable (L, -1));
+        lua_setmetatable (L, -2);
+      }
+      else
+      {
+        lua_pushnil (L);
+      }
     }
   };
 
@@ -4245,7 +4273,7 @@ private:
         rawgetfield (L, -2, "__propset");
         assert (lua_istable (L, -1));
         new (lua_newuserdata (L, sizeof (mp_t))) mp_t (mp);
-        lua_pushcclosure (L, &propsetProxy <U>, 1);
+        lua_pushcclosure (L, &setProperty <U>, 1);
         rawsetfield (L, -2, name);
         lua_pop (L, 1);
       }
