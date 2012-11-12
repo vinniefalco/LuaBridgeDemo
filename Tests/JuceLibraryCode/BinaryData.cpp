@@ -1,7 +1,6 @@
 /* ==================================== JUCER_BINARY_RESOURCE ====================================
 
-   This is an auto-generated file, created by The Introjucer 3.0.0
-   Do not edit anything in this file!
+   This is an auto-generated file: Any edits you make may be overwritten!
 
 */
 
@@ -9,7 +8,7 @@ namespace BinaryData
 {
 
 //================== Tests.lua ==================
-static const unsigned char temp_b6c6a671[] =
+static const unsigned char temp_89cf1814[] =
 "-- test lua script to be run with the luabridge test program\r\n"
 "\r\n"
 "print(\"Running LuaBridge tests:\");\r\n"
@@ -118,21 +117,20 @@ static const unsigned char temp_b6c6a671[] =
 "\r\n"
 "print(\"All tests succeeded.\");\r\n";
 
-const char* Tests_lua = (const char*) temp_b6c6a671;
+const char* Tests_lua = (const char*) temp_89cf1814;
 
 
 const char* getNamedResource (const char*, int&) throw();
 const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw()
 {
-    int hash = 0;
+    unsigned int hash = 0;
     if (resourceNameUTF8 != 0)
         while (*resourceNameUTF8 != 0)
-            hash = 31 * hash + *resourceNameUTF8++;
+            hash = 31 * hash + (unsigned int) *resourceNameUTF8++;
 
     switch (hash)
     {
-        case 0x322b48ba:
-        case 0xeec98b6c:  numBytes = 3877; return Tests_lua;
+        case 0x322b48ba:  numBytes = 3877; return Tests_lua;
         default: break;
     }
 

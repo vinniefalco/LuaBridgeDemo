@@ -153,7 +153,7 @@
       </Filter>
       <Filter Name="Lua">
         <File RelativePath="..\..\..\Lua\LuaLibrary5.1.5.cpp"/>
-        <File RelativePath="..\..\..\Lua\LuaLibrary5.2.0.cpp"/>
+        <File RelativePath="..\..\..\Lua\LuaLibrary5.2.1.cpp"/>
         <File RelativePath="..\..\..\Lua\LuaLibrary.h"/>
       </Filter>
       <Filter Name="LuaBridge">

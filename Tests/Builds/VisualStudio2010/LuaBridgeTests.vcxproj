@@ -93,7 +93,7 @@
       <HeaderFileName/>
     </Midl>
     <ClCompile>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>MinSpace</Optimization>
       <AdditionalIncludeDirectories>..\..\JuceLibraryCode;../../../Lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CONSOLE;WIN32;_WINDOWS;NDEBUG;JUCER_VS2010_78A501D=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -127,7 +127,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Lua\LuaLibrary5.1.5.cpp"/>
-    <ClCompile Include="..\..\..\Lua\LuaLibrary5.2.0.cpp"/>
+    <ClCompile Include="..\..\..\Lua\LuaLibrary5.2.1.cpp"/>
     <ClCompile Include="..\..\Source\Performance.cpp"/>
     <ClCompile Include="..\..\Source\Tests.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>

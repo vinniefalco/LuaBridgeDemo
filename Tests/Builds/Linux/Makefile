@@ -20,7 +20,7 @@ ifeq ($(CONFIG),Debug)
   CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../Lua
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -g -ggdb -O0
   CXXFLAGS += $(CFLAGS) 
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -ldl -lfreetype -lpthread -lrt -lX11 -lGL -lXinerama -lasound -lXext 
+  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ 
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "DEBUG=1" -D "_DEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../Lua
   TARGET := LuaBridgeTests
@@ -35,7 +35,7 @@ ifeq ($(CONFIG),Release)
   CPPFLAGS := $(DEPFLAGS) -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../Lua
   CFLAGS += $(CPPFLAGS) $(TARGET_ARCH) -Os
   CXXFLAGS += $(CFLAGS) 
-  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ -ldl -lfreetype -lpthread -lrt -lX11 -lGL -lXinerama -lasound -lXext 
+  LDFLAGS += -L$(BINDIR) -L$(LIBDIR) -L/usr/X11R6/lib/ 
   LDDEPS :=
   RESFLAGS :=  -D "LINUX=1" -D "NDEBUG=1" -D "JUCER_LINUX_MAKE_7346DA2A=1" -I /usr/include -I /usr/include/freetype2 -I ../../JuceLibraryCode -I ../../../Lua
   TARGET := LuaBridgeTests
@@ -44,7 +44,7 @@ endif
 
 OBJECTS := \
   $(OBJDIR)/LuaLibrary5.1.5_2cc1eeeb.o \
-  $(OBJDIR)/LuaLibrary5.2.0_6161b4a7.o \
+  $(OBJDIR)/LuaLibrary5.2.1_616fcc28.o \
   $(OBJDIR)/Performance_fdb1291.o \
   $(OBJDIR)/TestsMain_d88417db.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
@@ -64,14 +64,18 @@ clean:
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
 
+strip:
+	@echo Stripping LuaBridgeTests
+	-@strip --strip-unneeded $(OUTDIR)/$(TARGET)
+
 $(OBJDIR)/LuaLibrary5.1.5_2cc1eeeb.o: ../../../Lua/LuaLibrary5.1.5.cpp
 	-@mkdir -p $(OBJDIR)
 	@echo "Compiling LuaLibrary5.1.5.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/LuaLibrary5.2.0_6161b4a7.o: ../../../Lua/LuaLibrary5.2.0.cpp
+$(OBJDIR)/LuaLibrary5.2.1_616fcc28.o: ../../../Lua/LuaLibrary5.2.1.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling LuaLibrary5.2.0.cpp"
+	@echo "Compiling LuaLibrary5.2.1.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/Performance_fdb1291.o: ../../Source/Performance.cpp

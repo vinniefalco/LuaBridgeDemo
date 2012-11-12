@@ -49,7 +49,7 @@ OBJECTS := \
   $(OBJDIR)/juce_graphics_amalgam_f3add948.o \
   $(OBJDIR)/juce_gui_basics_amalgam_dc5a1886.o \
   $(OBJDIR)/LuaLibrary5.1.5_2cc1eeeb.o \
-  $(OBJDIR)/LuaLibrary5.2.0_6161b4a7.o \
+  $(OBJDIR)/LuaLibrary5.2.1_616fcc28.o \
   $(OBJDIR)/Main_90ebc5c2.o \
   $(OBJDIR)/BinaryData_ce4232d4.o \
 
@@ -67,6 +67,10 @@ clean:
 	-@rm -f $(OUTDIR)/$(TARGET)
 	-@rm -rf $(OBJDIR)/*
 	-@rm -rf $(OBJDIR)
+
+strip:
+	@echo Stripping LuaBridgeDemo
+	-@strip --strip-unneeded $(OUTDIR)/$(TARGET)
 
 $(OBJDIR)/juce_core_amalgam_b9b4addc.o: ../../JUCEAmalgam/include/juce_core_amalgam.cpp
 	-@mkdir -p $(OBJDIR)
@@ -98,9 +102,9 @@ $(OBJDIR)/LuaLibrary5.1.5_2cc1eeeb.o: ../../../Lua/LuaLibrary5.1.5.cpp
 	@echo "Compiling LuaLibrary5.1.5.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
-$(OBJDIR)/LuaLibrary5.2.0_6161b4a7.o: ../../../Lua/LuaLibrary5.2.0.cpp
+$(OBJDIR)/LuaLibrary5.2.1_616fcc28.o: ../../../Lua/LuaLibrary5.2.1.cpp
 	-@mkdir -p $(OBJDIR)
-	@echo "Compiling LuaLibrary5.2.0.cpp"
+	@echo "Compiling LuaLibrary5.2.1.cpp"
 	@$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
 $(OBJDIR)/Main_90ebc5c2.o: ../../Source/Main.cpp

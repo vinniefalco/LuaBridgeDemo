@@ -15,6 +15,7 @@
 		C8571EB1B5A2AC746EB1206B = { isa = PBXBuildFile; fileRef = E21D50C2D3FDBB3E3260383B; };
 		B7B4D3460572124D096888AB = { isa = PBXBuildFile; fileRef = 88632CE6741C1E055856C29B; };
 		21249B485F7F6E5A9228567A = { isa = PBXBuildFile; fileRef = 0DF7D522D7F2443C72269D5E; };
+		615F07E7F4E1C317CA1A0245 = { isa = PBXBuildFile; fileRef = 73260BD683C9F17423542DFF; };
 		7B03024E6503A2CC943811A1 = { isa = PBXBuildFile; fileRef = F4263F6FD4BA340FD5AF3D5B; };
 		1CF6EE256C35817EF80BC728 = { isa = PBXBuildFile; fileRef = 189E9DC578901D98F31ACDD1; };
 		53600451825034BE5E711AE3 = { isa = PBXBuildFile; fileRef = E1B46FED42499FBBA9B95422; };
@@ -26,7 +27,8 @@
 		A781414BE6FC0D702C4D51C6 = { isa = PBXBuildFile; fileRef = 11A0B339B5B6A4FBAE9BDDAE; };
 		09F7AF8B94C388B1B08BCA2A = { isa = PBXBuildFile; fileRef = 1D2BF0E2055B832B7B847298; };
 		3D4C8956D9655301725E100B = { isa = PBXBuildFile; fileRef = AC2BE0CA019F115FFA3BF831; };
-		E99532AA2CBBDA89EF369D17 = { isa = PBXBuildFile; fileRef = 45961B83FB2EBA62F0940B47; };
+		8886D6E98BDADDEA8E2899C5 = { isa = PBXBuildFile; fileRef = 81DD40579624BB14483AED39; };
+		8A8D4CE68CAEFD0A0A5BA603 = { isa = PBXBuildFile; fileRef = 0BE1A7A325848890F67797C3; };
 		2D9A13BFB9D4D429DF7EF848 = { isa = PBXBuildFile; fileRef = 6957AB52EE86CC8D937F1B1A; };
 		F40F45247F78FC01C330B03E = { isa = PBXBuildFile; fileRef = 1A764CF389D341619186D790; };
 		0110F715854624935FD9A8DC = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = TestHost.h; path = ../../Source/TestHost.h; sourceTree = "SOURCE_ROOT"; };
@@ -47,7 +49,6 @@
 		36F550B6532752A308B6A1B8 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CConsole.h; path = ../../Source/CConsole.h; sourceTree = "SOURCE_ROOT"; };
 		394692B9C324A1B45D0C3F21 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = NewTests.h; path = ../../Source/NewTests.h; sourceTree = "SOURCE_ROOT"; };
 		432B24F79C060E08AB2BD8D3 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
-		45961B83FB2EBA62F0940B47 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LuaLibrary5.2.0.cpp; path = ../../../Lua/LuaLibrary5.2.0.cpp; sourceTree = "SOURCE_ROOT"; };
 		4B13C44CB13E7BE9965FE3C3 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CConsoleEdit.h; path = ../../Source/CConsoleEdit.h; sourceTree = "SOURCE_ROOT"; };
 		51926E2C85EFC707CF49E460 = { isa = PBXFileReference; lastKnownFileType = file.lua; name = Tests.lua; path = ../../../Tests/Source/Tests.lua; sourceTree = "SOURCE_ROOT"; };
 		573FD7BBF3EC4EB53BED1F80 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Tests.h; path = ../../../Tests/Source/Tests.h; sourceTree = "SOURCE_ROOT"; };
@@ -56,12 +57,14 @@
 		5B223170EFE15C8299B67E6F = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = NewTests.cpp; path = ../../Source/NewTests.cpp; sourceTree = "SOURCE_ROOT"; };
 		6388B907296CAA91701E0E1F = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_graphics_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_graphics_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
 		6957AB52EE86CC8D937F1B1A = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Source/Main.cpp; sourceTree = "SOURCE_ROOT"; };
+		73260BD683C9F17423542DFF = { isa = PBXFileReference; lastKnownFileType = file.nib; name = RecentFilesMenuTemplate.nib; path = RecentFilesMenuTemplate.nib; sourceTree = "SOURCE_ROOT"; };
 		752735F56A2F1C825415A34D = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CConsoleWindow.h; path = ../../Source/CConsoleWindow.h; sourceTree = "SOURCE_ROOT"; };
 		75F2F85DDB0C665A8A414279 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CConsoleWindow.cpp; path = ../../Source/CConsoleWindow.cpp; sourceTree = "SOURCE_ROOT"; };
 		78C3AE94DF56A9D31EEABC28 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LuaBridge.h; path = ../../../LuaBridge/LuaBridge.h; sourceTree = "SOURCE_ROOT"; };
 		7E7014B4F989B1F2DFB5B762 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CConsoleText.h; path = ../../Source/CConsoleText.h; sourceTree = "SOURCE_ROOT"; };
 		7EC90260AE4C0C0207F0F4E2 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LuaBridgeExtras.h; path = ../../../LuaBridge/LuaBridgeExtras.h; sourceTree = "SOURCE_ROOT"; };
 		81C06C476387809FBA9CACA9 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		81DD40579624BB14483AED39 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LuaLibrary5.2.1.cpp; path = ../../../Lua/LuaLibrary5.2.1.cpp; sourceTree = "SOURCE_ROOT"; };
 		88632CE6741C1E055856C29B = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8B3CB1647A28C52EC11ED38C = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BinaryData.h; path = ../../JuceLibraryCode/BinaryData.h; sourceTree = "SOURCE_ROOT"; };
 		997DC26E587CE2AACDC199F8 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiscRecording.framework; path = System/Library/Frameworks/DiscRecording.framework; sourceTree = SDKROOT; };
@@ -70,15 +73,15 @@
 		A16B3351FB3E108584E95C20 = { isa = PBXFileReference; lastKnownFileType = file.md; name = README.md; path = ../../../README.md; sourceTree = "SOURCE_ROOT"; };
 		AAB551947738F69D0C1C18B7 = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		AC2BE0CA019F115FFA3BF831 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LuaLibrary5.1.5.cpp; path = ../../../Lua/LuaLibrary5.1.5.cpp; sourceTree = "SOURCE_ROOT"; };
-		BDA29FA79D560FDD16E00B22 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RefCountedPtr.h; path = ../../../LuaBridge/RefCountedPtr.h; sourceTree = "SOURCE_ROOT"; };
-		C7AC45A4DFCA9CDC698CA9DC = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LuaState.h; path = ../../Source/LuaState.h; sourceTree = "SOURCE_ROOT"; };
 		CC2216294164E0031F0E66C5 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "juce_events_amalgam.mm"; path = "../../JUCEAmalgam/include/juce_events_amalgam.mm"; sourceTree = "SOURCE_ROOT"; };
-		D85C11FBA6FC90A0EB8070C3 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LuaState.cpp; path = ../../Source/LuaState.cpp; sourceTree = "SOURCE_ROOT"; };
-		DEA3B5741D297A02D1769152 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Tests.cpp; path = ../../../Tests/Source/Tests.cpp; sourceTree = "SOURCE_ROOT"; };
 		E1B46FED42499FBBA9B95422 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_data_structures_amalgam.cpp"; path = "../../JUCEAmalgam/include/juce_data_structures_amalgam.cpp"; sourceTree = "SOURCE_ROOT"; };
-		E1D094E5113A941FCF492205 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_events_amalgam.cpp"; path = "../../JUCEAmalgam/include/juce_events_amalgam.cpp"; sourceTree = "SOURCE_ROOT"; };
 		E21D50C2D3FDBB3E3260383B = { isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		23CD4C12A973F352502F70F5 = { isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LuaBridgeDemo.app; sourceTree = "BUILT_PRODUCTS_DIR"; };
+		BDA29FA79D560FDD16E00B22 = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RefCountedPtr.h; path = ../../../LuaBridge/RefCountedPtr.h; sourceTree = "SOURCE_ROOT"; };
+		C7AC45A4DFCA9CDC698CA9DC = { isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LuaState.h; path = ../../Source/LuaState.h; sourceTree = "SOURCE_ROOT"; };
+		D85C11FBA6FC90A0EB8070C3 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = LuaState.cpp; path = ../../Source/LuaState.cpp; sourceTree = "SOURCE_ROOT"; };
+		DEA3B5741D297A02D1769152 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Tests.cpp; path = ../../../Tests/Source/Tests.cpp; sourceTree = "SOURCE_ROOT"; };
+		E1D094E5113A941FCF492205 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_events_amalgam.cpp"; path = "../../JUCEAmalgam/include/juce_events_amalgam.cpp"; sourceTree = "SOURCE_ROOT"; };
 		F4263F6FD4BA340FD5AF3D5B = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = "juce_core_amalgam.cpp"; path = "../../JUCEAmalgam/include/juce_core_amalgam.cpp"; sourceTree = "SOURCE_ROOT"; };
 		F9393CE2ECA3B0F46449E596 = { isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = CConsole.cpp; path = ../../Source/CConsole.cpp; sourceTree = "SOURCE_ROOT"; };
 		F9C6AE93352683295BE72C06 = { isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Info.plist; sourceTree = "SOURCE_ROOT"; };
@@ -95,7 +98,7 @@
 				1D2BF0E2055B832B7B847298 ); name = JUCEAmalgam; sourceTree = "<group>"; };
 		415DF3A5A6569454DD0E4FCE = { isa = PBXGroup; children = (
 				AC2BE0CA019F115FFA3BF831,
-				45961B83FB2EBA62F0940B47,
+				81DD40579624BB14483AED39,
 				599E7A06649B87BB3EBDE34C ); name = Lua; sourceTree = "<group>"; };
 		80EDA40E308415BDBA9B2647 = { isa = PBXGroup; children = (
 				A0241F74A5BF48601D7C2BEA,
@@ -137,7 +140,9 @@
 				8B3CB1647A28C52EC11ED38C,
 				5B05CB52BA3D9D28A3865709 ); name = "Juce Library Code"; sourceTree = "<group>"; };
 		F83AB0D0659BAE558362B10B = { isa = PBXGroup; children = (
-				F9C6AE93352683295BE72C06 ); name = Resources; sourceTree = "<group>"; };
+				F9C6AE93352683295BE72C06,
+				73260BD683C9F17423542DFF,
+				0BE1A7A325848890F67797C3 ); name = Resources; sourceTree = "<group>"; };
 		D65A6A39C90041DE1A743830 = { isa = PBXGroup; children = (
 				9FE0A5CF358437864D6D15E7,
 				09804419763EB6B085D3F12E,
@@ -157,7 +162,6 @@
 				D65A6A39C90041DE1A743830,
 				58A3D496484CF3685DA0DCCD ); name = Source; sourceTree = "<group>"; };
 		ACA6980C46091C913C689360 = { isa = XCBuildConfiguration; buildSettings = {
-				SRCROOT = "../..";
 				HEADER_SEARCH_PATHS = "../../JuceLibraryCode ../../../ $(inherited)";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = Info.plist;
@@ -166,6 +170,7 @@
 				SDKROOT_ppc = macosx10.5;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				COMBINE_HIDPI_IMAGES = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -175,7 +180,6 @@
 				"LUA_USE_APICHECK",
 				"JUCER_XCODE_MAC_F6D2F4CF=1"); }; name = Debug; };
 		6B80FBAE32D4A0C3BF81DFA0 = { isa = XCBuildConfiguration; buildSettings = {
-				SRCROOT = "../..";
 				HEADER_SEARCH_PATHS = "../../JuceLibraryCode ../../../ $(inherited)";
 				GCC_OPTIMIZATION_LEVEL = s;
 				INFOPLIST_FILE = Info.plist;
@@ -184,6 +188,7 @@
 				SDKROOT_ppc = macosx10.5;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -226,7 +231,9 @@
 		F46DBA4BEBEF3D66CF638AAE = { isa = XCConfigurationList; buildConfigurations = (
 				ACA6980C46091C913C689360,
 				6B80FBAE32D4A0C3BF81DFA0 ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Debug; };
-		30EE384A8FFF2FD35164008A = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (  ); runOnlyForDeploymentPostprocessing = 0; };
+		30EE384A8FFF2FD35164008A = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (
+				615F07E7F4E1C317CA1A0245,
+				8A8D4CE68CAEFD0A0A5BA603 ); runOnlyForDeploymentPostprocessing = 0; };
 		39DFD90A9115EC5F681876BD = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
 				7B03024E6503A2CC943811A1,
 				1CF6EE256C35817EF80BC728,
@@ -239,7 +246,7 @@
 				A781414BE6FC0D702C4D51C6,
 				09F7AF8B94C388B1B08BCA2A,
 				3D4C8956D9655301725E100B,
-				E99532AA2CBBDA89EF369D17,
+				8886D6E98BDADDEA8E2899C5,
 				2D9A13BFB9D4D429DF7EF848,
 				F40F45247F78FC01C330B03E ); runOnlyForDeploymentPostprocessing = 0; };
 		C36D501292D7034A7B974AA9 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (
@@ -256,7 +263,7 @@
 				30EE384A8FFF2FD35164008A,
 				39DFD90A9115EC5F681876BD,
 				C36D501292D7034A7B974AA9 ); buildRules = ( ); dependencies = ( ); name = LuaBridgeDemo; productName = LuaBridgeDemo; productReference = 23CD4C12A973F352502F70F5; productInstallPath = "$(HOME)/Applications"; productType = "com.apple.product-type.application"; };
-		7947C4B394F9F46B05D8BBEC = { isa = PBXProject; buildConfigurationList = 18CBC63C9BB60AD0F46B501E; compatibilityVersion = "Xcode 3.2"; hasScannedForEncodings = 0; mainGroup = A39FDF88ACC7DF5156E0B270; projectDirPath = ""; projectRoot = ""; targets = ( F41A3B2508CB06FA7730D93C ); };
+		7947C4B394F9F46B05D8BBEC = { isa = PBXProject; buildConfigurationList = 18CBC63C9BB60AD0F46B501E; attributes = { LastUpgradeCheck = 0440; }; compatibilityVersion = "Xcode 3.2"; hasScannedForEncodings = 0; mainGroup = A39FDF88ACC7DF5156E0B270; projectDirPath = ""; projectRoot = ""; targets = ( F41A3B2508CB06FA7730D93C ); };
 	};
 	rootObject = 7947C4B394F9F46B05D8BBEC;
 }

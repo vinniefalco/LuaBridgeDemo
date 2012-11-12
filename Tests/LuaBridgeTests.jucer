@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="k9UFlc" name="LuaBridgeTests" projectType="consoleapp" version="1.0.0"
-              jucerVersion="3.0.0">
+              jucerVersion="3.0.0" bundleIdentifier="com.yourcompany.LuaBridgeTests">
   <EXPORTFORMATS>
     <VS2010 targetFolder="Builds/VisualStudio2010" libraryType="1" juceFolder="">
       <CONFIGURATIONS>
@@ -53,8 +53,8 @@
       <FILE id="bYVpxI" name="LuaLibrary.h" compile="0" resource="0" file="../Lua/LuaLibrary.h"/>
       <FILE id="W6VAVJ" name="LuaLibrary5.1.5.cpp" compile="1" resource="0"
             file="../Lua/LuaLibrary5.1.5.cpp"/>
-      <FILE id="ababvZ" name="LuaLibrary5.2.0.cpp" compile="1" resource="0"
-            file="../Lua/LuaLibrary5.2.0.cpp"/>
+      <FILE id="V3nxBz" name="LuaLibrary5.2.1.cpp" compile="1" resource="0"
+            file="../Lua/LuaLibrary5.2.1.cpp"/>
     </GROUP>
     <GROUP id="{3FF76B2F-00BF-EB5F-76E0-C07F30498B91}" name="LuaBridge">
       <FILE id="IGA3Cq" name="LuaBridge.h" compile="0" resource="0" file="../LuaBridge/LuaBridge.h"/>

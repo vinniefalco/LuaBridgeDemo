@@ -1,7 +1,6 @@
 /* ==================================== JUCER_BINARY_RESOURCE ====================================
 
-   This is an auto-generated file, created by The Introjucer 3.0.0
-   Do not edit anything in this file!
+   This is an auto-generated file: Any edits you make may be overwritten!
 
 */
 
@@ -9,7 +8,7 @@ namespace BinaryData
 {
 
 //================== README.md ==================
-static const unsigned char temp_e53339e8[] =
+static const unsigned char temp_14a645e8[] =
 "<a href=\"http://lua.org\">\r\n"
 "<img src=\"http://vinniefalco.github.com/LuaBridgeDemo/powered-by-lua.png\">\r\n"
 "</a><br>\r\n"
@@ -80,10 +79,10 @@ static const unsigned char temp_e53339e8[] =
 "[6]: https://github.com/vinniefalco/LuaBridgeDemo \"LuaBridgeDemo master branch\"\r\n"
 "[7]: https://github.com/vinniefalco/LuaBridgeDemo/tree/develop \"LuaBridgeDemo develop branch\"\r\n";
 
-const char* README_md = (const char*) temp_e53339e8;
+const char* README_md = (const char*) temp_14a645e8;
 
 //================== Tests.lua ==================
-static const unsigned char temp_8b794c34[] =
+static const unsigned char temp_b459c034[] =
 "-- test lua script to be run with the luabridge test program\r\n"
 "\r\n"
 "print(\"Running LuaBridge tests:\");\r\n"
@@ -192,23 +191,21 @@ static const unsigned char temp_8b794c34[] =
 "\r\n"
 "print(\"All tests succeeded.\");\r\n";
 
-const char* Tests_lua = (const char*) temp_8b794c34;
+const char* Tests_lua = (const char*) temp_b459c034;
 
 
 const char* getNamedResource (const char*, int&) throw();
 const char* getNamedResource (const char* resourceNameUTF8, int& numBytes) throw()
 {
-    int hash = 0;
+    unsigned int hash = 0;
     if (resourceNameUTF8 != 0)
         while (*resourceNameUTF8 != 0)
-            hash = 31 * hash + *resourceNameUTF8++;
+            hash = 31 * hash + (unsigned int) *resourceNameUTF8++;
 
     switch (hash)
     {
-        case 0x64791dc8:
-        case 0xee58bcf8:  numBytes = 2597; return README_md;
-        case 0x322b48ba:
-        case 0x2a41f024:  numBytes = 3877; return Tests_lua;
+        case 0x64791dc8:  numBytes = 2597; return README_md;
+        case 0x322b48ba:  numBytes = 3877; return Tests_lua;
         default: break;
     }
 

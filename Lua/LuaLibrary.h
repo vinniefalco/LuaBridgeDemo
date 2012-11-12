@@ -38,16 +38,16 @@
 
 #ifndef LUABRIDGEDEMO_LUA_VERSION
 #if 1
-  #define LUABRIDGEDEMO_LUA_VERSION 502   // use 5.2.0
+  #define LUABRIDGEDEMO_LUA_VERSION 502   // use 5.2.1
 #else
-  #define LUABRIDGEDEMO_LUA_VERSION 501   // use 5.1.0 (really 5.1.5)
+  #define LUABRIDGEDEMO_LUA_VERSION 501   // use 5.1.5
 #endif
 #endif
 
 #ifndef LUALIBRARY_SOURCE
 
 #if LUABRIDGEDEMO_LUA_VERSION >= 502
-  #include "Lua.5.2.0/src/lua.hpp"
+  #include "Lua.5.2.1/src/lua.hpp"
 
 #elif LUABRIDGEDEMO_LUA_VERSION >= 501
 extern "C"
